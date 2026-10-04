@@ -15,18 +15,37 @@ wgpu::RenderPipeline pipeline;
 
 wgpu::Surface surface;
 wgpu::TextureFormat format;
-const uint32_t kWidth = 512;
-const uint32_t kHeight = 512;
+GLFWwindow* window = nullptr; // <--- Ahora es global para accederla fácilmente
 
-void ConfigureSurface() {
+// Modificado para aceptar ancho y alto dinámicos
+void ConfigureSurface(uint32_t width, uint32_t height) {
+  if (width == 0 || height == 0) return; // Evitar tamaños inválidos si se minimiza
+
   wgpu::SurfaceCapabilities capabilities;
   surface.GetCapabilities(adapter, &capabilities);
   format = capabilities.formats[0];
 
   wgpu::SurfaceConfiguration config{.device = device,
                                     .format = format,
-                                    .width = kWidth,
-                                    .height = kHeight};
+                                    .width = width,
+                                    .height = height};
+  surface.Configure(&config);
+}
+
+// Función dedicada para actualizar/redimensionar la swapchain del surface
+void ResizeSwapChain(int width, int height) {
+  if (width == 0 || height == 0) return; // Evitar tamaños inválidos si se minimiza
+
+  wgpu::SurfaceCapabilities capabilities;
+  surface.GetCapabilities(adapter, &capabilities);
+  format = capabilities.formats[0];
+
+  wgpu::SurfaceConfiguration config{
+      .device = device,
+      .format = format,
+      .width = static_cast<uint32_t>(width),
+      .height = static_cast<uint32_t>(height)
+  };
   surface.Configure(&config);
 }
 
@@ -97,6 +116,9 @@ void CreateRenderPipeline() {
 }
 
 void Render() {
+  // 1. Polling de eventos de GLFW en cada frame (necesario para detectar redimensionamientos del navegador)
+  glfwPollEvents();
+
   wgpu::SurfaceTexture surfaceTexture;
   surface.GetCurrentTexture(&surfaceTexture);
 
@@ -115,10 +137,18 @@ void Render() {
   pass.End();
   wgpu::CommandBuffer commands = encoder.Finish();
   device.GetQueue().Submit(1, &commands);
+
+  // 2. Presentar la textura y procesar eventos de WebGPU en cada frame
+  surface.Present();
+  instance.ProcessEvents();
 }
 
 void InitGraphics() {
-  ConfigureSurface();
+  // Obtener el tamaño inicial real del framebuffer del canvas/ventana
+  int width, height;
+  glfwGetFramebufferSize(window, &width, &height);
+  
+  ConfigureSurface(width, height);
   CreateRenderPipeline();
 }
 
@@ -128,9 +158,15 @@ void Start() {
   }
 
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-  GLFWwindow* window =
-      glfwCreateWindow(kWidth, kHeight, "WebGPU window", nullptr, nullptr);
+  
+  // Tamaño inicial por defecto (el navegador lo estirará si usas CSS width/height 100%)
+  window = glfwCreateWindow(512, 512, "WebGPU window", nullptr, nullptr);
   surface = wgpu::glfw::CreateSurfaceForWindow(instance, window);
+
+  // 3. Registrar el callback para cuando el navegador cambie de tamaño el canvas
+  glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, int width, int height) {
+    ResizeSwapChain(width, height);
+  });
 
   InitGraphics();
 
@@ -138,10 +174,7 @@ void Start() {
   emscripten_set_main_loop(Render, 0, false);
 #else
   while (!glfwWindowShouldClose(window)) {
-    glfwPollEvents();
     Render();
-    surface.Present();
-    instance.ProcessEvents();
   }
 #endif
 }

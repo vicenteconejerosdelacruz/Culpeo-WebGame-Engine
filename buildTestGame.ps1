@@ -34,6 +34,4 @@ cd ../emsdk
 
 cd $engine_folder
 
-emcmake cmake -B build -G Ninja -DCMAKE_CXX_FLAGS="-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1 -Wno-error=deprecated-pragma"
-
-cmake --build build -- -j4
+cmake --build build --target CulpeoEngine -- -j4

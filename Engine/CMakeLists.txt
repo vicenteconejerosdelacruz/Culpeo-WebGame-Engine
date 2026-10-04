@@ -19,7 +19,7 @@ target_include_directories(CulpeoEngine PRIVATE
 
 # 4. Configuración específica para WebAssembly (Emscripten)
 if(EMSCRIPTEN)
-    set_target_properties(CulpeoEngine PROPERTIES SUFFIX ".html")
+    #set_target_properties(CulpeoEngine PROPERTIES SUFFIX ".html")
 
     # Enlazar las librerías automáticamente (Esto inyecta por arte de magia todos los include paths de Dawn)
     target_link_libraries(CulpeoEngine PRIVATE 

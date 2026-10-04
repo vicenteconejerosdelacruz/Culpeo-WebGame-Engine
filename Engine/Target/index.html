@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Culpeo Web Game Engine</title>
+    <style>
+        /* Eliminar márgenes y asegurar que la ventana ocupe el 100% */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* Hacer que el canvas se expanda por toda la pantalla */
+        #canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- El canvas donde GLFW y WebGPU/Dawn van a renderizar -->
+    <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+
+    <!-- Configuración del módulo de Emscripten -->
+    <script>
+        var canvas = document.getElementById('canvas');
+
+        // Función para ajustar la resolución interna del canvas evitando el efecto borroso
+        function resizeCanvas() {
+            var dpr = window.devicePixelRatio || 1;
+            
+            // Obtenemos el tamaño real en pantalla del elemento y lo multiplicamos por el DPR
+            var displayWidth = canvas.clientWidth;
+            var displayHeight = canvas.clientHeight;
+
+            if (canvas.width !== displayWidth * dpr || canvas.height !== displayHeight * dpr) {
+                canvas.width = displayWidth * dpr;
+                canvas.height = displayHeight * dpr;
+            }
+        }
+
+        // Escuchar cuando la ventana cambie de tamaño
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Objeto Module requerido por Emscripten para enlazar el canvas
+        var Module = {
+            canvas: canvas
+        };
+    </script>
+
+    <!-- Carga el script generado por tu compilación de C++ -->
+    <script src="CulpeoEngine.js"></script>
+</body>
+</html>
