@@ -1,0 +1,8 @@
+[submodule "SDKs/dawn"]
+	path = SDKs/dawn
+	url = https://github.com/google/dawn.git
+	shallow = true
+[submodule "SDKs/assimp"]
+	path = SDKs/assimp
+	url = https://github.com/assimp/assimp.git
+	shallow = true
