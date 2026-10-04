@@ -1,4 +1,4 @@
-$sdkfolder=&"pwd"
+$engine_folder=&"pwd"
 
 function Ensure-GitSubmodules {
     Write-Host "[*] Verifying Git submodules..." -ForegroundColor Cyan
@@ -29,10 +29,11 @@ function Ensure-GitSubmodules {
 
 Ensure-GitSubmodules
 
-cd ../../emsdk
+cd ../emsdk
 ./emsdk_env.ps1
 
-cd $sdkfolder
+cd $engine_folder
 
-emcmake cmake -B build -G Ninja -DCMAKE_CXX_FLAGS="-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1"
+emcmake cmake -B build -G Ninja -DCMAKE_CXX_FLAGS="-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1 -Wno-error=deprecated-pragma"
+
 cmake --build build -- -j4
