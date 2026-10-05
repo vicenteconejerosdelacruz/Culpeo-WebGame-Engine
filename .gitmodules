@@ -6,3 +6,9 @@
 	path = SDKs/assimp
 	url = https://github.com/assimp/assimp.git
 	shallow = true
+[submodule "SDKs/yaml-cpp"]
+	path = SDKs/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "SDKs/json"]
+	path = SDKs/json
+	url = https://github.com/nlohmann/json.git
