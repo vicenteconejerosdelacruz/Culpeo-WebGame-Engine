@@ -7,6 +7,11 @@
 #include <dawn/webgpu_cpp_print.h>
 #include <webgpu/webgpu_cpp.h>
 #include <webgpu/webgpu_glfw.h>
+#include <nlohmann/json.hpp>
+#include <yaml-cpp/yaml.h>
+#include <Templates.h>
+
+using namespace Templates;
 
 wgpu::Instance instance;
 wgpu::Adapter adapter;
@@ -50,6 +55,9 @@ void ResizeSwapChain(int width, int height) {
 }
 
 void Init() {
+
+  CreateSystemTemplates(); // Llamada a la función para crear plantillas del sistema
+
   static const auto kTimedWaitAny = wgpu::InstanceFeatureName::TimedWaitAny;
   wgpu::InstanceDescriptor instanceDesc{.requiredFeatureCount = 1,
                                         .requiredFeatures = &kTimedWaitAny};
