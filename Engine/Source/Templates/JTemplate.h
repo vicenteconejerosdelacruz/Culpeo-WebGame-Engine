@@ -97,7 +97,7 @@ namespace Templates
 	};
 };
 
-// #include <Shader/Shader.h>
+#include <Shader/Shader.h>
 // #include <Material/Material.h>
 // #include <Model3D/Model3D.h>
 // #include <RenderPass/RenderPass.h>

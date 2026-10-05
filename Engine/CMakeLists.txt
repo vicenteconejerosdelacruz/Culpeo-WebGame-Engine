@@ -8,6 +8,10 @@ add_executable(CulpeoEngine
     "Source/Templates/JTemplate.h"
     "Source/Templates/Templates.h"
     "Source/Templates/Templates.cpp"
+    "Source/Templates/Material/MeshMaterial.h"
+    "Source/Templates/Shader/Shader.h"
+    "Source/Templates/Shader/ShaderAtt.h"
+    "Source/Templates/Shader/Shader.cpp"
     "Source/pch/UUID.h"
     "Source/pch/NoStd.h"
     "Source/pch/SceneUnitId.h"
@@ -32,6 +36,11 @@ target_precompile_headers(CulpeoEngine PRIVATE
     "Source/pch/UUID.h"
     "Source/pch/NoStd.h"
     "Source/pch/SceneUnitId.h"
+    "Source/pch/ShaderMaterials.h"
+    "Source/pch/RefTracker.h"
+    "Source/Templates/TemplateDecl.h"
+    "Source/Templates/TemplateDef.h"
+    "Source/Utils/Yaml2Json.h"
 )
 
 # 5. Configuración específica para WebAssembly (Emscripten)

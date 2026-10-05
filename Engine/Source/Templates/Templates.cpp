@@ -1,6 +1,7 @@
 #include "Templates.h"
 #include <unordered_map>
 #include <set>
+#include <yaml-cpp/yaml.h>
 
 namespace Templates {
 
@@ -1130,9 +1131,10 @@ namespace Templates {
 	{
 		return templatesTypes.contains(uuid);
 	}
-    
-    void CreateSystemTemplates() {
-		// LoadTemplates(systemShadersYaml, CreateShader);
+
+	void CreateSystemTemplates()
+	{
+		LoadTemplates(systemShadersYaml, CreateShader);
 		// LoadTemplates(systemSoundsYaml, CreateSound);
 		// LoadTemplates(systemMaterialsYaml0, CreateMaterial);
 		// LoadTemplates(systemMaterialsYaml1, CreateMaterial);
@@ -1144,6 +1146,58 @@ namespace Templates {
 		// LoadTemplates(systemRenderPassesYaml, CreateRenderPass);
 		// LoadTemplates(systemTexturesYaml, CreateTexture);
 		// LoadTemplates(systemPhysicGeometriesYaml, CreatePhysicGeometry);
-    }
+	}
 
+	void LoadTemplates(nlohmann::json templates, std::function<void(nlohmann::json&)> loader)
+	{
+		for (unsigned int i = 0; i < templates.size(); i++)
+		{
+			loader(templates.at(i));
+		}
+	}
+
+	void LoadTemplates(const std::string yaml, std::function<void(nlohmann::json&)> loader)
+	{
+		YAML::Node templates_yaml = YAML::Load(yaml);
+
+		nlohmann::json templates = yaml_to_json(templates_yaml);
+		for (unsigned int i = 0; i < templates.size(); i++)
+		{
+			loader(templates.at(i));
+		}
+	}
+
+	void LoadTemplates(const std::string folder, const std::string fileName, std::function<void(nlohmann::json&)> loader)
+	{
+		//first create the directory if needed
+		std::filesystem::path directory(folder);
+		const std::string finalFilename = folder + fileName;
+		std::filesystem::path path(finalFilename);
+		if (!std::filesystem::exists(path)) return;
+		std::string pathStr = path.generic_string();
+		std::ifstream file(pathStr);
+
+		YAML::Node templates_yaml = YAML::Load(file);
+		nlohmann::json data = yaml_to_json(templates_yaml);
+
+		file.close();
+
+		for (unsigned int i = 0; i < data.size(); i++)
+		{
+			loader(data.at(i));
+		}
+	}
+	
+	void DestroyTemplates()
+	{
+		//ReleaseRenderPassTemplates();
+		//ReleaseTextureTemplates();
+		//ReleaseSoundTemplates();
+		//ReleaseModel3DTemplates();
+		//ReleaseMaterialTemplates();
+		ReleaseShaderTemplates();
+		//ReleasePhysicGeometryTemplates();
+		//ReleaseHtmlUITemplates();
+		//ReleaseMoldTemplates();
+	}
 } // namespace Templates
