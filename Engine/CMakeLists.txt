@@ -5,6 +5,12 @@ add_executable(CulpeoEngine
     "Source/Engine.cpp"
     "Source/JExpose/JObject.h"
     "Source/JExpose/JObject.cpp"
+    "Source/Renderer/DeviceUtils/WebGpuDevice/Builder.h"
+    "Source/Renderer/DeviceUtils/WebGpuDevice/Builder.cpp"
+    "Source/Renderer/Renderer.h"
+    "Source/Renderer/Renderer.cpp"
+    "Source/Renderer/VertexFormats.h"
+    "Source/Renderer/VertexFormats.cpp"
     "Source/Templates/JTemplate.h"
     "Source/Templates/Templates.h"
     "Source/Templates/Templates.cpp"
@@ -50,6 +56,7 @@ set_target_properties(CulpeoEngine PROPERTIES
 target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/JExpose
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Templates
     ${CMAKE_SOURCE_DIR}/SDKs/assimp/include
     ${CMAKE_SOURCE_DIR}/SDKs/build/assimp/include
@@ -67,6 +74,7 @@ target_precompile_headers(CulpeoEngine PRIVATE
     "Source/Templates/TemplateDecl.h"
     "Source/Templates/TemplateDef.h"
     "Source/Utils/Yaml2Json.h"
+    "Source/Utils/GraphicsFloat.h"
 )
 
 # 5. Configuración específica para WebAssembly (Emscripten)
