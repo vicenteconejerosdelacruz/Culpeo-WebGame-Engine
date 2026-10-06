@@ -100,10 +100,10 @@ namespace Templates
 #include <Shader/Shader.h>
 // #include <Material/Material.h>
 // #include <Model3D/Model3D.h>
-// #include <RenderPass/RenderPass.h>
-// #include <Sound/Sound.h>
+#include <RenderPass/RenderPass.h>
+#include <Sound/Sound.h>
 // #include <Textures/Texture.h>
 // #include <Mesh/Mesh.h>
 // #include <PhysicGeometry.h>
-// #include <HtmlUI/HtmlUI.h>
-// #include <Mold/Mold.h>
+#include <HtmlUI/HtmlUI.h>
+#include <Mold/Mold.h>

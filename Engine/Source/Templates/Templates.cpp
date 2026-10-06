@@ -1135,7 +1135,7 @@ namespace Templates {
 	void CreateSystemTemplates()
 	{
 		LoadTemplates(systemShadersYaml, CreateShader);
-		// LoadTemplates(systemSoundsYaml, CreateSound);
+		LoadTemplates(systemSoundsYaml, CreateSound);
 		// LoadTemplates(systemMaterialsYaml0, CreateMaterial);
 		// LoadTemplates(systemMaterialsYaml1, CreateMaterial);
 		// LoadTemplates(systemMaterialsYaml2, CreateMaterial);
@@ -1143,7 +1143,7 @@ namespace Templates {
 		// LoadTemplates(systemMaterialsYaml4, CreateMaterial);
 		// LoadTemplates(systemMaterialsYaml5, CreateMaterial);
 		// LoadTemplates(systemMaterialsYaml6, CreateMaterial);
-		// LoadTemplates(systemRenderPassesYaml, CreateRenderPass);
+		LoadTemplates(systemRenderPassesYaml, CreateRenderPass);
 		// LoadTemplates(systemTexturesYaml, CreateTexture);
 		// LoadTemplates(systemPhysicGeometriesYaml, CreatePhysicGeometry);
 	}

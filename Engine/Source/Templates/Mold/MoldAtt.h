@@ -1,0 +1,5 @@
+JCLASS(Mold, _)
+JTYPE(TemplateType, T_Molds)
+JEXPOSE(std::string, uuid, "", jedv_t_hidden, 0, false)
+JEXPOSE(std::string, name, "", jedv_t_te_mold_name, 0, true)
+JPREVIEW(createFromMold, jedv_create_from_mold)

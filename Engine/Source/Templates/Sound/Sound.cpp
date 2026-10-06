@@ -1,0 +1,156 @@
+#include "Sound.h"
+#include <map>
+#include <set>
+// #include <Audio.h>
+// #include <AudioSystem.h>
+// #if defined(_EDITOR)
+// #include <Builder/ReleaseBuilder.h>
+// #endif
+// using namespace AudioSystem;
+// using namespace DirectX;
+
+namespace Templates
+{
+#if defined(_EDITOR)
+
+// #include <Editor/JDrawersDef.h>
+// #include "SoundAtt.h"
+// #include <JEnd.h>
+
+// #include <Editor/JPreviewDef.h>
+// #include "SoundAtt.h"
+// #include <JEnd.h>
+
+// #include <Creator/JJsonDef.h>
+// #include "SoundAtt.h"
+// #include <JEnd.h>
+
+// #include <Creator/JDrawersDef.h>
+// #include "SoundAtt.h"
+// #include <JEnd.h>
+
+// #include <Creator/JValidatorDef.h>
+// #include "SoundAtt.h"
+// #include <JEnd.h>
+
+#endif
+
+	namespace Sound
+	{
+		// std::unordered_map<JUUID, std::unique_ptr<DirectX::SoundEffect>> uuidToSoundEffects;
+		std::unordered_map<JUUID, unsigned int> uuidInstanceCount;
+	};
+
+	// SoundInstance GetSoundEffectInstance(JUUID uuid, unsigned int flags,
+	// 	std::string objectUUID
+	// )
+	// {
+	// 	using namespace Sound;
+	// 	// if (uuidToSoundEffects.contains(uuid))
+	// 	// {
+	// 	// 	uuidInstanceCount[uuid]++;
+	// 	// }
+	// 	// else
+	// 	// {
+	// 	// 	std::unique_ptr<SoundJson>& json = GetSoundTemplate(uuid);
+	// 	// 	std::wstring path = nostd::StringToWString(defaultSoundsFolder + json->path());
+	// 	// 	//uuidToSoundEffects[uuid] = std::make_unique<DirectX::SoundEffect>(GetAudioEngine().get(), path.c_str());
+	// 	// 	uuidToSoundEffects[uuid] = std::make_unique<void>(nullptr);
+	// 	// 	uuidInstanceCount[uuid] = 1;
+	// 	// }
+	// 	return std::make_tuple(
+	// 		uuid,
+	// 		nullptr
+	// 		//std::move(uuidToSoundEffects[uuid]->CreateInstance(SOUND_EFFECT_INSTANCE_FLAGS(flags)))
+	// 	);
+	// }
+
+	bool SoundEffectExists(JUUID uuid)
+	{
+		using namespace Sound;
+		//return uuidToSoundEffects.contains(uuid);
+		return false;
+	}
+
+	// std::unique_ptr<DirectX::SoundEffect>& GetSoundEffect(JUUID uuid)
+	// {
+	// 	using namespace Sound;
+	// 	return uuidToSoundEffects.at(uuid);
+	// }
+
+	void DestroySoundEffectInstance(JUUID uuid, SoundInstance& soundEffectInstance)
+	{
+		// using namespace Sound;
+		// uuidInstanceCount[uuid]--;
+		// soundEffectInstance = std::make_tuple("", nullptr);
+		// if (uuidInstanceCount[uuid] == 0)
+		// {
+		// 	uuidToSoundEffects.erase(uuid);
+		// 	uuidInstanceCount.erase(uuid);
+		// }
+	}
+
+	SoundJson::SoundJson(nlohmann::json& json) : JTemplate(json)
+	{
+#include <Attributes/JInit.h>
+#include "SoundAtt.h"
+#include <JEnd.h>
+
+#include <Attributes/JUpdate.h>
+#include "SoundAtt.h"
+#include <JEnd.h>
+
+// #include <Attributes/JV8Att.h>
+// #include "SoundAtt.h"
+// #include <JEnd.h>
+	}
+
+#if defined(_EDITOR)
+// 	void SoundJson::WriteJson(nlohmann::json& j)
+// 	{
+// #include <Editor/JWriteJson.h>
+// #include "SoundAtt.h"
+// #include <JEnd.h>
+// 	}
+// 	void SoundJson::GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream)
+// 	{
+// 		nlohmann::json json = this->json();
+// #include <Editor/JReleaseBuilder.h>
+// #include "SoundAtt.h"
+// #include <JEnd.h>
+// 	}
+#endif
+
+	TEMPDEF_FULL(Sound);
+
+	void SoundJsonStep()
+	{
+		std::set<SoundJsonID> sounds;
+		std::transform(Soundtemplates.begin(), Soundtemplates.end(), std::inserter(sounds, sounds.begin()), [](auto& temps)
+			{
+				return temps.first;
+			}
+		);
+
+		std::set<SoundJsonID> rebuildSounds;
+		std::copy_if(sounds.begin(), sounds.end(), std::inserter(rebuildSounds, rebuildSounds.begin()), [](auto sound)
+			{
+				return sound->dirty(SoundJson::Update_path);
+			}
+		);
+
+		if (rebuildSounds.size() > 0ULL)
+		{
+			
+		}
+	}
+
+	void ReleaseSoundEffectsInstances()
+	{
+		//for (auto& [uuid, t] : sounds)
+		//{
+		//	auto& instances = std::get<3>(t);
+		//	instances.clear();
+		//}
+	}
+}
