@@ -51,17 +51,17 @@ namespace Templates
 #if defined(_EDITOR)
 	void HtmlUIJson::WriteJson(nlohmann::json& j)
 	{
-#include <Editor/JWriteJson.h>
-#include "HtmlUIAtt.h"
-#include <JEnd.h>
+// #include <Editor/JWriteJson.h>
+// #include "HtmlUIAtt.h"
+// #include <JEnd.h>
 	}
-	void HtmlUIJson::GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream)
-	{
-		nlohmann::json json = this->json();
-#include <Editor/JReleaseBuilder.h>
-#include "HtmlUIAtt.h"
-#include <JEnd.h>
-	}
+// 	void HtmlUIJson::GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream)
+// 	{
+// 		nlohmann::json json = this->json();
+// #include <Editor/JReleaseBuilder.h>
+// #include "HtmlUIAtt.h"
+// #include <JEnd.h>
+// 	}
 #endif
 
 	TEMPDEF_FULL(HtmlUI);

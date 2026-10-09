@@ -1,0 +1,30 @@
+#pragma once
+#include <nlohmann/json.hpp>
+#include <string>
+
+namespace Scene
+{
+	class SceneUnit;
+};
+
+namespace Scene::Level
+{
+	void SetLevelToLoad(std::string levelName);
+#if defined(_EDITOR)
+	void SetDefaultLevelToLoad();
+#endif
+	bool PendingLevelToLoad();
+
+	//level handling
+#if defined(_EDITOR)
+	nlohmann::json GetDefaultLevel();
+#else
+	nlohmann::json GetBootLevel();
+#endif
+
+	nlohmann::json GetLevelFromFile(std::filesystem::path level);
+
+	void LoadSceneObjects(std::unique_ptr<SceneUnit>& scene, nlohmann::json& j, std::string type, std::function<void(nlohmann::json&)> loader);
+	void LoadLevel(std::unique_ptr<SceneUnit>& scene, std::string filename, nlohmann::json data, std::function<void(std::string, unsigned int, unsigned int)> progress = [](std::string, unsigned int, unsigned int) {}, bool initPhysX = true);
+};
+

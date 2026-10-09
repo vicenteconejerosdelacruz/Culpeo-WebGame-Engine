@@ -67,12 +67,12 @@ namespace Templates {
 	}
 
 #if defined(_EDITOR)
-// 	void ShaderJson::WriteJson(nlohmann::json& j)
-// 	{
+	void ShaderJson::WriteJson(nlohmann::json& j)
+	{
 // #include <Editor/JWriteJson.h>
 // #include "ShaderAtt.h"
 // #include <JEnd.h>
-// 	}
+	}
 // 	void ShaderJson::GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream)
 // 	{
 // 		nlohmann::json json = this->json();

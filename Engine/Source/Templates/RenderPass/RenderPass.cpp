@@ -73,17 +73,17 @@ namespace Templates
 #if defined(_EDITOR)
 	void RenderPassJson::WriteJson(nlohmann::json& j)
 	{
-#include <Editor/JWriteJson.h>
-#include "RenderPassAtt.h"
-#include <JEnd.h>
+// #include <Editor/JWriteJson.h>
+// #include "RenderPassAtt.h"
+// #include <JEnd.h>
 	}
-	void RenderPassJson::GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream)
-	{
-		nlohmann::json json = this->json();
-#include <Editor/JReleaseBuilder.h>
-#include "RenderPassAtt.h"
-#include <JEnd.h>
-	}
+// 	void RenderPassJson::GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream)
+// 	{
+// 		nlohmann::json json = this->json();
+// #include <Editor/JReleaseBuilder.h>
+// #include "RenderPassAtt.h"
+// #include <JEnd.h>
+// 	}
 #endif
 
 	void RenderPassJson::SetPipelineStateCallback(size_t hash, std::function<void()> callback)

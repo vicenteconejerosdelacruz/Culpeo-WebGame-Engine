@@ -77,6 +77,7 @@ namespace Templates
 	{
 		JTemplate(nlohmann::json& json) :JObject(json) {}
 		virtual TemplateType JType() { return T_None; }
+		virtual void WriteJson(nlohmann::json& j) {};
 		virtual void JUpdate(nlohmann::json p)
 		{
 // #if defined(_EDITOR)

@@ -3,24 +3,56 @@ cmake_minimum_required(VERSION 3.22)
 # 1. Define el ejecutable de tu motor (incluimos el PCH aquí para seguimiento)
 add_executable(CulpeoEngine
     "Source/Engine.cpp"
+    "Source/Editor/DefaultLevel.h"
+    "Source/Editor/DefaultLevel.cpp"
     "Source/JExpose/JObject.h"
     "Source/JExpose/JObject.cpp"
+    "Source/Game/Game.h"
+    "Source/Game/Game.cpp"
+    "Source/Primitives/BoxLines.h"
+    "Source/Primitives/BoxLines.cpp"
+    "Source/Primitives/Cube.h"
+    "Source/Primitives/Cube.cpp"
+    "Source/Primitives/Decal.h"
+    "Source/Primitives/Decal.cpp"
+    "Source/Primitives/Floor.h"
+    "Source/Primitives/Floor.cpp"
+    "Source/Primitives/Sphere.h"
+    "Source/Primitives/Sphere.cpp"
+    "Source/Primitives/Cone.h"
+    "Source/Primitives/Cone.cpp"
+    "Source/Primitives/Capsule.h"
+    "Source/Primitives/Capsule.cpp"
+    "Source/Primitives/Pentahedron.h"
+    "Source/Primitives/Pentahedron.cpp"
+    "Source/Primitives/UtahTeapot.h"
+    "Source/Primitives/UtahTeapot.cpp"
     "Source/Renderer/DeviceUtils/WebGpuDevice/Builder.h"
     "Source/Renderer/DeviceUtils/WebGpuDevice/Builder.cpp"
+    "Source/Renderer/DeviceUtils/IndexBuffer/IndexBuffer.h"
+    "Source/Renderer/DeviceUtils/IndexBuffer/IndexBuffer.cpp"
+    "Source/Renderer/DeviceUtils/VertexBuffer/VertexBuffer.h"
+    "Source/Renderer/DeviceUtils/VertexBuffer/VertexBuffer.cpp"
     "Source/Renderer/Renderer.h"
     "Source/Renderer/Renderer.cpp"
     "Source/Renderer/VertexFormats.h"
     "Source/Renderer/VertexFormats.cpp"
+    "Source/Scene/Level.h"
+    "Source/Scene/Level.cpp"
+    "Source/Scene/Scene.h"
+    "Source/Scene/Scene.cpp"
     "Source/Templates/JTemplate.h"
     "Source/Templates/Templates.h"
     "Source/Templates/Templates.cpp"
     "Source/Templates/HtmlUI/HtmlUI.h"
     "Source/Templates/HtmlUI/HtmlUIAtt.h"
     "Source/Templates/HtmlUI/HtmlUI.cpp"
+    "Source/Templates/Material/MeshMaterial.h"
+    "Source/Templates/Mesh/Mesh.h"
+    "Source/Templates/Mesh/Mesh.cpp"
     "Source/Templates/Mold/Mold.h"
     "Source/Templates/Mold/MoldAtt.h"
     "Source/Templates/Mold/Mold.cpp"
-    "Source/Templates/Material/MeshMaterial.h"
     "Source/Templates/RenderPass/RenderPass.h"
     "Source/Templates/RenderPass/RenderPassAtt.h"
     "Source/Templates/RenderPass/RenderPass.cpp"
@@ -55,9 +87,14 @@ set_target_properties(CulpeoEngine PROPERTIES
 # 3. Directorios de inclusión locales del motor y Assimp
 target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Editor
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Game
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/JExpose
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/JExpose/Primitives
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Templates
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Primitives
     ${CMAKE_SOURCE_DIR}/SDKs/assimp/include
     ${CMAKE_SOURCE_DIR}/SDKs/build/assimp/include
 )
@@ -71,6 +108,7 @@ target_precompile_headers(CulpeoEngine PRIVATE
     "Source/pch/SceneUnitId.h"
     "Source/pch/ShaderMaterials.h"
     "Source/pch/RefTracker.h"
+    "Source/JExpose/JTypes.h"
     "Source/Templates/TemplateDecl.h"
     "Source/Templates/TemplateDef.h"
     "Source/Utils/Yaml2Json.h"
@@ -90,10 +128,18 @@ if(EMSCRIPTEN)
         nlohmann_json::nlohmann_json
     )
 
+    target_compile_options(CulpeoEngine PRIVATE
+        -pthread
+        "-D_EDITOR"
+    )
+
     target_link_options(CulpeoEngine PRIVATE 
+        -pthread
+        "-sPTHREAD_POOL_SIZE=4"
         "-sASYNCIFY=1" 
         "-sUSE_GLFW=3" 
         "-sALLOW_MEMORY_GROWTH=1"
+        "-sGROWABLE_ARRAYBUFFERS=2"
     )
 else()
     target_link_libraries(CulpeoEngine PRIVATE 

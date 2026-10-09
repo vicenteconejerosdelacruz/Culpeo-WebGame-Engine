@@ -9,53 +9,16 @@
 #include <webgpu/webgpu_glfw.h>
 #include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
+#include <Game.h>
 #include <Renderer.h>
 #include <Templates.h>
 
 using namespace Templates;
+using namespace Game;
 
 std::unique_ptr<JRenderer> renderer;
 
-//wgpu::Instance instance;
-//wgpu::Adapter adapter;
-//wgpu::Device device;
 wgpu::RenderPipeline pipeline;
-
-//wgpu::Surface surface;
-//wgpu::TextureFormat format;
-//GLFWwindow* window = nullptr; // <--- Ahora es global para accederla fácilmente
-
-// Modificado para aceptar ancho y alto dinámicos
-// void ConfigureSurface(uint32_t width, uint32_t height) {
-//   if (width == 0 || height == 0) return; // Evitar tamaños inválidos si se minimiza
-
-//   wgpu::SurfaceCapabilities capabilities;
-//   surface.GetCapabilities(renderer->GetAdapter(), &capabilities);
-//   format = capabilities.formats[0];
-
-//   wgpu::SurfaceConfiguration config{.device = renderer->GetDevice(),
-//                                     .format = format,
-//                                     .width = width,
-//                                     .height = height};
-//   surface.Configure(&config);
-// }
-
-// Función dedicada para actualizar/redimensionar la swapchain del surface
-// void ResizeSwapChain(int width, int height) {
-//   if (width == 0 || height == 0) return; // Evitar tamaños inválidos si se minimiza
-
-//   wgpu::SurfaceCapabilities capabilities;
-//   surface.GetCapabilities(renderer->GetAdapter(), &capabilities);
-//   format = capabilities.formats[0];
-
-//   wgpu::SurfaceConfiguration config{
-//       .device = renderer->GetDevice(),
-//       .format = format,
-//       .width = static_cast<uint32_t>(width),
-//       .height = static_cast<uint32_t>(height)
-//   };
-//   surface.Configure(&config);
-// }
 
 bool InitInstance()
 {
@@ -68,49 +31,6 @@ bool InitInstance()
   renderer->CreateSurface(); // Crea la surface
 
   return true;
-}
-
-void Init() {
-
-  InitInstance();
-
-  /*
-  static const auto kTimedWaitAny = wgpu::InstanceFeatureName::TimedWaitAny;
-  wgpu::InstanceDescriptor instanceDesc{.requiredFeatureCount = 1,
-                                        .requiredFeatures = &kTimedWaitAny};
-  instance = wgpu::CreateInstance(&instanceDesc);
-
-  wgpu::Future f1 = instance.RequestAdapter(
-      nullptr, wgpu::CallbackMode::WaitAnyOnly,
-      [](wgpu::RequestAdapterStatus status, wgpu::Adapter a,
-         wgpu::StringView message) {
-        if (status != wgpu::RequestAdapterStatus::Success) {
-          std::cout << "RequestAdapter: " << message << "\n";
-          exit(0);
-        }
-        adapter = std::move(a);
-      });
-  instance.WaitAny(f1, UINT64_MAX);
-
-  wgpu::DeviceDescriptor desc{};
-  desc.SetUncapturedErrorCallback([](const wgpu::Device&,
-                                     wgpu::ErrorType errorType,
-                                     wgpu::StringView message) {
-    std::cout << "Error: " << errorType << " - message: " << message << "\n";
-  });
-
-  wgpu::Future f2 = adapter.RequestDevice(
-      &desc, wgpu::CallbackMode::WaitAnyOnly,
-      [](wgpu::RequestDeviceStatus status, wgpu::Device d,
-         wgpu::StringView message) {
-        if (status != wgpu::RequestDeviceStatus::Success) {
-          std::cout << "RequestDevice: " << message << "\n";
-          exit(0);
-        }
-        device = std::move(d);
-      });
-  instance.WaitAny(f2, UINT64_MAX);
-  */
 }
 
 const char shaderCode[] = R"(
@@ -169,33 +89,12 @@ void Render() {
   renderer->GetInstance().ProcessEvents();
 }
 
-void InitGraphics() {
-
-  // Obtener el tamaño inicial real del framebuffer del canvas/ventana
-  //int width, height;
-  //glfwGetFramebufferSize(window, &width, &height);
+int main() {
   
-  //ConfigureSurface(width, height);
+  InitInstance();
+  BootGame();
+  
   CreateRenderPipeline();
-}
-
-void Start() {
-  // if (!glfwInit()) {
-  //   return;
-  // }
-
-  // glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-  
-  // // Tamaño inicial por defecto (el navegador lo estirará si usas CSS width/height 100%)
-  // window = glfwCreateWindow(512, 512, "WebGPU window", nullptr, nullptr);
-  // surface = wgpu::glfw::CreateSurfaceForWindow(renderer->GetInstance(), window);
-
-  // // 3. Registrar el callback para cuando el navegador cambie de tamaño el canvas
-  // glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, int width, int height) {
-  //   ResizeSwapChain(width, height);
-  // });
-
-  InitGraphics();
 
 #if defined(__EMSCRIPTEN__)
   emscripten_set_main_loop(Render, 0, false);
@@ -204,9 +103,6 @@ void Start() {
     Render();
   }
 #endif
-}
 
-int main() {
-  Init();
-  Start();
+  return 0;
 }

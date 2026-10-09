@@ -7,6 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Parche global para evitar errores fatales con las macros de Emscripten en Abseil/Dawn
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=deprecated-pragma")
 
+if(EMSCRIPTEN)
+    # Las bibliotecas estáticas también deben compilarse con soporte pthread/atomics.
+    add_compile_options(-pthread)
+endif()
+
 # 1. Compila todas las librerías externas primero
 add_subdirectory(SDKs)
 

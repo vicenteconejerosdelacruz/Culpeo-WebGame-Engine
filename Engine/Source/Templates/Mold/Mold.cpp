@@ -50,18 +50,18 @@ namespace Templates
 #if defined(_EDITOR)
 	void MoldJson::WriteJson(nlohmann::json& j)
 	{
-#include <Editor/JWriteJson.h>
-#include "MoldAtt.h"
-#include <JEnd.h>
+// #include <Editor/JWriteJson.h>
+// #include "MoldAtt.h"
+// #include <JEnd.h>
 	}
-	void MoldJson::GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream)
-	{
-		nlohmann::json json = this->json();
-#include <Editor/JReleaseBuilder.h>
-#include "MoldAtt.h"
-#include <JEnd.h>
-		GatherFilesFromLevel(json, filesToCopy, templates, logStream);
-	}
+// 	void MoldJson::GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream)
+// 	{
+// 		nlohmann::json json = this->json();
+// #include <Editor/JReleaseBuilder.h>
+// #include "MoldAtt.h"
+// #include <JEnd.h>
+// 		GatherFilesFromLevel(json, filesToCopy, templates, logStream);
+// 	}
 #endif
 
 	TEMPDEF_FULL(Mold);

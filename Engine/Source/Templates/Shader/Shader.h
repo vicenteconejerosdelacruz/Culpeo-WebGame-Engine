@@ -78,7 +78,7 @@ namespace Templates
 		DEF_STRING2FLAGS_FUNC(ShaderJson, JTemplate);
 
 #if defined(_EDITOR)
-		// virtual void WriteJson(nlohmann::json& j);
+		void WriteJson(nlohmann::json& j) override;
 		// void GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream) override;
 #endif
 	};
