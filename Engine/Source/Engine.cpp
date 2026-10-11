@@ -17,18 +17,17 @@ using namespace Templates;
 using namespace Game;
 
 std::unique_ptr<JRenderer> renderer;
-
 wgpu::RenderPipeline pipeline;
 
 bool InitInstance()
 {
-  CreateSystemTemplates(); // Llamada a la función para crear plantillas del sistema
+  CreateSystemTemplates(); 
 
   renderer = std::make_unique<JRenderer>();
-  renderer->Initialize(); // Inicializa el renderer
+  renderer->Initialize(); 
 
-  renderer->CreateWindow(); // Crea la ventana
-  renderer->CreateSurface(); // Crea la surface
+  renderer->CreateWindow(); 
+  renderer->CreateSurface(); 
 
   return true;
 }
@@ -62,14 +61,21 @@ void CreateRenderPipeline() {
 }
 
 void Render() {
-  // 1. Polling de eventos de GLFW en cada frame (necesario para detectar redimensionamientos del navegador)
+  // 1. Polling de eventos de GLFW (resize, teclado, mouse)
   glfwPollEvents();
 
   wgpu::SurfaceTexture surfaceTexture;
   renderer->surface.GetCurrentTexture(&surfaceTexture);
 
+  // Validación de seguridad para evitar crashes si la ventana se minimiza o invalida
+  if (!surfaceTexture.texture) {
+    return;
+  }
+
+  wgpu::TextureView view = surfaceTexture.texture.CreateView();
+
   wgpu::RenderPassColorAttachment attachment{
-      .view = surfaceTexture.texture.CreateView(),
+      .view = view,
       .loadOp = wgpu::LoadOp::Clear,
       .storeOp = wgpu::StoreOp::Store};
 
@@ -81,23 +87,28 @@ void Render() {
   pass.SetPipeline(pipeline);
   pass.Draw(3);
   pass.End();
+  
   wgpu::CommandBuffer commands = encoder.Finish();
   renderer->GetDevice().GetQueue().Submit(1, &commands);
 
-  // 2. Presentar la textura y procesar eventos de WebGPU en cada frame
+#ifndef __EMSCRIPTEN__
+  // Solo en ejecuciones nativas de escritorio (Dawn C++ nativo)
   renderer->surface.Present();
+#endif
+
+  // 2. Procesar eventos de WebGPU
   renderer->GetInstance().ProcessEvents();
 }
 
 int main() {
-  
   InitInstance();
   BootGame();
-  
   CreateRenderPipeline();
 
 #if defined(__EMSCRIPTEN__)
-  emscripten_set_main_loop(Render, 0, false);
+  // 0 = Usar requestAnimationFrame del navegador
+  // true = Simular bucle infinito interrumpiendo el flujo lineal sin destruir variables globales
+  emscripten_set_main_loop(Render, 0, true);
 #else
   while (!glfwWindowShouldClose(renderer->GetWindow())) {
     Render();

@@ -5,11 +5,14 @@
 
 namespace Editor::DefaultLevel {
 
+	/*
 	nlohmann::json GetDefaultLevelRenderables();
 	nlohmann::json GetDefaultLevelCameras();
 	nlohmann::json GetDefaultLevelLights();
 	nlohmann::json GetDefaultLevelSounds();
 	nlohmann::json GetDefaultLevelPhysicsScenes();
+	*/
+	nlohmann::json GetDefaultLevel();
 }
 
 // #endif

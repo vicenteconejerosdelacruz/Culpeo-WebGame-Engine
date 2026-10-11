@@ -5,10 +5,12 @@ add_executable(CulpeoEngine
     "Source/Engine.cpp"
     "Source/Editor/DefaultLevel.h"
     "Source/Editor/DefaultLevel.cpp"
-    "Source/JExpose/JObject.h"
-    "Source/JExpose/JObject.cpp"
+    "Source/Controllers/Controller.h"
+    "Source/Controllers/Controller.cpp"
     "Source/Game/Game.h"
     "Source/Game/Game.cpp"
+    "Source/JExpose/JObject.h"
+    "Source/JExpose/JObject.cpp"
     "Source/Primitives/BoxLines.h"
     "Source/Primitives/BoxLines.cpp"
     "Source/Primitives/Cube.h"
@@ -41,6 +43,12 @@ add_executable(CulpeoEngine
     "Source/Scene/Level.cpp"
     "Source/Scene/Scene.h"
     "Source/Scene/Scene.cpp"
+    "Source/Scene/SceneUnit.h"
+    "Source/Scene/SceneUnit.cpp"
+    "Source/Scene/SceneObject.h"
+    "Source/Scene/SceneObject.cpp"
+    "Source/Scene/Renderable/Renderable.h"
+    "Source/Scene/Renderable/Renderable.cpp"
     "Source/Templates/JTemplate.h"
     "Source/Templates/Templates.h"
     "Source/Templates/Templates.cpp"
@@ -74,6 +82,7 @@ add_executable(CulpeoEngine
     "Source/Templates/Sound/Sound.h"
     "Source/Templates/Sound/SoundAtt.h"
     "Source/Templates/Sound/Sound.cpp"
+    "Source/TestGame/GameControllers/GameControllers.cpp"
     "Source/pch/UUID.h"
     "Source/pch/NoStd.h"
     "Source/pch/SceneUnitId.h"
@@ -88,11 +97,13 @@ set_target_properties(CulpeoEngine PROPERTIES
 target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Editor
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Controllers
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Game
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/JExpose
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/JExpose/Primitives
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Renderable
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Templates
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Primitives
     ${CMAKE_SOURCE_DIR}/SDKs/assimp/include
@@ -105,6 +116,9 @@ target_precompile_headers(CulpeoEngine PRIVATE
     "Source/pch/DeleteHook.h"
     "Source/pch/UUID.h"
     "Source/pch/NoStd.h"
+    "Source/pch/NoMath.h"
+    "Source/pch/GraphicsFloat.h"
+    "Source/pch/Json.h"
     "Source/pch/SceneUnitId.h"
     "Source/pch/ShaderMaterials.h"
     "Source/pch/RefTracker.h"
@@ -112,7 +126,6 @@ target_precompile_headers(CulpeoEngine PRIVATE
     "Source/Templates/TemplateDecl.h"
     "Source/Templates/TemplateDef.h"
     "Source/Utils/Yaml2Json.h"
-    "Source/Utils/GraphicsFloat.h"
 )
 
 # 5. Configuración específica para WebAssembly (Emscripten)
@@ -134,6 +147,9 @@ if(EMSCRIPTEN)
     )
 
     target_link_options(CulpeoEngine PRIVATE 
+        $<$<CONFIG:Debug>:-g3>
+        $<$<CONFIG:Debug>:-sASSERTIONS=2>
+
         -pthread
         "-sPTHREAD_POOL_SIZE=4"
         "-sASYNCIFY=1" 

@@ -2,8 +2,9 @@
 #include <Level.h>
 //scene objects
 // #include <Scene.h>
+#include <SceneUnit.h>
 #include <fstream>
-// #include <SceneObject.h>
+#include <SceneObject.h>
 // #include <Physics.h>
 // #include <Yaml2Json.h>
 #if defined(_EDITOR)
@@ -59,37 +60,6 @@ namespace Scene::Level
 #endif
 	}
 
-#if defined(_EDITOR)
-	nlohmann::json GetDefaultLevel()
-	{
-		using namespace Editor::DefaultLevel;
-
-		nlohmann::json level = nlohmann::json::object({});
-		level.merge_patch(GetDefaultLevelRenderables());
-		level.merge_patch(GetDefaultLevelCameras());
-		level.merge_patch(GetDefaultLevelLights());
-		level.merge_patch(GetDefaultLevelSounds());
-		level.merge_patch(GetDefaultLevelPhysicsScenes());
-
-		return level;
-	}
-#else
-	nlohmann::json GetBootLevel()
-	{
-		//using namespace Game::BootLevel;
-		//
-		//OutputDebugStringA(std::string("Loading boot level\n").c_str());
-
-		nlohmann::json level = nlohmann::json::object({});
-		//level.merge_patch(GetBootLevelRenderables());
-		//level.merge_patch(GetBootLevelCameras());
-		//level.merge_patch(GetBootLevelLights());
-		//level.merge_patch(GetBootLevelSounds());
-
-		return level;
-	}
-#endif
-
 	nlohmann::json GetLevelFromFile(std::filesystem::path filename)
 	{
 		// std::string pathStr = "" + (std::filesystem::exists(filename) ? filename.generic_string() : (defaultLevelsFolder + filename.generic_string() + (filename.has_extension() ? "" : ".yaml")));
@@ -105,6 +75,7 @@ namespace Scene::Level
 		return level;
 	}
 
+	/*
 	void LoadSceneObjects(std::unique_ptr<SceneUnit>& scene, nlohmann::json& j, std::string type, std::function<void(nlohmann::json&)> loader)
 	{
 		if (j.contains(type))
@@ -117,13 +88,22 @@ namespace Scene::Level
 			);
 		}
 	}
+	*/
+
+	void LoadSceneObjects(std::unique_ptr<SceneUnit>& scene, nlohmann::json& data, std::function<void(std::string, unsigned int, unsigned int)> progress)
+	{
+		for(unsigned int idx=0U ; idx<data.size() ; idx++)
+		{
+			CreateSceneObject(scene->Id(), data.at(idx));
+		}
+	}
 
 	static std::mutex loadLevelMutex;
 	void LoadLevel(std::unique_ptr<SceneUnit>& scene, std::string filename, nlohmann::json data, std::function<void(std::string, unsigned int, unsigned int)> progress, bool initPhysX)
 	{
-// 		std::lock_guard<std::mutex> lock(loadLevelMutex);
-// 		using namespace Scene;
-// 		SceneUnitId id = scene->Id();
+		std::lock_guard<std::mutex> lock(loadLevelMutex);
+		using namespace Scene;
+		SceneUnitId id = scene->Id();
 
 // #if defined(_EDITOR)
 // 		using namespace Editor;
@@ -143,11 +123,13 @@ namespace Scene::Level
 
 // 		CreateSceneUnitSceneObjects(id);
 
-// 		unsigned int total = std::accumulate(SceneObjectTypeJsonContainer.begin(), SceneObjectTypeJsonContainer.end(), 0U, [&](unsigned int sum, auto& pair)
-// 			{
-// 				return sum + (data.contains(pair.second) ? static_cast<unsigned int>(data.at(pair.second).size()) : 0U);
-// 			}
-// 		);
+ 		// unsigned int total = std::accumulate(SceneObjectTypeJsonContainer.begin(), SceneObjectTypeJsonContainer.end(), 0U, [&](unsigned int sum, auto& pair)
+ 		// 	{
+ 		// 		return sum + (data.contains(pair.second) ? static_cast<unsigned int>(data.at(pair.second).size()) : 0U);
+ 		// 	}
+ 		// );
+
+		LoadSceneObjects(scene, data, progress);
 
 // 		unsigned int count = 0U;
 

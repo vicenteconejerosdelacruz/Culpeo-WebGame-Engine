@@ -1,3 +1,5 @@
+#include <utility>
+
 #if defined(JEXPOSE_ATT_DECL)
 
 #define JCLASS(CLASS,GETJOBJECTS) \

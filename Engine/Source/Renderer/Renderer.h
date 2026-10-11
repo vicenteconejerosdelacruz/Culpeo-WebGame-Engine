@@ -12,7 +12,7 @@
 struct JRenderer
 {
 	~JRenderer() {}
-	// static const constexpr unsigned int numFrames = 3;
+	static const constexpr unsigned int numFrames = 3;
 	static const constexpr float fovAngleY = (70.0f * std::numbers::pi_v<float> / 180.0f);
 	// static inline const std::unordered_map<DXGI_FORMAT, DXGI_FORMAT> depthFallback = {
 	// 	{ DXGI_FORMAT_D32_FLOAT, DXGI_FORMAT_D24_UNORM_S8_UINT }

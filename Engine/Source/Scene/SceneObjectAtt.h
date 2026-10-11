@@ -1,0 +1,7 @@
+JCLASS(SceneObject, _)
+JEXPOSE(std::string, uuid, "", jedv_t_hidden, 0, false)
+JEXPOSE(std::string, name, "so.1", jedv_t_so_name, 0, true)
+JEXPOSE_TRANSFORM(FLOAT3, position, ToFLOAT3, FromFLOAT3, FLOAT3(0.0f, 0.0f, 0.0f), jedv_t_float3, 1, false)
+JEXPOSE_TRANSFORM_CALLBACK(FLOAT3, rotation, ToFLOAT3, FromFLOAT3, FLOAT3(0.0f, 0.0f, 0.0f), jedv_t_float3_angle, 1, false)
+JEXPOSE_TRANSFORM(FLOAT3, scale, ToFLOAT3, FromFLOAT3, FLOAT3(1.0f, 1.0f, 1.0f), jedv_t_float3_f6, 1, false)
+JEXPOSE_MAP_OBJECT(Controller, controllers, nlohmann::json::object({}), jedv_t_controller_vector, 1, false)

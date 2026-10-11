@@ -1,5 +1,4 @@
 #include "BoxLines.h"
-#include <Utils/GraphicsFloat.h>
 
 using namespace Primitives;
 

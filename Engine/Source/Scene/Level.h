@@ -16,15 +16,10 @@ namespace Scene::Level
 	bool PendingLevelToLoad();
 
 	//level handling
-#if defined(_EDITOR)
-	nlohmann::json GetDefaultLevel();
-#else
-	nlohmann::json GetBootLevel();
-#endif
-
 	nlohmann::json GetLevelFromFile(std::filesystem::path level);
 
-	void LoadSceneObjects(std::unique_ptr<SceneUnit>& scene, nlohmann::json& j, std::string type, std::function<void(nlohmann::json&)> loader);
+	void LoadSceneObjects(std::unique_ptr<SceneUnit>& scene, nlohmann::json& data, std::function<void(std::string, unsigned int, unsigned int)> progress);
+	//void LoadSceneObjects(std::unique_ptr<SceneUnit>& scene, nlohmann::json& j, std::string type, std::function<void(nlohmann::json&)> loader);
 	void LoadLevel(std::unique_ptr<SceneUnit>& scene, std::string filename, nlohmann::json data, std::function<void(std::string, unsigned int, unsigned int)> progress = [](std::string, unsigned int, unsigned int) {}, bool initPhysX = true);
 };
 

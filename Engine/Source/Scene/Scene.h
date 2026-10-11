@@ -9,7 +9,7 @@
 //#include <SceneUnitId.h>
 #include <Renderer.h>
 #include <Templates.h>
-// #include <SceneUnit.h>
+#include <SceneUnit.h>
 // #include <SceneObject.h>
 // #include <NoV8.h>
 
@@ -33,7 +33,7 @@ namespace Scene
 // 		}
 // 	);
 
-// 	std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName = std::to_string(nostd::threadIdHash()), unsigned int numProcessors = JRenderer::numFrames);
+std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName = std::to_string(nostd::threadIdHash()), unsigned int numProcessors = JRenderer::numFrames);
 // 	void CreateSceneUnitSceneObjects(SceneUnitId unit);
 // 	void DestroyScene(SceneUnitId unit);
 // 	void DestroyScenes(bool inmediate = false);

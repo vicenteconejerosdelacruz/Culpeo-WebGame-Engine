@@ -1,7 +1,7 @@
 #include <Scene.h>
 #include <thread>
 // #include <SceneObject.h>
-// #include <Renderer.h>
+#include <Renderer.h>
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 #include <Level.h>
 // #include <unordered_map>
@@ -50,7 +50,7 @@ namespace Game
 
 namespace Scene
 {
-	// std::map<SceneUnitId, std::unique_ptr<SceneUnit>> scenesUnits;
+	std::map<SceneUnitId, std::unique_ptr<SceneUnit>> scenesUnits;
 	std::map<SceneUnitId, std::unique_ptr<std::atomic_uint>> levelThreadsStack;
 	std::map<SceneUnitId, SceneUnitId> attachedUnits; //<Attached, Destination>
 	std::set<SceneUnitId> renderableSceneUnits;
@@ -61,12 +61,12 @@ namespace Scene
 
 		std::thread levelThread([](std::string filename, nlohmann::json data, std::function<void(SceneUnitId)> levelLoaded, std::function<void(std::string, unsigned int, unsigned int)> progress)
 		{
-		// 		SceneUnitId id = nostd::threadIdHash();
+	 		SceneUnitId id = nostd::threadIdHash();
 
 		// 		levelThreadsStack.insert_or_assign(id, std::make_unique<std::atomic_uint>(1U));
-		// 		auto& scene = CreateScene(id, filename, JRenderer::numFrames);
+			auto& scene = CreateScene(id, filename, JRenderer::numFrames);
 
-		// 		LoadLevel(scene, filename, data, progress);
+			LoadLevel(scene, filename, data, progress);
 
 		// 		if (levelThreadsStack.at(id)->fetch_sub(1U) == 1U)
 		// 		{
@@ -181,16 +181,16 @@ namespace Scene
 // 		);
 // 	}
 
-// 	std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName, unsigned int numProcessors)
-// 	{
-// 		scenesUnits.insert_or_assign(unit, std::make_unique<SceneUnit>(unit, unitName));
-// 		if (numProcessors > 0U)
-// 		{
-// 			scenesUnits.at(unit)->InitFrame2FrameProcessor(renderer->d3dDevice, numProcessors, unit);
-// 			scenesUnits.at(unit)->InitComputeProcessor(renderer->d3dDevice, numProcessors, unit);
-// 		}
-// 		return scenesUnits.at(unit);
-// 	}
+	std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName, unsigned int numProcessors)
+	{
+		scenesUnits.insert_or_assign(unit, std::make_unique<SceneUnit>(unit, unitName));
+		// if (numProcessors > 0U)
+		// {
+		// 	scenesUnits.at(unit)->InitFrame2FrameProcessor(renderer->d3dDevice, numProcessors, unit);
+		// 	scenesUnits.at(unit)->InitComputeProcessor(renderer->d3dDevice, numProcessors, unit);
+		// }
+		return scenesUnits.at(unit);
+	}
 
 // 	void CreateSceneUnitSceneObjects(SceneUnitId unit)
 // 	{

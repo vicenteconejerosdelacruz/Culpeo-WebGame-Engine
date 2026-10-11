@@ -1,6 +1,11 @@
 #pragma once
+#include <memory>
 #include <string>
 #include <vector>
+#include <map>
+#include <unordered_map>
+#include <set>
+#include <utility>
 
 static const std::string defaultLevelsFolder = "Levels/";
 static const std::string defaultTemplatesFolder = "Templates/";

@@ -12,7 +12,6 @@ nlohmann::json JObject::json()
 	return j;
 }
 
-
 std::unordered_map<std::string, size_t> JObject::GetStringToFlags()
 {
 	return {};

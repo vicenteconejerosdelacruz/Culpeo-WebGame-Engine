@@ -2,7 +2,6 @@
 
 #include "Primitive.h"
 #include <VertexFormats.h>
-#include <Utils/GraphicsFloat.h>
 
 namespace Primitives
 {

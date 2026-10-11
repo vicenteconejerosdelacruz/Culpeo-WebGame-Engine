@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <Scene.h>
 #include <Level.h>
+#include <Editor/DefaultLevel.h>
 
 namespace Game
 {
@@ -54,6 +55,8 @@ namespace Game
 	void BootGame()
 	{
 		using namespace Scene::Level;
+		using namespace Editor::DefaultLevel;
+		
 		LoadLevelIntoSceneUnit(
 			"default",
 			GetDefaultLevel,
