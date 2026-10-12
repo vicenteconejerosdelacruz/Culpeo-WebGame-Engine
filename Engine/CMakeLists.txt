@@ -47,6 +47,11 @@ add_executable(CulpeoEngine
     "Source/Scene/SceneUnit.cpp"
     "Source/Scene/SceneObject.h"
     "Source/Scene/SceneObject.cpp"
+    "Source/Scene/Camera/Camera.h"
+    "Source/Scene/Camera/CameraAtt.h"
+    "Source/Scene/Camera/Camera.cpp"
+    "Source/Scene/Camera/Projections/Orthographic.h"
+    "Source/Scene/Camera/Projections/Perspective.h"
     "Source/Scene/Renderable/Renderable.h"
     "Source/Scene/Renderable/Renderable.cpp"
     "Source/Templates/JTemplate.h"
@@ -55,7 +60,12 @@ add_executable(CulpeoEngine
     "Source/Templates/HtmlUI/HtmlUI.h"
     "Source/Templates/HtmlUI/HtmlUIAtt.h"
     "Source/Templates/HtmlUI/HtmlUI.cpp"
+    "Source/Templates/Material/Material.h"
+    "Source/Templates/Material/MaterialAtt.h"
+    "Source/Templates/Material/Material.cpp"
     "Source/Templates/Material/MeshMaterial.h"
+    "Source/Templates/Material/Variables.h"
+    "Source/Templates/Material/Variables.cpp"
     "Source/Templates/Mesh/Mesh.h"
     "Source/Templates/Mesh/Mesh.cpp"
     "Source/Templates/Mold/Mold.h"
@@ -82,6 +92,9 @@ add_executable(CulpeoEngine
     "Source/Templates/Sound/Sound.h"
     "Source/Templates/Sound/SoundAtt.h"
     "Source/Templates/Sound/Sound.cpp"
+    "Source/Templates/Textures/Texture.h"
+    "Source/Templates/Textures/TextureAtt.h"
+    "Source/Templates/Textures/Texture.cpp"
     "Source/TestGame/GameControllers/GameControllers.cpp"
     "Source/pch/UUID.h"
     "Source/pch/NoStd.h"
@@ -104,6 +117,7 @@ target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Renderable
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Camera
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Templates
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Primitives
     ${CMAKE_SOURCE_DIR}/SDKs/assimp/include

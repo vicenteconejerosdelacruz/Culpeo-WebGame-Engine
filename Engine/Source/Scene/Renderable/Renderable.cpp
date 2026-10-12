@@ -104,7 +104,18 @@ namespace Scene
 		// );
 	}
 
-	// void Renderable::create_rotation(XMFLOAT3 v)
+    void Renderable::Map(SUUUID so)
+    {
+		Controller::Map(so);
+		CreateMeshInstances();
+    }
+
+    void Renderable::Unmap()
+    {
+		Controller::Unmap();
+    }
+
+    // void Renderable::create_rotation(XMFLOAT3 v)
 	// {
 	// 	if (!contains("rotation"))
 	// 	{
@@ -366,9 +377,10 @@ namespace Scene
 		}
 	}
 */
-/*
+
 	void Renderable::CreateMeshInstances()
 	{
+		/*
 		using namespace Templates;
 
 		if (Model3DTemplateExist(model()))
@@ -402,14 +414,15 @@ namespace Scene
 				CreateAnimationSequences();
 			}
 		}
-		else if (!meshMaterial().mesh.empty() && meshMaterial().mesh.contains("primitive") && !meshMaterial().mesh.at("primitive").empty() && !meshMaterial().materialUUID.empty())
+		else*/
+		 if (!meshMaterial().mesh.empty() && meshMaterial().mesh.contains("primitive") && !meshMaterial().mesh.at("primitive").empty() && !meshMaterial().materialUUID.empty())
 		{
 			nlohmann::json mesh = meshMaterial().mesh;
 			meshes.push_back(GetMeshInstance(unit, mesh)->uuid);
-			CreateBoundingBox();
+			//CreateBoundingBox();
 		}
 	}
-*/
+
 /*
 	std::vector<RenderPassInstanceID> Renderable::GetCameraRenderPasses(CameraID cam)
 	{

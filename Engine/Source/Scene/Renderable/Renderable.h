@@ -4,7 +4,8 @@
 // #include <Scene.h>
 // #include <SceneObject.h>
 //#include <Model3D/Model3D.h>
-// #include <Material/MeshMaterial.h>
+#include <Material/MeshMaterial.h>
+#include <Mesh/Mesh.h>
 // #include <RenderPass/PassMaterialOverride.h>
 // #include <Sequence/AnimationSequences.h>
 // #include <Sequence/SequencePlayer.h>
@@ -13,7 +14,7 @@
 // #include <PhysicObject.h>
 // #include <NoV8.h>
 
-// using RenderableMeshes = std::vector<MeshInstanceID>;
+using RenderableMeshes = std::vector<MeshInstanceID>;
 // using RenderableMaterials = std::unordered_map<RenderPassInstanceID, std::vector<MaterialInstanceID>>; //RenderPassInstanceID -> MaterialInstanceID
 // using RenderableConstantsBuffer = std::unordered_map<RenderPassInstanceID, std::vector<std::vector<ConstantsBufferID>>>; //RenderPassUUID -> vector:vector:ConstantsBufferID
 // using RenderableRootSignatures = std::unordered_map<RenderPassInstanceID, std::vector<CComPtr<ID3D12RootSignature>>>; //RenderPassUUID -> vector:RootSignature
@@ -93,7 +94,9 @@ namespace Scene
 		~Renderable() {
 			// Destroy();
 		}
-
+		
+		void Map(SUUUID so) override;
+		void Unmap() override;
 #if defined(_EDITOR)
 		// void DropJsonMoldAttributes(nlohmann::json& j) override;
 #endif
@@ -120,7 +123,7 @@ namespace Scene
 		// std::vector<RenderPassInstanceID> GetCameraRenderPasses(CameraID cam);
 
 		//Meshes
-		// void CreateMeshInstances();
+		void CreateMeshInstances();
 
 		//Materials
 		// void CreateMaterialsInstances(CameraID cam);
@@ -207,7 +210,7 @@ namespace Scene
 		//Model3D
 		// Model3DInstanceID model3D;
 		//Meshes
-		// RenderableMeshes meshes;
+		RenderableMeshes meshes;
 		// RenderableMaterials materials;
 		// RenderableConstantsBuffer constantsBuffers;
 		// std::unique_ptr<std::atomic_bool> constantsBuffersLock[JRenderer::numFrames];

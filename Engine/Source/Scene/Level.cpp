@@ -227,8 +227,8 @@ namespace Scene::Level
 // 		{
 // 			pendingPhysicsCreation.insert(id);
 // 		}
-// 		//leave this to last
-// 		MapControllers(id);
+		//leave this to last
+		MapControllers(id);
 // #if defined(_EDITOR)
 // 		if (!scene->IsIsolated())
 // 		{

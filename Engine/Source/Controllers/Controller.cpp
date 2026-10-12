@@ -4,6 +4,7 @@
 #include <mutex>
 #include <Scene.h>
 #include <Renderable.h>
+#include <Camera.h>
 
 // #if defined(_EDITOR)
 // namespace Editor
@@ -27,6 +28,7 @@ namespace Game
     std::unordered_map<std::string, std::function<std::unique_ptr<Game::Controller>(nlohmann::json&)>> engineControllers =
 	{
 		{ "renderable", [](nlohmann::json& json) { return std::make_unique<Renderable>(json); }},
+		{ "camera", [](nlohmann::json& json) { return std::make_unique<Camera>(json); }},
     };
 
 	std::map<JUUID, std::unique_ptr<Controller>> controllersUUIDs;
