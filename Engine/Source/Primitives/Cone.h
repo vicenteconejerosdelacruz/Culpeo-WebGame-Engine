@@ -43,7 +43,7 @@ namespace Primitives
 #if defined(_EDITOR)
 		void WriteJson(nlohmann::json& j) override;
 #endif
-		// void PrepareMesh() override;
+		void PrepareMesh() override;
 
 		std::vector<uint32_t> GetIndices();
 		std::vector<VertexType> GetVertices();

@@ -1,6 +1,7 @@
 #include "SceneObject.h"
 #include <memory>
 #include <mutex>
+#include <SimpleMath.h>
 
 #if defined(_EDITOR)
 namespace Editor
@@ -11,7 +12,8 @@ namespace Editor
 
 namespace Scene
 {
-	using namespace Graphics;
+	//using namespace Graphics;
+	using namespace DirectX;
 	typedef std::tuple<JNAME, std::unique_ptr<SceneObject>> SceneObjectTuple;
 	typedef SceneObjectsContainer<SceneObjectTuple> SceneObjects;
 	std::map<SceneUnitId, SceneObjects> SUSceneObjects;
@@ -33,7 +35,7 @@ namespace Scene
 		soName = json.at("name");
 	}
 
-	void SceneObject::create_rotation(FLOAT3 v)
+	void SceneObject::create_rotation(XMFLOAT3 v)
 	{
 		if (!contains("rotation"))
 		{
@@ -41,9 +43,9 @@ namespace Scene
 		}
 	}
 
-	void SceneObject::rotation(FLOAT3 v)
+	void SceneObject::rotation(XMFLOAT3 v)
 	{
-		(*this)["rotation"] = FromFLOAT3(v);
+		(*this)["rotation"] = FromXMFLOAT3(v);
 		//updateRotationQ();
 	}
 

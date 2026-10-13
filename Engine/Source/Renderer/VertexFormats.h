@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SimpleMath.h>
 #include <map>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -8,7 +9,8 @@
 // #include <Animated.h>
 #include <set>
 
-using namespace Graphics;
+//using namespace Graphics;
+using namespace DirectX;
 
 //define the vertices types
 enum VertexClass {
@@ -44,65 +46,65 @@ static std::map<VertexClass, std::string> VertexClassToString =
 //define the data of each vertex type
 template<VertexClass V> struct Vertex;
 template<> struct Vertex<VertexClass::POS> {
-	FLOAT3 Position;
+	XMFLOAT3 Position;
 };
 template<> struct Vertex<VertexClass::POS_SKINNING> {
-	FLOAT3 Position;
-	UINT4 BoneIds;
-	FLOAT4 BoneWeights;
+	XMFLOAT3 Position;
+	XMUINT4 BoneIds;
+	XMFLOAT4 BoneWeights;
 };
 template<> struct Vertex<VertexClass::POS_COLOR> {
-	FLOAT3 Position;
-	FLOAT3 Color;
+	XMFLOAT3 Position;
+	XMFLOAT3 Color;
 };
 template<> struct Vertex<VertexClass::POS_TEXCOORD0> {
-	FLOAT3 Position;
-	FLOAT2 TexCoord;
+	XMFLOAT3 Position;
+	XMFLOAT2 TexCoord;
 };
 template<> struct Vertex<VertexClass::POS_TEXCOORD0_SKINNING> {
-	FLOAT3 Position;
-	FLOAT2 TexCoord;
-	UINT4 BoneIds;
-	FLOAT4 BoneWeights;
+	XMFLOAT3 Position;
+	XMFLOAT2 TexCoord;
+	XMUINT4 BoneIds;
+	XMFLOAT4 BoneWeights;
 };
 template<> struct Vertex<VertexClass::POS_NORMAL> {
-	FLOAT3 Position;
-	FLOAT3 Normal;
+	XMFLOAT3 Position;
+	XMFLOAT3 Normal;
 };
 template<> struct Vertex<VertexClass::POS_NORMAL_TEXCOORD0> {
-	FLOAT3 Position;
-	FLOAT3 Normal;
-	FLOAT2 TexCoord;
+	XMFLOAT3 Position;
+	XMFLOAT3 Normal;
+	XMFLOAT2 TexCoord;
 };
 template<> struct Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0> {
-	FLOAT3 Position;
-	FLOAT3 Normal;
-	FLOAT3 Tangent;
-	FLOAT2 TexCoord;
+	XMFLOAT3 Position;
+	XMFLOAT3 Normal;
+	XMFLOAT3 Tangent;
+	XMFLOAT2 TexCoord;
 };
 template<> struct Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING> {
-	FLOAT3 Position;
-	FLOAT3 Normal;
-	FLOAT3 Tangent;
-	FLOAT2 TexCoord;
-	UINT4 BoneIds;
-	FLOAT4 BoneWeights;
+	XMFLOAT3 Position;
+	XMFLOAT3 Normal;
+	XMFLOAT3 Tangent;
+	XMFLOAT2 TexCoord;
+	XMUINT4 BoneIds;
+	XMFLOAT4 BoneWeights;
 };
 template<> struct Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0> {
-	FLOAT3 Position;
-	FLOAT3 Normal;
-	FLOAT3 Tangent;
-	FLOAT3 BiTangent;
-	FLOAT2 TexCoord;
+	XMFLOAT3 Position;
+	XMFLOAT3 Normal;
+	XMFLOAT3 Tangent;
+	XMFLOAT3 BiTangent;
+	XMFLOAT2 TexCoord;
 };
 template<> struct Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING> {
-	FLOAT3 Position;
-	FLOAT3 Normal;
-	FLOAT3 Tangent;
-	FLOAT3 BiTangent;
-	FLOAT2 TexCoord;
-	UINT4 BoneIds;
-	FLOAT4 BoneWeights;
+	XMFLOAT3 Position;
+	XMFLOAT3 Normal;
+	XMFLOAT3 Tangent;
+	XMFLOAT3 BiTangent;
+	XMFLOAT2 TexCoord;
+	XMUINT4 BoneIds;
+	XMFLOAT4 BoneWeights;
 };
 
 //make aliases for each vertex type

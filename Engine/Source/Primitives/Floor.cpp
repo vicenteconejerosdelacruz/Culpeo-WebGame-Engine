@@ -1,4 +1,5 @@
 #include "Floor.h"
+#include <SimpleMath.h>
 
 using namespace Primitives;
 
@@ -8,10 +9,10 @@ static std::vector<uint32_t> indices = {
 
 static std::vector<Floor::VertexType> vertices = {
 	//+Y
-	{ FLOAT3(-1.0f,  0.0f,  1.0f), FLOAT3(0.0f,  1.0f,  0.0f) },
-	{ FLOAT3(1.0f,  0.0f,  1.0f), FLOAT3(0.0f,  1.0f,  0.0f) },
-	{ FLOAT3(-1.0f,  0.0f, -1.0f), FLOAT3(0.0f,  1.0f,  0.0f) },
-	{ FLOAT3(1.0f,  0.0f, -1.0f), FLOAT3(0.0f,  1.0f,  0.0f) }
+	{ XMFLOAT3(-1.0f,  0.0f,  1.0f), XMFLOAT3(0.0f,  1.0f,  0.0f) },
+	{ XMFLOAT3(1.0f,  0.0f,  1.0f), XMFLOAT3(0.0f,  1.0f,  0.0f) },
+	{ XMFLOAT3(-1.0f,  0.0f, -1.0f), XMFLOAT3(0.0f,  1.0f,  0.0f) },
+	{ XMFLOAT3(1.0f,  0.0f, -1.0f), XMFLOAT3(0.0f,  1.0f,  0.0f) }
 };
 
 namespace Primitives

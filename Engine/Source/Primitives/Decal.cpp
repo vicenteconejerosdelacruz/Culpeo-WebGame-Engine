@@ -1,16 +1,18 @@
 #include "Decal.h"
+#include <SimpleMath.h>
 
 using namespace Primitives;
+using namespace DirectX;
 
 static std::vector<uint32_t> indices = {
 	 2, 1, 0, 1, 2, 3 //+Y
 };
 
 static std::vector<Decal::VertexType> vertices = {
-	{ FLOAT3(1.0f,  1.0f,  0.0f), FLOAT2(1.0f, 0.0f) },
-	{ FLOAT3(-1.0f,  1.0f,  0.0f), FLOAT2(0.0f, 0.0f) },
-	{ FLOAT3(1.0f, -1.0f,  0.0f), FLOAT2(1.0f, 1.0f) },
-	{ FLOAT3(-1.0f, -1.0f,  0.0f), FLOAT2(0.0f, 1.0f) },
+	{ XMFLOAT3(1.0f,  1.0f,  0.0f), XMFLOAT2(1.0f, 0.0f) },
+	{ XMFLOAT3(-1.0f,  1.0f,  0.0f), XMFLOAT2(0.0f, 0.0f) },
+	{ XMFLOAT3(1.0f, -1.0f,  0.0f), XMFLOAT2(1.0f, 1.0f) },
+	{ XMFLOAT3(-1.0f, -1.0f,  0.0f), XMFLOAT2(0.0f, 1.0f) },
 };
 
 namespace Primitives

@@ -27,13 +27,13 @@ inline static std::unordered_map<std::string, ProjectionsTypes> StringToProjecti
 };
 
 struct CameraAttributes {
-	// XMMATRIX view;
-	// XMMATRIX viewProjection;
-	FLOAT4 eyePosition;
-	FLOAT4 eyeForward;
-	FLOAT4 eyeUp;
-	FLOAT4 eyeRight;
-	FLOAT4 widthHeight;
+	XMMATRIX view;
+	XMMATRIX viewProjection;
+	XMFLOAT4 eyePosition;
+	XMFLOAT4 eyeForward;
+	XMFLOAT4 eyeUp;
+	XMFLOAT4 eyeRight;
+	XMFLOAT4 widthHeight;
 	float white;
 	float IBLNumEnvLevels;
 };

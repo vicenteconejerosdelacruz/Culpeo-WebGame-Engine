@@ -122,6 +122,7 @@ target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Primitives
     ${CMAKE_SOURCE_DIR}/SDKs/assimp/include
     ${CMAKE_SOURCE_DIR}/SDKs/build/assimp/include
+    ${CMAKE_SOURCE_DIR}/SDKs/DirectXMath/Inc
 )
 
 # 4. Configurar Precompiled Header (PCH) global para el motor
@@ -131,7 +132,6 @@ target_precompile_headers(CulpeoEngine PRIVATE
     "Source/pch/UUID.h"
     "Source/pch/NoStd.h"
     "Source/pch/NoMath.h"
-    "Source/pch/GraphicsFloat.h"
     "Source/pch/Json.h"
     "Source/pch/SceneUnitId.h"
     "Source/pch/ShaderMaterials.h"
@@ -156,11 +156,13 @@ if(EMSCRIPTEN)
     )
 
     target_compile_options(CulpeoEngine PRIVATE
+        -msimd128
         -pthread
         "-D_EDITOR"
     )
 
     target_link_options(CulpeoEngine PRIVATE 
+        -msimd128
         $<$<CONFIG:Debug>:-g3>
         $<$<CONFIG:Debug>:-sASSERTIONS=2>
 

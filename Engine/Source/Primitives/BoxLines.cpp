@@ -1,6 +1,8 @@
 #include "BoxLines.h"
+#include <SimpleMath.h>
 
 using namespace Primitives;
+using namespace DirectX;
 
 static std::vector<uint32_t> indices =
 {
@@ -10,14 +12,14 @@ static std::vector<uint32_t> indices =
 };
 
 static std::vector<BoxLines::VertexType> vertices = {
-	{ FLOAT3(-1.0f, +1.0f, -1.0f) }, // -X +Y -Z
-	{ FLOAT3(+1.0f, +1.0f, -1.0f) }, // +X +Y -Z
-	{ FLOAT3(-1.0f, +1.0f, +1.0f) }, // -X +Y +Z
-	{ FLOAT3(+1.0f, +1.0f, +1.0f) }, // +X +Y +Z
-	{ FLOAT3(-1.0f, -1.0f, -1.0f) }, // -X -Y -Z
-	{ FLOAT3(+1.0f, -1.0f, -1.0f) }, // +X -Y -Z
-	{ FLOAT3(-1.0f, -1.0f, +1.0f) }, // -X -Y +Z
-	{ FLOAT3(+1.0f, -1.0f, +1.0f) }  // +X -Y +Z
+	{ XMFLOAT3(-1.0f, +1.0f, -1.0f) }, // -X +Y -Z
+	{ XMFLOAT3(+1.0f, +1.0f, -1.0f) }, // +X +Y -Z
+	{ XMFLOAT3(-1.0f, +1.0f, +1.0f) }, // -X +Y +Z
+	{ XMFLOAT3(+1.0f, +1.0f, +1.0f) }, // +X +Y +Z
+	{ XMFLOAT3(-1.0f, -1.0f, -1.0f) }, // -X -Y -Z
+	{ XMFLOAT3(+1.0f, -1.0f, -1.0f) }, // +X -Y -Z
+	{ XMFLOAT3(-1.0f, -1.0f, +1.0f) }, // -X -Y +Z
+	{ XMFLOAT3(+1.0f, -1.0f, +1.0f) }  // +X -Y +Z
 };
 
 namespace Primitives
