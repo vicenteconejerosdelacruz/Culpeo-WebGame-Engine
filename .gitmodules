@@ -12,3 +12,6 @@
 [submodule "SDKs/json"]
 	path = SDKs/json
 	url = https://github.com/nlohmann/json.git
+[submodule "SDKs/PhysX"]
+	path = SDKs/PhysX
+	url = https://github.com/fabmax/physx-js-webidl.git

@@ -34,4 +34,14 @@ cd ../emsdk
 
 cd $engine_folder
 
-cmake --build build --target WasmSDKs -- -j4
+#cmake --build build --target WasmSDKs -- -j4
+
+cmake --build build --target WasmSDKs -- -j4 -v | ForEach-Object {
+    if ($_ -match " -c\s+(.+\.cpp)$") {
+        Write-Host "[Compilando] $($Matches[1])" -ForegroundColor Cyan
+    } elseif ($_ -match " -o\s+(.+\.js)$") {
+        Write-Host "[Enlazando]   $($Matches[1])" -ForegroundColor Green
+    } else {
+        $_
+    }
+}

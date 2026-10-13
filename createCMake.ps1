@@ -35,4 +35,4 @@ cd ../emsdk
 cd $engine_folder
 
 #emcmake cmake -B build -G Ninja -DCMAKE_CXX_FLAGS="-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1 -Wno-error=deprecated-pragma"
-emcmake cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1 -Wno-error=deprecated-pragma"
+emcmake cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1 -Wno-error=deprecated-pragma"

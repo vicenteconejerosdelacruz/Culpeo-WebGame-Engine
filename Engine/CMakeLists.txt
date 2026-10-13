@@ -153,6 +153,11 @@ if(EMSCRIPTEN)
         assimp
         yaml-cpp
         nlohmann_json::nlohmann_json
+        PhysXFoundation
+        PhysXCommon
+        PhysX
+        PhysXCooking
+        PhysXExtensions
     )
 
     target_compile_options(CulpeoEngine PRIVATE
@@ -181,5 +186,10 @@ else()
         assimp
         yaml-cpp
         nlohmann_json::nlohmann_json
+        PhysXFoundation
+        PhysXCommon
+        PhysX
+        PhysXCooking
+        PhysXExtensions
     )
 endif()
