@@ -4,6 +4,7 @@
 #include <set>
 #include <string>
 #include <functional>
+#include <SimpleMath.h>
 #include <nlohmann/json.hpp>
 #include <JObject.h>
 #include <Controller.h>
@@ -136,7 +137,15 @@ namespace Scene
 		// virtual void Unbind(JUUID uuid) {}
 		virtual void Destroy();
 
-		// //transformations
+		//transformations
+		XMVECTOR rotationQ();
+		void rotationQ(XMVECTOR Q);
+		void updateRotationQ();
+		XMVECTOR positionV();
+		XMVECTOR scaleV();
+		// XMVECTOR positionV();
+		// void updateRotationQ();
+		// XMVECTOR rotationQ();
 		// virtual XMVECTOR rotationQ() { return XMQuaternionIdentity(); }
 		// virtual XMMATRIX world() { return XMMatrixIdentity(); }
 
@@ -172,10 +181,16 @@ namespace Scene
 		SceneUnitId unit;
 		std::string soName;
 		std::vector<std::function<void()>> destroyCallbacks;
+		//Transformation
+		XMVECTOR rotationQuaternion;
 	};
 
 	void CreateSceneObject(SceneUnitId id, nlohmann::json& json);
+	std::unique_ptr<SceneObject>& GetSceneObject(SceneUnitId id, JUUID uuid);
 };
+
+using namespace Scene;
+using SceneObjectID = TSUUUID<SceneObject, GetSceneObject>;
 
 // #include <Renderable/Renderable.h>
 // #include <Light/Light.h>

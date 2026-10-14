@@ -1,4 +1,5 @@
 #include "Renderable.h"
+#include <SceneObject.h>
 // #include <Scene.h>
 // #include <Renderer.h>
 // #include <DeviceUtils/RootSignature/RootSignature.h>
@@ -351,15 +352,21 @@ namespace Scene
 		rotationQuaternion = Q;
 	}
 */
-/*
+
 	XMMATRIX Renderable::world()
 	{
-		XMFLOAT3 posV = position();
-		XMFLOAT3 scaleV = scale();
-		XMMATRIX rotationM = XMMatrixRotationQuaternion(rotationQuaternion);
-		XMMATRIX scaleM = XMMatrixScalingFromVector(XMLoadFloat3(&scaleV));
-		XMMATRIX positionM = XMMatrixTranslationFromVector(XMLoadFloat3(&posV));
+		auto& so = *sceneObject;
+		
+		XMVECTOR posV = so->positionV();
+		XMVECTOR scaleV = so->scaleV();
+
+		XMMATRIX rotationM = XMMatrixRotationQuaternion(so->rotationQuaternion);
+		XMMATRIX scaleM = XMMatrixScalingFromVector(scaleV);
+		XMMATRIX positionM = XMMatrixTranslationFromVector(posV);
+
 		XMMATRIX worldM = XMMatrixMultiply(XMMatrixMultiply(scaleM, rotationM), positionM);
+
+		/*
 		XMMATRIX animT = (!animationUseTransformation()) ? worldM : XMMatrixMultiply(animationTransformation, worldM);
 		if (attachedTo().empty())
 		{
@@ -375,8 +382,9 @@ namespace Scene
 			auto [mm, pos, a, b, c] = parent->GetBoneTransformation(attachedBone());
 			return XMMatrixMultiply(animT, mm);
 		}
+		*/
+		return worldM;
 	}
-*/
 
 	void Renderable::CreateMeshInstances()
 	{

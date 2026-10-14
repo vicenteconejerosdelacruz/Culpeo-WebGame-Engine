@@ -46,7 +46,7 @@ namespace Scene
 	void SceneObject::rotation(XMFLOAT3 v)
 	{
 		(*this)["rotation"] = FromXMFLOAT3(v);
-		//updateRotationQ();
+		updateRotationQ();
 	}
 
 	void SceneObject::Initialize()
@@ -75,6 +75,38 @@ namespace Scene
 		// {
 		// 	cb();
 		// }
+	}
+
+	XMVECTOR SceneObject::rotationQ()
+	{
+		return rotationQuaternion;
+	}
+
+	void SceneObject::rotationQ(XMVECTOR Q)
+	{
+		rotationQuaternion = Q;
+	}
+
+	void SceneObject::updateRotationQ()
+	{
+		XMFLOAT3 v = rotation();
+		rotationQuaternion = XMQuaternionRotationRollPitchYaw(
+			XMConvertToRadians(v.x),
+			XMConvertToRadians(v.y),
+			XMConvertToRadians(v.z)
+		);
+	}
+
+	XMVECTOR SceneObject::positionV()
+	{
+		XMFLOAT3 pos = position();
+		return XMLoadFloat3(&pos);
+	}
+
+	XMVECTOR SceneObject::scaleV()
+	{
+		XMFLOAT3 pos = scale();
+		return XMLoadFloat3(&pos);
 	}
 
 // #if defined(_EDITOR)
@@ -106,5 +138,11 @@ namespace Scene
 		std::unique_ptr<SceneObject> jT = std::make_unique<SceneObject>(id, json);
 		uuidSceneObjects.insert_or_assign(uuid, std::make_tuple(name, std::move(jT)));
 		std::get<1>(uuidSceneObjects.at(uuid))->Initialize();
+	}
+
+	std::unique_ptr<SceneObject>& GetSceneObject(SceneUnitId id, JUUID uuid)
+	{
+		auto& uuidSceneObjects = SUSceneObjects.at(id);
+		return std::get<1>(uuidSceneObjects.at(uuid));
 	}
 }

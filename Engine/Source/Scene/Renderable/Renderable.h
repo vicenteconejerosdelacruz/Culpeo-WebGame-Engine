@@ -105,7 +105,7 @@ namespace Scene
 		// void updateRotationQ();
 		// XMVECTOR rotationQ();
 		// void rotationQ(XMVECTOR Q);
-		// XMMATRIX world();
+		XMMATRIX world();
 
 		// void Initialize() override;
 		// virtual void SetInitialConditions();

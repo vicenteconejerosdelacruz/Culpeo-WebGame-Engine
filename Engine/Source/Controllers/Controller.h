@@ -6,8 +6,17 @@
 #include <set>
 #include <JObject.h>
 #include <nlohmann/json.hpp>
+//#include <SceneObject.h>
 // #include <StepTimer.h>
 // #include <NoV8.h>
+
+namespace Scene
+{
+	struct SceneObject;
+	extern std::unique_ptr<SceneObject>& GetSceneObject(SceneUnitId id, JUUID uuid);
+};
+using namespace Scene;
+using SceneObjectID = TSUUUID<SceneObject, GetSceneObject>;
 
 // #define DECL_CONTROLLER_DRAWER(JClass,ParentJClass)\
 // std::map<std::string, JEdvEditorDrawerFunction> GetControllerDrawers() override\
@@ -160,7 +169,7 @@ namespace Game
 		// virtual void BindNestedControllers(Local<Context> context, Isolate* isolate, std::unique_ptr<SceneUnitScripting>& scriptData) {}
 
 		SceneUnitId unit;
-		SUUUID sceneObject;
+		SceneObjectID sceneObject;
 	};
 
 	std::map<JUUID, std::unique_ptr<Controller>>& GetControllersUUIDs();
@@ -184,12 +193,12 @@ namespace Game
 		for (auto& [uuid, ctrl] : uuid2ctrl)
 		{
 			if (ctrl->unit != id || !dynamic_cast<T*>(ctrl.get())) continue;
-			auto& uuidNameSet = suuid2ctrlsuuidName.at(ctrl->sceneObject);
+			auto& uuidNameSet = suuid2ctrlsuuidName.at(ctrl->sceneObject());
 			for (auto [uuidInSet, nameInSet] : uuidNameSet)
 			{
 				if (uuidInSet == uuid)
 				{
-					controllers.push_back(std::make_tuple(std::get<1>(ctrl->sceneObject), nameInSet));
+					controllers.push_back(std::make_tuple(std::get<1>(ctrl->sceneObject()), nameInSet));
 					break;
 				}
 			}
