@@ -66,3 +66,10 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+build_Debug/
+build_Development/
+build_Release/
+build_EditorDebug/
+build_EditorDevelopment/
+build_EditorRelease/

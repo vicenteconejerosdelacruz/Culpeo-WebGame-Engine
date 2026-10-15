@@ -1,4 +1,10 @@
-$engine_folder=&"pwd"
+param(
+    [Parameter(Mandatory=$false)]
+    [ValidateSet("Editor_Debug", "Debug", "Editor_Development", "Development", "Editor_Release", "Release")]
+    [string]$Configuration = "Development"
+)
+
+$engine_folder = (Get-Location).Path
 
 function Ensure-GitSubmodules {
     Write-Host "[*] Verifying Git submodules..." -ForegroundColor Cyan
@@ -9,10 +15,10 @@ function Ensure-GitSubmodules {
         exit 1
     }
 
-    $needsUpdate = $false
+    $needsUpdate =$false
     foreach ($line in $submoduleStatus) {
         if ($line.Trim().StartsWith("-")) {
-            $needsUpdate = $true
+            $needsUpdate =$true
             break
         }
     }
@@ -29,10 +35,34 @@ function Ensure-GitSubmodules {
 
 Ensure-GitSubmodules
 
-cd ../emsdk
-./emsdk_env.ps1
+# Configuración manual del entorno de Emscripten para evitar bloqueos
+$emsdk_path = Resolve-Path "$PSScriptRoot\..\emsdk"
+$env:EMSDK =$emsdk_path
+$env:EMSDK_NODE = "$emsdk_path\node\16.15.0_64bit\bin\node.exe"
+$env:PATH = "$emsdk_path;$emsdk_path\upstream\emscripten;$env:PATH"
 
 cd $engine_folder
 
-#emcmake cmake -B build -G Ninja -DCMAKE_CXX_FLAGS="-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1 -Wno-error=deprecated-pragma"
-emcmake cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1 -Wno-error=deprecated-pragma"
+# Mapear la configuración del motor a un CMAKE_BUILD_TYPE válido para las SDKs y flags
+$sdkBuildType = "Release"
+$extraCFlags = "-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1 -Wno-error=deprecated-pragma"
+
+switch ($Configuration) {
+    { $_ -in "Editor_Debug", "Debug" } { $sdkBuildType = "Debug" }
+    { $_ -in "Editor_Development", "Development", "Editor_Release", "Release" } {
+        $sdkBuildType = "Release"
+        if ($Configuration -match "Development") { $extraCFlags += " -g3" }
+        else { $extraCFlags += " -O3" }
+    }
+}
+
+# Carpeta de build aislada por configuración
+$buildDir = "build/$Configuration"
+
+Write-Host "[*] Generando CMake Cache en: $buildDir" -ForegroundColor Cyan
+
+emcmake cmake -B "$buildDir" -G Ninja `
+    -DCMAKE_BUILD_TYPE="$sdkBuildType" `
+    -DCULPEO_CONFIG="$Configuration" `
+    -DCMAKE_C_FLAGS="$extraCFlags" `
+    -DCMAKE_CXX_FLAGS="$extraCFlags"

@@ -1,4 +1,10 @@
-$engine_folder=&"pwd"
+param(
+    [Parameter(Mandatory=$false)]
+    [ValidateSet("Debug", "Release")]
+    [string]$BuildType = "Release"
+)
+
+$engine_folder = (Get-Location).Path
 
 function Ensure-GitSubmodules {
     Write-Host "[*] Verifying Git submodules..." -ForegroundColor Cyan
@@ -29,14 +35,34 @@ function Ensure-GitSubmodules {
 
 Ensure-GitSubmodules
 
-cd ../emsdk
-./emsdk_env.ps1
+# Configuración manual del entorno de emsdk para evitar bloqueos
+$emsdk_path = Resolve-Path "$PSScriptRoot\..\emsdk"
+$env:EMSDK = $emsdk_path
+$env:EMSDK_NODE = "$emsdk_path\node\16.15.0_64bit\bin\node.exe"
+$env:PATH = "$emsdk_path;$emsdk_path\upstream\emscripten;$env:PATH"
 
 cd $engine_folder
 
-#cmake --build build --target WasmSDKs -- -j4
+# Carpeta de build aislada por tipo de build para las SDKs
+$sdkBuildDir = "build_$BuildType"
 
-cmake --build build --target WasmSDKs -- -j4 -v | ForEach-Object {
+# Definir flags requeridos para Emscripten en las SDKs
+$extraCFlags = "-DEMSCRIPTEN=1 -D__EMSCRIPTEN__=1 -Wno-error=deprecated-pragma"
+if ($BuildType -eq "Debug") {
+    $extraCFlags += " -g3"
+} else {
+    $extraCFlags += " -O3"
+}
+
+Write-Host "[*] Configurando CMake para SDKs en modo $BuildType ($sdkBuildDir)..." -ForegroundColor Cyan
+
+emcmake cmake -B "$sdkBuildDir" -S . -G Ninja `
+    -DCMAKE_BUILD_TYPE="$BuildType" `
+    -DCMAKE_C_FLAGS="$extraCFlags" `
+    -DCMAKE_CXX_FLAGS="$extraCFlags"
+
+# Compilación secuencial con -j1 para evitar bloqueos y filtrado de salida
+cmake --build "$sdkBuildDir" --target WasmSDKs -- -j1 -v | ForEach-Object {
     if ($_ -match " -c\s+(.+\.cpp)$") {
         Write-Host "[Compilando] $($Matches[1])" -ForegroundColor Cyan
     } elseif ($_ -match " -o\s+(.+\.js)$") {

@@ -1,6 +1,26 @@
 cmake_minimum_required(VERSION 3.22)
 
-# 1. Define el ejecutable de tu motor (incluimos el PCH aquí para seguimiento)
+# Asegurar que CULPEO_CONFIG tenga un valor por defecto si no se pasa
+if(NOT CULPEO_CONFIG)
+    set(CULPEO_CONFIG "Development" CACHE STRING "Culpeo configuration mode" FORCE)
+endif()
+
+# --- DETERMINAR SUBDIRECTORIOS Y CARPETAS AISLADAS SEGÚN CONFIGURACIÓN HÍBRIDA ---
+# Para Editor_Debug y Debug: Assimp/Yaml/Json usan Debug, PhysX/Dawn usan Release (con símbolos)
+# Para Development/Editor_Development/Release/Editor_Release: Todos usan Release
+if(CULPEO_CONFIG STREQUAL "Editor_Debug" OR CULPEO_CONFIG STREQUAL "Debug")
+    set(LIB_SUBDIR_STANDARD "Debug")
+    set(LIB_SUBDIR_PHYSX "Release")
+    set(SDK_BUILD_DIR_STANDARD "${CMAKE_SOURCE_DIR}/build_Debug")
+    set(SDK_BUILD_DIR_PHYSX    "${CMAKE_SOURCE_DIR}/build_Release")
+else()
+    set(LIB_SUBDIR_STANDARD "Release")
+    set(LIB_SUBDIR_PHYSX "Release")
+    set(SDK_BUILD_DIR_STANDARD "${CMAKE_SOURCE_DIR}/build_Release")
+    set(SDK_BUILD_DIR_PHYSX    "${CMAKE_SOURCE_DIR}/build_Release")
+endif()
+
+# 1. Define el ejecutable de tu motor
 add_executable(CulpeoEngine
     "Source/Engine.cpp"
     "Source/Editor/DefaultLevel.h"
@@ -101,12 +121,12 @@ add_executable(CulpeoEngine
     "Source/pch/SceneUnitId.h"
 )
 
-# 2. Configura la ruta de salida en /Engine/Target
+# 2. Configura la ruta de salida usando directamente el nombre de la configuración
 set_target_properties(CulpeoEngine PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Target"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CULPEO_CONFIG}"
 )
 
-# 3. Directorios de inclusión locales del motor y Assimp
+# 3. Directorios de inclusión locales del motor y dependencias (Actualizado dinámicamente)
 target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Editor
@@ -121,7 +141,8 @@ target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Templates
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Primitives
     ${CMAKE_SOURCE_DIR}/SDKs/assimp/include
-    ${CMAKE_SOURCE_DIR}/SDKs/build/assimp/include
+    ${CMAKE_SOURCE_DIR}/SDKs/yaml-cpp/include
+    ${SDK_BUILD_DIR_STANDARD}/SDKs/assimp/include
     ${CMAKE_SOURCE_DIR}/SDKs/DirectXMath/Inc
 )
 
@@ -142,35 +163,56 @@ target_precompile_headers(CulpeoEngine PRIVATE
     "Source/Utils/Yaml2Json.h"
 )
 
+# Determinar el nombre del archivo de assimp y yaml-cpp según si es Debug o Release
+if(LIB_SUBDIR_STANDARD STREQUAL "Debug")
+    set(ASSIMP_LIB_NAME "libassimpd.a")
+    set(YAMLCPP_LIB_NAME "libyaml-cppd.a")
+else()
+    set(ASSIMP_LIB_NAME "libassimp.a")
+    set(YAMLCPP_LIB_NAME "libyaml-cpp.a")
+endif()
+
+# Definir la subcarpeta de PhysX según sea release o debug interno
+if(LIB_SUBDIR_PHYSX STREQUAL "Debug")
+    set(PHYSX_BIN_SUBDIR "debug")
+else()
+    set(PHYSX_BIN_SUBDIR "release")
+endif()
+
 # 5. Configuración específica para WebAssembly (Emscripten)
 if(EMSCRIPTEN)
-    #set_target_properties(CulpeoEngine PROPERTIES SUFFIX ".html")
-
-    # Enlazar las librerías automáticamente
     target_link_libraries(CulpeoEngine PRIVATE 
+        # Dawn / WebGPU
         emdawnwebgpu_cpp 
         webgpu_glfw 
-        assimp
-        yaml-cpp
+
+        # Assimp, yaml-cpp y json (Usan el directorio estándar según Debug/Release)
+        "${SDK_BUILD_DIR_STANDARD}/lib/${LIB_SUBDIR_STANDARD}/${ASSIMP_LIB_NAME}"
+        "${SDK_BUILD_DIR_STANDARD}/lib/${LIB_SUBDIR_STANDARD}/${YAMLCPP_LIB_NAME}"
         nlohmann_json::nlohmann_json
-        PhysXFoundation
-        PhysXCommon
-        PhysX
-        PhysXCooking
-        PhysXExtensions
+
+        # PhysX (Con rutas profundas UNKNOWN, subcarpeta dinámica y sufijo _static)
+        "${SDK_BUILD_DIR_PHYSX}/physx_lib/${LIB_SUBDIR_PHYSX}/bin/UNKNOWN/${PHYSX_BIN_SUBDIR}/libPhysXFoundation_static.a"
+        "${SDK_BUILD_DIR_PHYSX}/physx_lib/${LIB_SUBDIR_PHYSX}/bin/UNKNOWN/${PHYSX_BIN_SUBDIR}/libPhysXCommon_static.a"
+        "${SDK_BUILD_DIR_PHYSX}/physx_lib/${LIB_SUBDIR_PHYSX}/bin/UNKNOWN/${PHYSX_BIN_SUBDIR}/libPhysX_static.a"
+        "${SDK_BUILD_DIR_PHYSX}/physx_lib/${LIB_SUBDIR_PHYSX}/bin/UNKNOWN/${PHYSX_BIN_SUBDIR}/libPhysXCooking_static.a"
+        "${SDK_BUILD_DIR_PHYSX}/physx_lib/${LIB_SUBDIR_PHYSX}/bin/UNKNOWN/${PHYSX_BIN_SUBDIR}/libPhysXExtensions_static.a"
     )
+
+    # Flags condicionales según si es Editor o Debug puro
+    if(CULPEO_CONFIG MATCHES "Editor")
+        target_compile_definitions(CulpeoEngine PRIVATE "_EDITOR")
+    endif()
 
     target_compile_options(CulpeoEngine PRIVATE
         -msimd128
         -pthread
-        "-D_EDITOR"
     )
 
     target_link_options(CulpeoEngine PRIVATE 
         -msimd128
         $<$<CONFIG:Debug>:-g3>
         $<$<CONFIG:Debug>:-sASSERTIONS=2>
-
         -pthread
         "-sPTHREAD_POOL_SIZE=4"
         "-sASYNCIFY=1" 
@@ -179,6 +221,7 @@ if(EMSCRIPTEN)
         "-sGROWABLE_ARRAYBUFFERS=2"
     )
 else()
+    # Entorno nativo (si aplica)
     target_link_libraries(CulpeoEngine PRIVATE 
         webgpu_dawn 
         webgpu_glfw 

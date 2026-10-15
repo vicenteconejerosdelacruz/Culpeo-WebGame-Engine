@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 
-# Forzar Release (o RelWithDebInfo si prefieres conservar algunos símbolos)
+# Forzar el CMAKE_BUILD_TYPE recibido externamente para que nunca quede retenido en caché antigua
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
+else()
+    set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING "Build type" FORCE)
 endif()
 
 project(WasmSDKs CXX C)
@@ -10,6 +12,11 @@ project(WasmSDKs CXX C)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=deprecated-pragma")
+
+# --- Directorios de salida globales separados por tipo de build (Debug / Release) ---
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}")
 
 # --- 1. Opciones para Assimp ---
 set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)
@@ -22,7 +29,6 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE) # Estáticas para Emscripten
 
 # --- 2. Opciones para Dawn ---
 set(DAWN_BUILD_SAMPLES OFF CACHE BOOL "" FORCE)
-#set(DAWN_ENABLE_INSTALL ON CACHE BOOL "" FORCE)
 set(DAWN_FETCH_DEPENDENCIES ON CACHE BOOL "" FORCE)
 set(DAWN_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(DAWN_BUILD_PROTOBUF OFF CACHE BOOL "" FORCE)
@@ -38,7 +44,7 @@ set(JSON_BuildTests OFF CACHE BOOL "" FORCE)
 set(PX_GENERATE_STATIC_LIBRARIES ON CACHE BOOL "" FORCE)
 set(PX_SUPPORT_GPU_PHYSX OFF CACHE BOOL "" FORCE)
 set(PX_SUPPORT_OMNIVERSE OFF CACHE BOOL "" FORCE)
-set(PX_SUPPORT_PVD OFF CACHE BOOL "" FORCE)      # <-- Asegúrate de que esté en OFF
+set(PX_SUPPORT_PVD OFF CACHE BOOL "" FORCE)
 set(NV_USE_GAMEWORKS_ALLOCATOR OFF CACHE BOOL "" FORCE)
 set(PHYSX_USE_PTHREADS ON CACHE BOOL "" FORCE)
 
@@ -82,20 +88,19 @@ if(EXISTS "${PHYSX_INTERNAL_CMAKE_DIR}/CMakeLists.txt")
     get_filename_component(PHYSX_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/PhysX/PhysX/physx" ABSOLUTE)
     set(PHYSX_ROOT_DIR "${PHYSX_ROOT_DIR}" CACHE PATH "PhysX Root Directory" FORCE)
 
-    # Forzar modo Release y plataforma Linux/Emscripten para que no caiga en UNKNOWN/Debug
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
+    # Configuración de plataforma para PhysX (respetando el CMAKE_BUILD_TYPE actual)
     set(PX_BUILDSYS_LOWER_PLATFORM "linux" CACHE STRING "" FORCE)
     set(TARGET_BUILD_PLATFORM "emscripten" CACHE STRING "" FORCE)
     set(PX_TARGET_ARCH "wasm" CACHE STRING "" FORCE)
 
-    # Rutas de salida para las librerías estáticas
-    set(PX_OUTPUT_LIB_DIR "${CMAKE_BINARY_DIR}/physx_lib" CACHE PATH "PhysX Output Lib Directory" FORCE)
-    set(PX_OUTPUT_BIN_DIR "${CMAKE_BINARY_DIR}/physx_bin" CACHE PATH "PhysX Output Bin Directory" FORCE)
+    # Rutas de salida específicas de PhysX separadas por modo de compilación
+    set(PX_OUTPUT_LIB_DIR "${CMAKE_BINARY_DIR}/physx_lib/${CMAKE_BUILD_TYPE}" CACHE PATH "PhysX Output Lib Directory" FORCE)
+    set(PX_OUTPUT_BIN_DIR "${CMAKE_BINARY_DIR}/physx_bin/${CMAKE_BUILD_TYPE}" CACHE PATH "PhysX Output Bin Directory" FORCE)
 
     # Indicar plataforma Emscripten para que el build system active la configuración de WASM
     set(TARGET_BUILD_PLATFORM "emscripten" CACHE STRING "Target Build Platform" FORCE)
     set(PX_TARGET_ARCH "wasm" CACHE STRING "Target Architecture" FORCE)
-
+    
     # Definiciones estáticas y de entorno WASM
     add_compile_definitions(
         PX_PHYSX_STATIC_LIB
@@ -107,7 +112,7 @@ if(EXISTS "${PHYSX_INTERNAL_CMAKE_DIR}/CMakeLists.txt")
         _Bool=bool
     )
 
-    # Opciones opcionales para silenciar advertencias estrictas del compilador Clang de Emscripten
+    # Opciones para silenciar advertencias del compilador Clang de Emscripten
     add_compile_options(
         -Wno-error
         -Wno-everything
@@ -119,9 +124,9 @@ if(EXISTS "${PHYSX_INTERNAL_CMAKE_DIR}/CMakeLists.txt")
 
 # ==========================================================================
     # PARCHES WASM: Ajustar tamaños estáticos de 64-bits a 32-bits (WASM)
-    # ==========================================================================
+# ==========================================================================
 
-    # 1. GuConvexMeshData.h (ConvexHullData 80 -> 68)
+    # 1. GuConvexMeshData.h
     set(PATH_CONVEX "${PHYSX_ROOT_DIR}/source/geomutils/src/convex/GuConvexMeshData.h")
     if(EXISTS "${PATH_CONVEX}")
         file(READ "${PATH_CONVEX}" CONTENT)
@@ -129,7 +134,7 @@ if(EXISTS "${PHYSX_INTERNAL_CMAKE_DIR}/CMakeLists.txt")
         file(WRITE "${PATH_CONVEX}" "${CONTENT}")
     endif()
 
-    # 2. GuBigConvexData.h (BigConvexRawData 40 -> 24)
+    # 2. GuBigConvexData.h
     set(PATH_BIG "${PHYSX_ROOT_DIR}/source/geomutils/src/convex/GuBigConvexData.h")
     if(EXISTS "${PATH_BIG}")
         file(READ "${PATH_BIG}" CONTENT)
@@ -137,7 +142,7 @@ if(EXISTS "${PHYSX_INTERNAL_CMAKE_DIR}/CMakeLists.txt")
         file(WRITE "${PATH_BIG}" "${CONTENT}")
     endif()
 
-    # 3. DySolverContact4.h (SolverContactHeader4 208 -> 192)
+    # 3. DySolverContact4.h
     set(PATH_SOLVER "${PHYSX_ROOT_DIR}/source/lowleveldynamics/src/DySolverContact4.h")
     if(EXISTS "${PATH_SOLVER}")
         file(READ "${PATH_SOLVER}" CONTENT)
@@ -145,7 +150,7 @@ if(EXISTS "${PHYSX_INTERNAL_CMAKE_DIR}/CMakeLists.txt")
         file(WRITE "${PATH_SOLVER}" "${CONTENT}")
     endif()
 
-    # 4. ScActorCore.h (ActorCore 16 -> 12)
+    # 4. ScActorCore.h
     set(PATH_ACTOR "${PHYSX_ROOT_DIR}/source/simulationcontroller/include/ScActorCore.h")
     if(EXISTS "${PATH_ACTOR}")
         file(READ "${PATH_ACTOR}" CONTENT)
@@ -153,17 +158,15 @@ if(EXISTS "${PHYSX_INTERNAL_CMAKE_DIR}/CMakeLists.txt")
         file(WRITE "${PATH_ACTOR}" "${CONTENT}")
     endif()
     
-    # 5. PxMetaDataObjects.h (Proteger _Bool para C++)
+    # 5. PxMetaDataObjects.h
     set(PATH_METADATA "${PHYSX_ROOT_DIR}/source/physxmetadata/core/include/PxMetaDataObjects.h")
     if(EXISTS "${PATH_METADATA}")
         file(READ "${PATH_METADATA}" META_CONTENT)
         string(REPLACE "typedef bool _Bool;" "#ifndef __cplusplus\ntypedef bool _Bool;\n#endif" META_CONTENT "${META_CONTENT}")
         file(WRITE "${PATH_METADATA}" "${META_CONTENT}")
-        message(STATUS "[PhysX WASM Patch] Protegido correctamente _Bool en PxMetaDataObjects.h")
     endif()
-    # ==========================================================================
+# ==========================================================================
 
-    # Incluir el sistema de compilación interno de PhysX
     add_subdirectory("${PHYSX_INTERNAL_CMAKE_DIR}" physx_build)
 endif()
 
