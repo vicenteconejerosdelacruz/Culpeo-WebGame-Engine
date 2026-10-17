@@ -1,9 +1,9 @@
 #pragma once
 
-// #include <SimpleMath.h>
+#include <SimpleMath.h>
 #include <nlohmann/json.hpp>
 
-// using namespace DirectX;
+using namespace DirectX;
 
 namespace Scene::CameraProjections {
 
@@ -21,7 +21,7 @@ namespace Scene::CameraProjections {
 		float viewRight = defaultViewRight;
 		float viewTop = defaultViewTop;
 		float viewBottom = defaultViewBottom;
-		// XMMATRIX projectionMatrix;
+		XMMATRIX projectionMatrix;
 
 		Orthographic() {}
 		Orthographic(float nearZ, float farZ, float viewLeft, float viewRight, float viewTop, float viewBottom)
@@ -42,11 +42,11 @@ namespace Scene::CameraProjections {
 			viewRight = other.viewRight;
 			viewTop = other.viewTop;
 			viewBottom = other.viewBottom;
-			// projectionMatrix = other.projectionMatrix;
+			projectionMatrix = other.projectionMatrix;
 		}
 
 		inline void updateProjectionMatrix() {
-			// projectionMatrix = XMMatrixOrthographicOffCenterLH(viewLeft, viewRight, viewBottom, viewTop, nearZ, farZ);
+			projectionMatrix = XMMatrixOrthographicOffCenterLH(viewLeft, viewRight, viewBottom, viewTop, nearZ, farZ);
 		}
 
 		inline void updateProjectionMatrix(float viewLeft, float viewRight, float viewBottom, float viewTop) {

@@ -1,16 +1,38 @@
 #include "IndexBuffer.h"
+#include <Renderer.h>
+
+extern std::unique_ptr<JRenderer> renderer;
 
 namespace DeviceUtils
 {
-	void InitializeIndexBufferView(wgpu::Device device, const void* indices, unsigned int indicesCount, IndexBufferViewData& ibvData)
+	static std::map<JUUID, std::unique_ptr<IndexBuffer>> indexBuffer;
+
+	std::unique_ptr<IndexBuffer>& GetIndexBuffer(JUUID uuid)
+	{
+		return indexBuffer.at(uuid);
+	}
+
+	IndexBufferID CreateIndexBuffer(const void* indices, unsigned int indicesCount)
 	{
 		using namespace wgpu;
-		BufferDescriptor bufferDesc{};
-		bufferDesc.usage = BufferUsage::CopyDst | BufferUsage::Index;
-    	bufferDesc.size = sizeof(unsigned int) * indicesCount;
-		ibvData.indexBuffer = device.CreateBuffer(&bufferDesc);
-		ibvData.indexCount = indicesCount;
-		device.GetQueue().WriteBuffer(ibvData.indexBuffer, 0, indices, sizeof(unsigned int) * indicesCount);
-		//LogCComPtrAddress(std::string("indexBuffer:(" + std::to_string(indicesCount) + ")"), ibvData.indexBuffer);
+
+		IndexBufferID indexBufferID = getUUID();
+		std::unique_ptr<IndexBuffer> ib = std::make_unique<IndexBuffer>();
+		ib->indexCount = indicesCount;
+
+		assert(!indexBuffer.contains(indexBufferID()));
+		indexBuffer.insert_or_assign(indexBufferID(), std::move(ib));
+
+		renderer->executionCallback.push_back([indexBufferID, indices, indicesCount]
+			{
+				BufferDescriptor bufferDesc{};
+				bufferDesc.usage = BufferUsage::CopyDst | BufferUsage::Index;
+				bufferDesc.size = sizeof(unsigned int) * indicesCount;
+				indexBufferID->indexBuffer = renderer->GetDevice().CreateBuffer(&bufferDesc);
+				renderer->GetDevice().GetQueue().WriteBuffer(indexBufferID->indexBuffer, 0, indices, sizeof(unsigned int) * indicesCount);
+			}
+		);
+
+		return indexBufferID;
 	}
 };

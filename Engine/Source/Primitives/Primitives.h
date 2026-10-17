@@ -12,6 +12,8 @@
 #include "Sphere.h"
 #include "Cone.h"
 #include "Capsule.h"
+#include <DeviceUtils/VertexBuffer/VertexBuffer.h>
+#include <DeviceUtils/IndexBuffer/IndexBuffer.h>
 //#include "../Utils/LoadingProcessor.h"
 
 extern std::unique_ptr<JRenderer> renderer;
@@ -19,6 +21,7 @@ namespace Primitives
 {
 	using namespace Templates;
 	using namespace Scene;
+	using namespace DeviceUtils;
 
 	template<typename T>
 	void LoadPrimitiveIntoMesh(SceneUnitId id, const std::unique_ptr<MeshInstance>& mesh, nlohmann::json& json) {
@@ -30,28 +33,11 @@ namespace Primitives
 		std::vector<uint32_t> indices = p.GetIndices();
 		std::vector<Vertex<T::VertexClass>> vertices = p.GetVertices();
 
+		mesh->vertexBufferId = CreateVertexBuffer(vertices.data(), sizeof(typename T::VertexType),  static_cast<unsigned int>(vertices.size()));
+		mesh->indexBufferId = CreateIndexBuffer(indices.data(), static_cast<unsigned int>(indices.size()));
+
 		/*
 		BoundingBox::CreateFromPoints(mesh->boundingBox, vertices.size(), &vertices.at(0).Position, sizeof(T::VertexType));
-
-		auto loading = CreateLoadingProcessor();
-		auto& cmd = loading.cmd;
-		auto& commandList = cmd.GetCommandList();
-
-		//upload the vertex buffer to the GPU and create the vertex buffer view
-		InitializeVertexBufferView(renderer->d3dDevice, commandList, vertices.data(), sizeof(T::VertexType), static_cast<unsigned int>(vertices.size()), mesh->vbvData);
-
-		//upload the index buffer to the GPU and create the index buffer view
-		InitializeIndexBufferView(renderer->d3dDevice, commandList, indices.data(), static_cast<unsigned int>(indices.size()), mesh->ibvData);
-
-		JUUID uuid = mesh->uuid;
-
-		cmd.RunPreDeletion([uuid]
-			{
-				auto& mesh = GetMeshInstance(uuid);
-				mesh->vbvData.vertexBufferUpload = nullptr;
-				mesh->ibvData.indexBufferUpload = nullptr;
-			}
-		);
 		*/
 	}
 

@@ -55,6 +55,8 @@ add_executable(CulpeoEngine
     "Source/Renderer/DeviceUtils/IndexBuffer/IndexBuffer.cpp"
     "Source/Renderer/DeviceUtils/VertexBuffer/VertexBuffer.h"
     "Source/Renderer/DeviceUtils/VertexBuffer/VertexBuffer.cpp"
+    "Source/Renderer/DeviceUtils/UniformBuffer/UniformBuffer.h"
+    "Source/Renderer/DeviceUtils/UniformBuffer/UniformBuffer.cpp"
     "Source/Renderer/Renderer.h"
     "Source/Renderer/Renderer.cpp"
     "Source/Renderer/VertexFormats.h"

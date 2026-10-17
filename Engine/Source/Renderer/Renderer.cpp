@@ -18,6 +18,7 @@
 
 // unsigned int backBufferIndex;
 extern std::unique_ptr<JRenderer> renderer;
+extern RECT hWndRect;
 
 //CREATE
 // void JRenderer::Initialize(HWND coreHwnd) {
@@ -95,6 +96,8 @@ void JRenderer::ResizeSwapChain(int width, int height)
 
 	windowWidth = width;
 	windowHeight = height;
+	hWndRect.right = width;
+	hWndRect.bottom = height;
 	ConfigureSurface(windowWidth, windowHeight);
 }
 

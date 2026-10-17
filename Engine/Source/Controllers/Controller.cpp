@@ -1,5 +1,6 @@
 #include "Controller.h"
 #include <map>
+#include <iostream>
 #include <set>
 #include <mutex>
 #include <Scene.h>
@@ -152,6 +153,7 @@ namespace Game
 		std::lock_guard<std::mutex> lock(controllerMutex);
 		JUUID uuid = controller->uuid();
 		controllersUUIDs.insert_or_assign(uuid, std::move(controller));
+		
 		//relate the suuuid to the controllers
 		if (!controllerUUIDBySUUUID.contains(sceneObject))
 		{

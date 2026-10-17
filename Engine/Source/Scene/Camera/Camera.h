@@ -5,6 +5,7 @@
 // #include <SceneObject.h>
 #include "Projections/Perspective.h"
 #include "Projections/Orthographic.h"
+#include <DeviceUtils/UniformBuffer/UniformBuffer.h>
 
 enum ProjectionsTypes {
 	PROJ_Orthographic,
@@ -40,6 +41,7 @@ struct CameraAttributes {
 
 using namespace Scene::CameraProjections;
 using namespace Game;
+using namespace DeviceUtils;
 
 namespace Scene {
 #if defined(_EDITOR)
@@ -73,6 +75,7 @@ namespace Scene {
 
 #endif
 
+	using namespace Game;
 	struct Camera : Controller
 	{
 		// inline static const SceneObjectType sceneObjectType = SO_Cameras;
@@ -96,6 +99,8 @@ namespace Scene {
 			//Destroy();
 		}
 
+		void Map(SUUUID so) override;
+		void Unmap() override;
 #if defined(_EDITOR)
 		// void DropJsonMoldAttributes(nlohmann::json& j) override;
 #endif
@@ -105,22 +110,22 @@ namespace Scene {
 		// void updateRotationQ();
 		// XMVECTOR rotationQ();
 		// void rotationQ(XMVECTOR q);
-		// XMVECTOR forward();
-		// XMVECTOR up();
-		// XMVECTOR right();
-		// XMMATRIX world();
-		// XMMATRIX view();
-		// XMMATRIX projection();
+		XMVECTOR forward();
+		XMVECTOR up();
+		XMVECTOR right();
+		XMMATRIX world();
+		XMMATRIX view();
+		XMMATRIX projection();
 		// void CopyProjection(CameraID cam);
 		// std::tuple<unsigned int, unsigned int, bool> Project(XMVECTOR world_pos);
 
-		// float projectionWidth();
-		// float projectionRight();
-		// float projectionBottom();
-		// float projectionHeight();
-		// float projectionNearZ();
-		// float projectionFarZ();
-		// float projectionfovAngleY();
+		float projectionWidth();
+		float projectionRight();
+		float projectionBottom();
+		float projectionHeight();
+		float projectionNearZ();
+		float projectionFarZ();
+		float projectionfovAngleY();
 
 		// void CreateRenderPasses();
 		// RenderPassJsonID GetRenderPassTemplateFromInstanceIndex(unsigned int passIndex);
@@ -132,7 +137,7 @@ namespace Scene {
 		// void DestroyRenderPasses();
 		// void ResizeReleasePasses();
 		// void ResizePasses(unsigned int width, unsigned int height);
-		// void UpdateProjection();
+		void UpdateProjection();
 
 		// void Initialize() override;
 		// virtual void SetInitialConditions();
@@ -161,7 +166,7 @@ namespace Scene {
 
 		// void Destroy();
 
-		// void CreateConstantsBuffer();
+		void CreateUniformsBuffer();
 		// void WriteConstantsBuffer(unsigned int frame);
 		// void MoveAlongFwAxis(float dz);
 		// void MovePerpendicularFwAxis(float dx, float dy);
@@ -219,7 +224,7 @@ namespace Scene {
 		//render passes instances
 		// std::vector<RenderPassInstanceID> renderPassesUUID;
 		//this camera attributes
-		// ConstantsBufferID cameraCb;
+		UniformBufferID cameraUb;
 		//renderables
 		// std::set<RenderableID> renderables;
 		//lights
@@ -241,9 +246,9 @@ namespace Scene {
 
 // 	SODECL_FULL(Camera);
 
-// #include <TrackUUID/JDecl.h>
-// #include "CameraAtt.h"
-// #include <JEnd.h>
+#include <TrackUUID/JDecl.h>
+#include "CameraAtt.h"
+#include <JEnd.h>
 
 // 	void CamerasStep(SceneUnitId id);
 // 	void DestroyCameras();

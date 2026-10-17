@@ -1,16 +1,38 @@
 #include "VertexBuffer.h"
+#include <Renderer.h>
+
+extern std::unique_ptr<JRenderer> renderer;
 
 namespace DeviceUtils
 {
-	void InitializeVertexBufferView(wgpu::Device device, const void* vertices, unsigned int vertexSize, unsigned int verticesCount, VertexBufferViewData& vbvData)
+	static std::map<JUUID, std::unique_ptr<VertexBuffer>> vertexBuffers;
+
+	std::unique_ptr<VertexBuffer>& GetVertexBuffer(JUUID uuid)
+	{
+		return vertexBuffers.at(uuid);
+	}
+
+	VertexBufferID CreateVertexBuffer(const void* vertices, unsigned int vertexSize, unsigned int verticesCount)
 	{
 		using namespace wgpu;
-		BufferDescriptor bufferDesc{};
-		bufferDesc.usage = BufferUsage::CopyDst | BufferUsage::Vertex;
-    	bufferDesc.size = vertexSize * verticesCount;
-		vbvData.vertexBuffer = device.CreateBuffer(&bufferDesc);
-		vbvData.vertexCount = verticesCount;
-		device.GetQueue().WriteBuffer(vbvData.vertexBuffer, 0, vertices, vertexSize * verticesCount);
-		//LogCComPtrAddress(std::string("vertexBuffer:(" + std::to_string(vertexSize) + "," + std::to_string(verticesCount) + ")"), vbvData.vertexBuffer);
+
+		VertexBufferID vertexBufferID = getUUID();
+		std::unique_ptr<VertexBuffer> vb = std::make_unique<VertexBuffer>();
+		vb->vertexCount = verticesCount;
+
+		assert(!vertexBuffers.contains(vertexBufferID()));
+		vertexBuffers.insert_or_assign(vertexBufferID(), std::move(vb));
+
+		renderer->executionCallback.push_back([vertexBufferID, vertices, vertexSize, verticesCount]
+			{
+				BufferDescriptor bufferDesc{};
+				bufferDesc.usage = BufferUsage::CopyDst | BufferUsage::Vertex;
+				bufferDesc.size = vertexSize * verticesCount;
+				vertexBufferID->vertexBuffer = renderer->GetDevice().CreateBuffer(&bufferDesc);
+				renderer->GetDevice().GetQueue().WriteBuffer(vertexBufferID->vertexBuffer, 0, vertices, vertexSize * verticesCount);
+			}
+		);
+
+		return vertexBufferID;
 	}
 }

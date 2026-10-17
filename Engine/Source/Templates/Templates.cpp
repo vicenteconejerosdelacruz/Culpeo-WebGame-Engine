@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <set>
 #include <yaml-cpp/yaml.h>
+#include <Mesh/Mesh.h>
 
 namespace Templates {
 
@@ -1146,6 +1147,16 @@ namespace Templates {
 		LoadTemplates(systemRenderPassesYaml, CreateRenderPass);
 		// LoadTemplates(systemTexturesYaml, CreateTexture);
 		// LoadTemplates(systemPhysicGeometriesYaml, CreatePhysicGeometry);
+
+		CreatePrimitiveMeshTemplate("d41e5c29-49bb-4f2c-aa2b-da781fbac512", "floor");
+		CreatePrimitiveMeshTemplate("d8bfdef4-55f9-4f6e-b4a8-20915eb854d6", "utahteapot");
+		CreatePrimitiveMeshTemplate("f7786ac1-e296-4e9a-a7e6-6f1949de75ef", "cube");
+		CreatePrimitiveMeshTemplate("d76b3bd8-0f53-4128-974e-2d6d5062bc00", "pyramid");
+		CreatePrimitiveMeshTemplate("7dec1229-075f-4599-95e1-9ccfad0d48b1", "decal");
+		CreatePrimitiveMeshTemplate("30f15e68-db42-46fa-b846-b2647a0ac9b9", "boxlines");
+		CreatePrimitiveMeshTemplate("4d1174b2-8225-4c09-9db6-ff09718ae0f5", "sphere");
+		CreatePrimitiveMeshTemplate("ad73990a-c59d-45d2-8ec3-807b1f52f5b9", "cone");
+		CreatePrimitiveMeshTemplate("c900056b-9f67-47d1-a252-71e0ef1f9a65", "capsule");
 	}
 
 	void LoadTemplates(nlohmann::json templates, std::function<void(nlohmann::json&)> loader)

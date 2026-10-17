@@ -1,5 +1,6 @@
 // #include "pch.h"
 #include "Camera.h"
+#include <SceneObject.h>
 // #include <Application.h>
 // #include <Templates.h>
 // #include <Scene.h>
@@ -47,9 +48,9 @@ namespace Scene
 {
 	// SODEF_FULL(Camera);
 
-// #include <TrackUUID/JDef.h>
-// #include "CameraAtt.h"
-// #include <JEnd.h>
+#include <TrackUUID/JDef.h>
+#include "CameraAtt.h"
+#include <JEnd.h>
 
 #if defined(_EDITOR)
 
@@ -89,6 +90,43 @@ namespace Scene
 // #include "CameraAtt.h"
 // #include <JEnd.h>
 // 		RENAME_ON_DELETION(Camera);
+	}
+
+	void Camera::Map(SUUUID so)
+	{
+		Controller::Map(so);
+#if defined(_EDITOR)
+		// using namespace Editor;
+#endif
+
+#include <TrackUUID/JInsert.h>
+#include "CameraAtt.h"
+#include <JEnd.h>
+
+		UpdateProjection();
+		CreateUniformsBuffer();
+// 		CreateRenderPasses();
+// 		CreateIBLTextures();
+
+// #if defined(_EDITOR)
+// 		if (shadowMapLight().empty() && !SceneIsIsolated(unit))
+// 			RegisterBillboard(unit, uuid());
+// #endif
+
+// 		if (shadowMapLight().empty())
+// 		{
+// 			CreateLightsConstantsBuffer();
+// 			CreateShadowMapsConstantsBuffer();
+// 		}
+// 		SetInitialConditions();
+	}
+
+	void Camera::Unmap()
+	{
+#include <TrackUUID/JErase.h>
+#include "CameraAtt.h"
+#include <JEnd.h>
+		Controller::Unmap();
 	}
 
 	/*
@@ -233,9 +271,9 @@ namespace Scene
 	}
 */
 
-/*
 	XMVECTOR Camera::forward()
 	{
+		/*
 		if (!shadowMapLight().empty())
 		{
 			LightID lcam = MAKESUUUID(unit, shadowMapLight());
@@ -250,15 +288,15 @@ namespace Scene
 				}
 			}
 		}
+		*/
 
 		FXMVECTOR dir = { 0.0f, 0.0f, 1.0f,0.0f };
-		return XMVector3Normalize(XMVector3Rotate(dir, rotationQ()));
+		return XMVector3Normalize(XMVector3Rotate(dir, sceneObject->rotationQ()));
 	}
-*/
 
-/*
 	XMVECTOR Camera::up()
 	{
+		/*
 		if (!shadowMapLight().empty())
 		{
 			LightID lcam = MAKESUUUID(unit, shadowMapLight());
@@ -274,41 +312,32 @@ namespace Scene
 				}
 			}
 		}
-
+		*/
 		FXMVECTOR up = { 0.0f, 1.0f, 0.0f,0.0f };
-		return XMVector3Normalize(XMVector3Rotate(up, rotationQ()));
+		return XMVector3Normalize(XMVector3Rotate(up, sceneObject->rotationQ()));
 	}
-*/
 
-/*
 	XMVECTOR Camera::right()
 	{
 		return XMVector3Cross(forward(), up());
 	}
-*/
 
-/*
 	XMMATRIX Camera::world()
 	{
-		XMMATRIX rotationM = XMMatrixRotationQuaternion(rotationQ());
-		XMMATRIX positionM = XMMatrixTranslationFromVector(positionV());
+		XMMATRIX rotationM = XMMatrixRotationQuaternion(sceneObject->rotationQ());
+		XMMATRIX positionM = XMMatrixTranslationFromVector(sceneObject->positionV());
 		return XMMatrixMultiply(rotationM, positionM);
 	}
-*/
 
-/*
 	XMMATRIX Camera::view()
 	{
-		return XMMatrixLookToLH(positionV(), forward(), up());
+		return XMMatrixLookToLH(sceneObject->positionV(), forward(), up());
 	}
-*/
 
-/*
 	XMMATRIX Camera::projection()
 	{
 		return (projectionType() == PROJ_Orthographic) ? orthographicProjection.projectionMatrix : perspectiveProjection.projectionMatrix;
 	}
-*/
 
 /*
 	void Camera::CopyProjection(CameraID cam)
@@ -342,7 +371,6 @@ namespace Scene
 	}
 */
 
-/*
 	float Camera::projectionWidth()
 	{
 		switch (projectionType())
@@ -357,23 +385,17 @@ namespace Scene
 			break;
 		}
 	}
-*/
 
-/*
 	float Camera::projectionRight()
 	{
 		return orthographic().viewRight;
 	}
-*/
 
-/*
 	float Camera::projectionBottom()
 	{
 		return orthographic().viewBottom;
 	}
-*/
 
-/*
 	float Camera::projectionHeight()
 	{
 		switch (projectionType())
@@ -386,28 +408,21 @@ namespace Scene
 			break;
 		}
 	}
-*/
 
-/*
 	float Camera::projectionNearZ()
 	{
 		return (projectionType() == PROJ_Perspective) ? perspective().nearZ : orthographic().nearZ;
 	}
-*/
 
-/*
 	float Camera::projectionFarZ()
 	{
 		return (projectionType() == PROJ_Perspective) ? perspective().farZ : orthographic().farZ;
 	}
-*/
 
-/*
 	float Camera::projectionfovAngleY()
 	{
 		return (projectionType() == PROJ_Perspective) ? perspective().fovAngleY : 0.0f;
 	}
-*/
 
 /*
 	void Camera::CreateRenderPasses()
@@ -536,7 +551,6 @@ namespace Scene
 	}
 */
 
-/*
 	void Camera::UpdateProjection()
 	{
 		switch (projectionType())
@@ -560,7 +574,6 @@ namespace Scene
 		break;
 		}
 	}
-*/
 
 /*
 	void Camera::BindToScene()
@@ -926,12 +939,10 @@ namespace Scene
 	}
 */
 
-/*
-	void Camera::CreateConstantsBuffer()
+	void Camera::CreateUniformsBuffer()
 	{
-		cameraCb = DeviceUtils::CreateConstantsBuffer(sizeof(CameraAttributes), JRenderer::numFrames, name());
+		cameraUb = DeviceUtils::CreateUniformBuffer(sizeof(CameraAttributes), name());
 	}
-*/
 
 /*
 	void Camera::WriteConstantsBuffer(unsigned int frame)

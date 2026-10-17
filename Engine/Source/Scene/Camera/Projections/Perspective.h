@@ -1,7 +1,9 @@
 #pragma once
 
-// #include <SimpleMath.h>
+#include <SimpleMath.h>
 #include <nlohmann/json.hpp>
+
+using namespace DirectX;
 
 namespace Scene::CameraProjections {
 
@@ -17,7 +19,7 @@ namespace Scene::CameraProjections {
 		float fovAngleY = defaultFovAngleY;
 		float width = defaultWidth;
 		float height = defaultHeight;
-		// XMMATRIX projectionMatrix;
+		XMMATRIX projectionMatrix;
 
 		Perspective() {}
 		Perspective(float nearZ, float farZ, float fovAngleY, float width, float height)
@@ -36,12 +38,12 @@ namespace Scene::CameraProjections {
 			fovAngleY = other.fovAngleY;
 			width = other.width;
 			height = other.height;
-			// projectionMatrix = other.projectionMatrix;
+			projectionMatrix = other.projectionMatrix;
 		}
 
 		inline void updateProjectionMatrix() {
 			float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-			// projectionMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(fovAngleY), aspectRatio, nearZ, farZ);
+			projectionMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(fovAngleY), aspectRatio, nearZ, farZ);
 		};
 
 		inline void updateProjectionMatrix(float width, float height) {

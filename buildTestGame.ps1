@@ -1,7 +1,10 @@
 param(
     [Parameter(Mandatory=$false)]
     [ValidateSet("Editor_Debug", "Debug", "Editor_Development", "Development", "Editor_Release", "Release")]
-    [string]$Configuration = "Development"
+    [string]$Configuration = "Development",
+
+    [Parameter(Mandatory=$false)]
+    [switch]$CleanFirst
 )
 
 $engine_folder = (Get-Location).Path
@@ -73,15 +76,23 @@ switch ($Configuration) {
     }
 }
 
-# Usar emcmake y la carpeta de build aislada por configuración
+# Configurar siempre la caché por si el directorio no existe
 emcmake cmake -B "$buildDir" -S . `
     -DCMAKE_BUILD_TYPE="$cmakeBuildType" `
     -DCULPEO_CONFIG="$Configuration" `
     -DCMAKE_C_FLAGS="$extraCFlags" `
     -DCMAKE_CXX_FLAGS="$extraCFlags"
 
-# Compilación apuntando a la carpeta de build específica
-cmake --build "$buildDir" --target CulpeoEngine -- -j4 -v | ForEach-Object {
+# Construir los argumentos de compilación dinámicamente
+$buildArgs = @("--build", "$buildDir", "--target", "CulpeoEngine")
+if ($CleanFirst) {
+    Write-Host "[*] Aplicando limpieza inicial (--clean-first)..." -ForegroundColor Yellow
+    $buildArgs += "--clean-first"
+}
+$buildArgs += @("--", "-j4", "-v")
+
+# Ejecutar la compilación filtrando la salida
+& cmake @buildArgs | ForEach-Object {
     if ($_ -match " -c\s+(.+\.cpp)$") {
         Write-Host "[Compilando] $($Matches[1])" -ForegroundColor Cyan
     } elseif ($_ -match " -o\s+(.+\.js)$") {

@@ -77,7 +77,7 @@ struct JRenderer
 	// unsigned long long fenceValue = 0;
 	// unsigned long long frameFenceValues[numFrames] = {};
 	// HANDLE fenceEvent;
-	// std::vector<std::function<void()>> executionCallback;
+	std::vector<std::function<void()>> executionCallback;
 
 	//window based values
 	// D3D12_VIEWPORT screenViewport;

@@ -20,6 +20,9 @@ namespace Scene
 
 	SceneObject::SceneObject(SceneUnitId id, nlohmann::json& json) :JObject(json)
 	{
+		unit = id;
+		soName = json.at("name");
+		
 		#include <Attributes/JInit.h>
 		#include "SceneObjectAtt.h"
 		#include <JEnd.h>
@@ -31,8 +34,6 @@ namespace Scene
 		// #include <Attributes/JV8Att.h>
 		// #include "RenderableAtt.h"
 		// #include <JEnd.h>
-		unit = id;
-		soName = json.at("name");
 	}
 
 	void SceneObject::create_rotation(XMFLOAT3 v)

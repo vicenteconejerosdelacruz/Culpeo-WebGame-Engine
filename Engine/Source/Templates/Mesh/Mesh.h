@@ -13,8 +13,8 @@ namespace Templates {
 	{
 		JUUID uuid;
 		VertexClass vertexClass;
-		VertexBufferViewData vbvData;
-		IndexBufferViewData	ibvData;
+		VertexBufferID vertexBufferId;
+		IndexBufferID indexBufferId;
 		//BoundingBox boundingBox;
 		//void CreateVerticesShaderResourceView(CD3DX12_CPU_DESCRIPTOR_HANDLE& cpuHandle, CD3DX12_GPU_DESCRIPTOR_HANDLE& gpuHandle);
 		//void ExtendBoundingBox(BoundingBox& outBB, bool extend);

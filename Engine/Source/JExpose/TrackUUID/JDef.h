@@ -1,0 +1,67 @@
+#define JEXPOSE_TRACK_UUID_DEF
+
+#define JCLASS(CLASS,GETJOBJECTS)
+#define JTYPE(TYPE,VALUE)
+#define JEXPOSE(TYPE,ATT,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_CALLBACK(TYPE,ATT,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_TRANSFORM(TYPE,ATT,TOTYPE,FROMTYPE,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_TRANSFORM_CALLBACK(TYPE,ATT,TOTYPE,FROMTYPE,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_ENUM(TYPE,ATT,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_VECTOR(TYPE,ATT,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_VECTOR_TRANSFORM(TYPE,ATT,TOTYPE,FROMTYPE,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_SET(TYPE,ATT,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_MAP_TRANSFORM(KEYTYPE,VALUETYPE,ATT,TOTYPE,FROMTYPE,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_MAP_OBJECT(TYPE, ATT,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_VECTOR_OBJECT(TYPE, ATT,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)
+#define JEXPOSE_FLAG(ATT, INITIAL, GETFLAGSVALUESFUNCTION,UPDATEMASK,REQUIREDTOCREATE)
+#define JPREVIEW(NAME,JEDVALUETYPE)
+#define JTRACKUUID(CLASS,NAME,LIMIT,COND) \
+	static std::unordered_map<SceneUnitId, std::set<JUUID>> NAME;\
+	size_t GetCountFrom##NAME(SceneUnitId id) {\
+		return NAME[id].size();\
+	 }\
+	std::set<JUUID>& Get##NAME(SceneUnitId id) { return NAME[id]; }\
+	CLASS* GetFrom##NAME(SceneUnitId id, JUUID uuid)\
+	{\
+		assert(NAME[id].contains(uuid));\
+		return GetController<CLASS>(uuid);\
+	}\
+	std::vector<JNAME> GetNamesFrom##NAME(SceneUnitId id)\
+	{\
+		std::vector<JNAME> names;\
+		std::transform(NAME[id].begin(), NAME[id].end(), std::back_inserter(names), [id](JUUID uuid)\
+			{\
+				CLASS* c = GetController<CLASS>(uuid);\
+				return c->sceneObject->name();\
+			}\
+		);\
+		std::sort(names.begin(), names.end());\
+		return names;\
+	}\
+	std::vector<JUUIDName> GetUUIDNamesFrom##NAME(SceneUnitId id)\
+	{\
+		std::vector<JUUIDName> uuidNames;\
+		std::transform(NAME[id].begin(), NAME[id].end(), std::back_inserter(uuidNames), [id](JUUID uuid)\
+			{\
+				JUUIDName uuidName;\
+				JUUID& uuid0 = std::get<0>(uuidName);\
+				JUUID& name = std::get<1>(uuidName);\
+				uuid0 = uuid;\
+				CLASS* c = GetController<CLASS>(uuid);\
+				name = c->sceneObject->name();\
+				return uuidName;\
+			}\
+		);\
+		SortUUIDByName(uuidNames);\
+		return uuidNames;\
+	}\
+	void Insert##CLASS##Into##NAME(SceneUnitId id, JUUID uuid)\
+	{\
+		if(LIMIT>0 && !NAME[id].contains(uuid))\
+			assert(NAME[id].size()<LIMIT);\
+		NAME[id].insert(uuid);\
+	}\
+	void Erase##CLASS##From##NAME(SceneUnitId id, JUUID uuid)\
+	{\
+		NAME[id].erase(uuid);\
+	}

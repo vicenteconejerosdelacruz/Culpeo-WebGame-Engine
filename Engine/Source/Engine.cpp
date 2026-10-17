@@ -16,6 +16,8 @@
 using namespace Templates;
 using namespace Game;
 
+RECT hWndRect = { 0L, 0L, 0L, 0L };
+
 std::unique_ptr<JRenderer> renderer;
 wgpu::RenderPipeline pipeline;
 
@@ -63,6 +65,12 @@ void CreateRenderPipeline() {
 void Render() {
   // 1. Polling de eventos de GLFW (resize, teclado, mouse)
   glfwPollEvents();
+
+  for(auto& cb:renderer->executionCallback)
+  {
+    cb();
+  }
+  renderer->executionCallback.clear();
 
   wgpu::SurfaceTexture surfaceTexture;
   renderer->surface.GetCurrentTexture(&surfaceTexture);

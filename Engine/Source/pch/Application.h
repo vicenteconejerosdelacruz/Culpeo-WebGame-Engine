@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -6,6 +7,7 @@
 #include <unordered_map>
 #include <set>
 #include <utility>
+#include <WinTypes.h>
 
 static const std::string defaultLevelsFolder = "Levels/";
 static const std::string defaultTemplatesFolder = "Templates/";
@@ -33,8 +35,8 @@ static const std::vector<std::string> defaultAnimatedTexturesExtensions = {
 };
 static const std::vector<std::string> cubeTextureAxesNames = { "X+" , "X-" , "Y+" , "Y-" , "Z+" , "Z-" , };
 
-// extern RECT hWndRect;
-// #define HWNDWIDTH	(static_cast<unsigned int>(hWndRect.right - hWndRect.left))
-// #define HWNDHEIGHT (static_cast<unsigned int>(hWndRect.bottom - hWndRect.top))
-// #define HWNDWIDTHF	(static_cast<float>(abs(hWndRect.right - hWndRect.left)))
-// #define HWNDHEIGHTF (static_cast<float>(abs(hWndRect.bottom - hWndRect.top)))
+extern RECT hWndRect;
+#define HWNDWIDTH	(static_cast<unsigned int>(hWndRect.right - hWndRect.left))
+#define HWNDHEIGHT (static_cast<unsigned int>(hWndRect.bottom - hWndRect.top))
+#define HWNDWIDTHF	(static_cast<float>(abs(hWndRect.right - hWndRect.left)))
+#define HWNDHEIGHTF (static_cast<float>(abs(hWndRect.bottom - hWndRect.top)))
