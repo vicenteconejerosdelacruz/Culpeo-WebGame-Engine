@@ -68,7 +68,6 @@ namespace Scene
 	using namespace Game;
 	struct Renderable : Controller
 	{
-		// inline static const SceneObjectType sceneObjectType = SO_Renderables;
 		// inline static const std::string fallbackMaterialName = "BaseLighting";
 
 #include <Attributes/JFlags.h>
@@ -101,10 +100,6 @@ namespace Scene
 		// void DropJsonMoldAttributes(nlohmann::json& j) override;
 #endif
 
-		// XMVECTOR positionV();
-		// void updateRotationQ();
-		// XMVECTOR rotationQ();
-		// void rotationQ(XMVECTOR Q);
 		XMMATRIX world();
 
 		// void Initialize() override;
@@ -161,9 +156,9 @@ namespace Scene
 		// void SetSRVRootDescriptorTable(std::vector<DescriptorTableSetter>& setters, std::vector<CD3DX12_GPU_DESCRIPTOR_HANDLE> gpu_handles_srv);
 		// void SetShadowMapsSRVDescriptorTable(std::vector<DescriptorTableSetter>& setters, Camera* camera, ShaderInstance* vertexShader_ins, ShaderInstance* pixelShader_ins, CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle_srv_shadowMap);
 
-		// void CreateBoundingBox();
-		// bool HasBoundingBoxComputed();
-		// BoundingBox GetBoundingBox();
+		void CreateBoundingBox();
+		bool HasBoundingBoxComputed();
+		BoundingBox GetBoundingBox();
 
 		// void WriteMaterialVariablesToConstantsBufferSpace(MaterialInstanceID material, ConstantsBufferID cbvData, unsigned int cbvFrameIndex);
 		// void WriteConstantsBuffer(std::string constantName, void* data, unsigned int backbufferIndex, unsigned int slot = 0U, size_t offset = 0ULL);
@@ -205,8 +200,6 @@ namespace Scene
 		// unsigned int deleteFrames;
 		// bool renderReady = false;
 		// bool renderException = false;
-		//Transformation
-		// XMVECTOR rotationQuaternion;
 		//Model3D
 		// Model3DInstanceID model3D;
 		//Meshes
@@ -235,7 +228,7 @@ namespace Scene
 		//Cameras
 		// std::set<CameraID> bindedCameras;
 
-		// BoundingBox boundingBox;
+		BoundingBox boundingBox;
 		//RenderableBoundingBoxID boundingBoxCompute; //used for animables
 	};
 

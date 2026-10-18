@@ -84,8 +84,6 @@ namespace Scene {
 	using namespace Game;
 	struct Camera : Controller
 	{
-		// inline static const SceneObjectType sceneObjectType = SO_Cameras;
-
 #include <Attributes/JFlags.h>
 #include "CameraAtt.h"
 #include <JEnd.h>
@@ -158,12 +156,12 @@ namespace Scene {
 		void RenderReady(bool value);
 		void Render();
 
-		// //Bounding Frustum
-		// void CalculateBoundingFrustum();
-		// //Adjust
-		// void LookAt(XMVECTOR target);
-		// void LookAtBoundingBox(BoundingBox bb, float scale = 1.0f);
-		// bool IsLookingAt(XMVECTOR targetPos, float epsilonDegrees = 1.0f);
+		//Bounding Frustum
+		void CalculateBoundingFrustum();
+		//Adjust
+		void LookAt(XMVECTOR target);
+		void LookAtBoundingBox(BoundingBox bb, float scale = 1.0f);
+		bool IsLookingAt(XMVECTOR targetPos, float epsilonDegrees = 1.0f);
 
 		// void Destroy();
 
@@ -218,8 +216,6 @@ namespace Scene {
 
 		//State
 		// DeleteHook markedForDelete;
-		//Transformation
-		// XMVECTOR rotationQuaternion;
 		//Render
 		bool renderReady = false;
 		//render passes instances
@@ -238,7 +234,7 @@ namespace Scene {
 		CameraProjections::Perspective perspectiveProjection;
 		CameraProjections::Orthographic orthographicProjection;
 		//Bounding Frustum
-		// BoundingFrustum boundingFrustum;
+		BoundingFrustum boundingFrustum;
 #if defined(_EDITOR)
 		// unsigned int previewRenderPassIndex = 0U;
 		// unsigned int previewRenderToTextureIndex = 0U;

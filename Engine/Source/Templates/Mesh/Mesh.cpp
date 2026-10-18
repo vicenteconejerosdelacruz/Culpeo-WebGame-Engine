@@ -166,10 +166,10 @@ namespace Templates {
 	// 	renderer->d3dDevice->CreateShaderResourceView(vbvData.vertexBuffer, &srvDesc, cpuHandle);
 	// }
 
-	// void MeshInstance::ExtendBoundingBox(BoundingBox& outBB, bool extend)
-	// {
-	// 	BoundingBox out;
-	// 	BoundingBox::CreateMerged(out, extend ? outBB : boundingBox, boundingBox);
-	// 	outBB = out;
-	// }
+	void MeshInstance::ExtendBoundingBox(BoundingBox& outBB, bool extend)
+	{
+		BoundingBox out;
+		BoundingBox::CreateMerged(out, extend ? outBB : boundingBox, boundingBox);
+		outBB = out;
+	}
 };

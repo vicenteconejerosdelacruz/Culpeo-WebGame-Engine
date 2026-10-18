@@ -689,7 +689,7 @@ namespace Scene
 	{
 		// unsigned int frame = GetSceneUnit(unit)->Frame();
 		// WriteConstantsBuffer(frame);
-		// CalculateBoundingFrustum();
+		CalculateBoundingFrustum();
 
 		//first make a set of objects which are not meant to be rendered first
 		std::set<RenderableID> nonRoot;
@@ -809,17 +809,14 @@ namespace Scene
 		}
 	}
 
-/*
 	void Camera::CalculateBoundingFrustum()
 	{
 		BoundingFrustum(projection()).Transform(boundingFrustum, world());
 	}
-*/
 
-/*
 	void Camera::LookAt(XMVECTOR target)
 	{
-		XMVECTOR eyePos = positionV();
+		XMVECTOR eyePos = sceneObject->positionV();
 		XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMVECTOR dir = XMVector3Normalize(XMVectorSubtract(target, eyePos));
 
@@ -833,15 +830,13 @@ namespace Scene
 
 		XMVECTOR newRotationQ = XMQuaternionRotationMatrix(worldMatrix);
 
-		rotation(Quaternion2Euler(newRotationQ));
-		rotationQ(newRotationQ);
+		sceneObject->rotation(Quaternion2Euler(newRotationQ));
+		sceneObject->rotationQ(newRotationQ);
 	}
-*/
 
-/*
 	bool Camera::IsLookingAt(XMVECTOR targetPos, float epsilonDegrees)
 	{
-		XMVECTOR eyePos = positionV();
+		XMVECTOR eyePos = sceneObject->positionV();
 		XMVECTOR toTarget = XMVector3Normalize(XMVectorSubtract(targetPos, eyePos));
 
 		XMVECTOR fw = forward();
@@ -853,13 +848,11 @@ namespace Scene
 
 		return dot >= threshold;
 	}
-*/
 
-/*
 	void Camera::LookAtBoundingBox(BoundingBox bb, float scale)
 	{
 		XMVECTOR bbCenter = XMLoadFloat3(&bb.Center);
-		XMVECTOR diff = bbCenter - positionV();
+		XMVECTOR diff = bbCenter - sceneObject->positionV();
 
 		if (IsLookingAt(bbCenter) && XMVectorGetX(XMVector3Length(diff)) <= 0.001f)
 			return;
@@ -875,10 +868,8 @@ namespace Scene
 		XMVECTOR camPosV = XMVectorSubtract(bbCenter, XMVectorScale(camFwV, distance));
 		XMFLOAT3 camPos;
 		XMStoreFloat3(&camPos, camPosV);
-		position(camPos);
-
+		sceneObject->position(camPos);
 	}
-*/
 
 /*
 	void Camera::Destroy()

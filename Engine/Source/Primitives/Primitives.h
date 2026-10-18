@@ -36,9 +36,7 @@ namespace Primitives
 		mesh->vertexBufferId = CreateVertexBuffer(vertices.data(), sizeof(typename T::VertexType),  static_cast<unsigned int>(vertices.size()));
 		mesh->indexBufferId = CreateIndexBuffer(indices.data(), static_cast<unsigned int>(indices.size()));
 
-		/*
-		BoundingBox::CreateFromPoints(mesh->boundingBox, vertices.size(), &vertices.at(0).Position, sizeof(T::VertexType));
-		*/
+		BoundingBox::CreateFromPoints(mesh->boundingBox, vertices.size(), &vertices.at(0).Position, sizeof(typename T::VertexType));
 	}
 
 	/*

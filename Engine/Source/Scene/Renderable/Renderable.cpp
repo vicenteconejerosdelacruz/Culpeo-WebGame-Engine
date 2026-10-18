@@ -124,20 +124,6 @@ namespace Scene
 		Controller::Unmap();
     }
 
-    // void Renderable::create_rotation(XMFLOAT3 v)
-	// {
-	// 	if (!contains("rotation"))
-	// 	{
-	// 		rotation(v);
-	// 	}
-	// }
-
-	// void Renderable::rotation(XMFLOAT3 v)
-	// {
-	// 	(*this)["rotation"] = FromXMFLOAT3(v);
-	// 	updateRotationQ();
-	// }
-
 // #if defined(_EDITOR)
 // 	void Renderable::WriteJson(nlohmann::json& j)
 // 	{
@@ -330,36 +316,6 @@ namespace Scene
 	}
 #endif
 */
-/*
-	XMVECTOR Renderable::positionV()
-	{
-		XMFLOAT3 pos = position();
-		return XMLoadFloat3(&pos);
-	}
-*/
-/*
-	void Renderable::updateRotationQ()
-	{
-		XMFLOAT3 v = rotation();
-		rotationQuaternion = XMQuaternionRotationRollPitchYaw(
-			XMConvertToRadians(v.x),
-			XMConvertToRadians(v.y),
-			XMConvertToRadians(v.z)
-		);
-	}
-*/
-/*
-	XMVECTOR Renderable::rotationQ()
-	{
-		return rotationQuaternion;
-	}
-*/
-/*
-	void Renderable::rotationQ(XMVECTOR Q)
-	{
-		rotationQuaternion = Q;
-	}
-*/
 
 	XMMATRIX Renderable::world()
 	{
@@ -435,7 +391,7 @@ namespace Scene
 		{
 			nlohmann::json mesh = meshMaterial().mesh;
 			meshes.push_back(GetMeshInstance(unit, mesh)->uuid);
-			//CreateBoundingBox();
+			CreateBoundingBox();
 		}
 	}
 
@@ -1245,7 +1201,7 @@ namespace Scene
 		}
 	};
 */
-/*
+
 	void Renderable::CreateBoundingBox()
 	{
 		using namespace Templates;
@@ -1257,31 +1213,29 @@ namespace Scene
 			extend = true;
 		}
 	}
-*/
-/*
+
 	bool Renderable::HasBoundingBoxComputed()
 	{
 		//return (!animable.empty()) ? boundingBoxCompute->hasSolution : true;
 		return true;
 	}
-*/
-/*
+
 	BoundingBox Renderable::GetBoundingBox()
 	{
-		if (!animable)
-		{
-			BoundingBox& bb = boundingBox;
-			BoundingBox bbw;
-			bb.Transform(bbw, world());
-			return bbw;
-		}
-		else
-		{
+		// if (!animable)
+		// {
+		// 	BoundingBox& bb = boundingBox;
+		// 	BoundingBox bbw;
+		// 	bb.Transform(bbw, world());
+		// 	return bbw;
+		// }
+		// else
+		// {
 			BoundingBox bb(AABBCenter(), AABBExtent());
 			BoundingBox bbw;
 			bb.Transform(bbw, world());
 			return bbw;
-		}
+		// }
 		
 		// BoundingBox& bb = animable.empty() ? boundingBox : boundingBoxCompute->boundingBox;
 		// BoundingBox bbw;
@@ -1289,8 +1243,8 @@ namespace Scene
 		// return bbw;
 		
 	}
-*/
-/*
+
+	/*
 	void Renderable::WriteMaterialVariablesToConstantsBufferSpace(MaterialInstanceID material, ConstantsBufferID cbvData, unsigned int cbvFrameIndex)
 	{
 		for (auto& [varName, varMapping] : material->variablesMapping)
