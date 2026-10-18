@@ -6,6 +6,9 @@
 #include "Projections/Perspective.h"
 #include "Projections/Orthographic.h"
 #include <DeviceUtils/UniformBuffer/UniformBuffer.h>
+#include <RenderPass/RenderPass.h>
+#include <SceneControllerDecl.h>
+#include <Renderable/Renderable.h>
 
 enum ProjectionsTypes {
 	PROJ_Orthographic,
@@ -42,6 +45,9 @@ struct CameraAttributes {
 using namespace Scene::CameraProjections;
 using namespace Game;
 using namespace DeviceUtils;
+
+DEF_CONTROLLER_ID_DEP(Scene, Renderable, GetController<Renderable>);
+DEF_CONTROLLER_ID_DEP(Scene, Camera, GetController<Camera>);
 
 namespace Scene {
 #if defined(_EDITOR)
@@ -105,18 +111,13 @@ namespace Scene {
 		// void DropJsonMoldAttributes(nlohmann::json& j) override;
 #endif
 
-		// XMVECTOR positionV();
-		// void positionV(XMVECTOR v);
-		// void updateRotationQ();
-		// XMVECTOR rotationQ();
-		// void rotationQ(XMVECTOR q);
 		XMVECTOR forward();
 		XMVECTOR up();
 		XMVECTOR right();
 		XMMATRIX world();
 		XMMATRIX view();
 		XMMATRIX projection();
-		// void CopyProjection(CameraID cam);
+		void CopyProjection(CameraID cam);
 		// std::tuple<unsigned int, unsigned int, bool> Project(XMVECTOR world_pos);
 
 		float projectionWidth();
@@ -127,9 +128,9 @@ namespace Scene {
 		float projectionFarZ();
 		float projectionfovAngleY();
 
-		// void CreateRenderPasses();
+		void CreateRenderPasses();
 		// RenderPassJsonID GetRenderPassTemplateFromInstanceIndex(unsigned int passIndex);
-		// RenderPassInstanceID CreateRenderPass(RenderPassJsonID pass, unsigned int passIndex);
+		RenderPassInstanceID CreateRenderPass(RenderPassJsonID pass, unsigned int passIndex);
 		// void CreateRenderPassAtIndex(RenderPassJsonID pass, unsigned int passIndex);
 		// void DeleteRenderPassAtIndex(unsigned int passIndex);
 		// void SwapRenderPassAtIndex(RenderPassJsonID pass, unsigned int passIndex);
@@ -152,10 +153,10 @@ namespace Scene {
 		// void UnbindLight(LightID light);
 		// void UnbindLightWithShadowMap(LightID light);
 
-		// bool ResolvesToSwapChain();
-		// bool RenderReady();
-		// void RenderReady(bool value);
-		// void Render();
+		bool ResolvesToSwapChain();
+		bool RenderReady();
+		void RenderReady(bool value);
+		void Render();
 
 		// //Bounding Frustum
 		// void CalculateBoundingFrustum();
@@ -220,13 +221,13 @@ namespace Scene {
 		//Transformation
 		// XMVECTOR rotationQuaternion;
 		//Render
-		// bool renderReady = false;
+		bool renderReady = false;
 		//render passes instances
-		// std::vector<RenderPassInstanceID> renderPassesUUID;
+		std::vector<RenderPassInstanceID> renderPassesUUID;
 		//this camera attributes
 		UniformBufferID cameraUb;
 		//renderables
-		// std::set<RenderableID> renderables;
+		std::set<RenderableID> renderables;
 		//lights
 		// ConstantsBufferID lightsCB;
 		// std::vector<LightID> lights;
@@ -244,6 +245,7 @@ namespace Scene {
 #endif
 	};
 
+	CONTROLLER_DECL_FULL(Camera);
 // 	SODECL_FULL(Camera);
 
 #include <TrackUUID/JDecl.h>
@@ -259,5 +261,6 @@ namespace Scene {
 // #endif
 };
 
-// using namespace Scene;
+using namespace Scene;
+DEF_CONTROLLER_ID_HASH(Camera);
 // DEF_SCENEOBJECT_ID_HASH(Camera);

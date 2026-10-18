@@ -207,6 +207,7 @@ namespace Game
 		return controllers;
 	}
 	std::set<JUUID> GetControllersInSceneUnit(SceneUnitId id);
+	bool ControllerExists(JUUID uuid);
 	std::unique_ptr<Controller>& GetController(JUUID uuid);
 	std::set<JUUID> GetControllersBySceneObjectUUID(SUUUID uuid);
 	std::set<JUUIDName> GetControllersUUIDNamesBySceneObjectUUID(SUUUID uuid);

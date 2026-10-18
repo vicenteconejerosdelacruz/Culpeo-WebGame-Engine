@@ -29,7 +29,7 @@ struct JRenderer
 	//CREATE
 	// void Initialize(HWND hwnd);
 	void Initialize();
-	// void CreateSwapChainPass();
+	void CreateSwapChainPass();
 	void CreateWindow();
 	void ResizeSwapChain(int width, int height);
 	void CreateSurface();
@@ -84,5 +84,5 @@ struct JRenderer
 	// D3D12_RECT scissorRect;
 
 	//the swap chain pass
-	// RenderPassInstanceID swapChainPass;
+	RenderPassInstanceID swapChainPass;
 };

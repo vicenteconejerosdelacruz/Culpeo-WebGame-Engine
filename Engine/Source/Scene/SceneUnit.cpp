@@ -1,5 +1,6 @@
 #include <SceneUnit.h>
 #include <Renderer.h>
+#include <Scene.h>
 // #include <Renderable/Renderable.h>
 // #include <SceneObject.h>
 // #include <Scripting.h>
@@ -26,11 +27,11 @@ namespace Scene
 	{
 		id = unit;
 		unitName = name;
-// 		markedForDelete = false;
+		markedForDelete = false;
 // 		beingCreated = true;
 // 		beingDestroyed = false;
 // 		deleteCallback = nullptr;
-// 		isolated = false;
+		isolated = false;
 // 		binder.unit = unit;
 // #if defined(_EDITOR)
 // 		canBuildAssetsTree = std::make_unique<std::atomic_uint>(0U);
@@ -56,10 +57,10 @@ namespace Scene
 // 		deleteCallback = cb;
 // 	}
 
-// 	bool SceneUnit::MarkedForDelete()
-// 	{
-// 		return markedForDelete;
-// 	}
+	bool SceneUnit::MarkedForDelete()
+	{
+		return markedForDelete;
+	}
 
 // 	bool SceneUnit::BeingCreated()
 // 	{
@@ -87,15 +88,15 @@ namespace Scene
 // 			deleteCallback();
 // 	}
 
-// 	void SceneUnit::SetIsolated(bool value)
-// 	{
-// 		isolated = value;
-// 	}
+	void SceneUnit::SetIsolated(bool value)
+	{
+		isolated = value;
+	}
 
-// 	bool SceneUnit::IsIsolated()
-// 	{
-// 		return isolated;
-// 	}
+	bool SceneUnit::IsIsolated()
+	{
+		return isolated;
+	}
 
 // 	void SceneUnit::DestroySceneObjects()
 // 	{
@@ -196,22 +197,26 @@ namespace Scene
 // 		commandsProcessor->ExecuteCommandList();
 // 	}
 
-// 	void SceneUnit::Render()
-// 	{
-// 		using namespace Scene;
+	void SceneUnit::Render()
+	{
+		using namespace Scene;
+
+		std::cout << "SceneUnit::Render()" << std::endl;
+
 // #if defined(_EDITOR)
 // 		using namespace Editor;
 // #endif
 // 		bool processRendering = commandsProcessor && renderer->GetBackBufferIndex() == Frame();
-// 		if (!IsIsolated())
-// 			processRendering &= GetCountFromSwapChainCameras(id) > 0;
+		bool processRendering = true;
+		if (!IsIsolated())
+			processRendering &= GetCountFromSwapChainCameras(id) > 0;
 
 // #if defined(_DEVELOPMENT)
 // 		std::string RenderEvent = "SceneUnit::Render(" + unitName + ")";
 // 		PIXScopedEvent(0, nostd::StringToWString(RenderEvent).c_str());
 // #endif
-// 		if (processRendering)
-// 		{
+		if (processRendering)
+		{
 
 // #if defined(_EDITOR)
 // 			if (!IsPlaying(id))
@@ -229,12 +234,12 @@ namespace Scene
 // 				}
 // #endif
 // 				RenderSceneShadowMaps(id);
-// 				RenderSceneCameras(id);
+				RenderSceneCameras(id);
 // 				RenderControllers(id);
 // 			}
 // 			CloseSubmitAndNextCommandList();
-// 		}
-// 	}
+		}
+	}
 
 // 	void SceneUnit::PostRender()
 // 	{

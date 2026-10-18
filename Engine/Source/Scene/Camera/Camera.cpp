@@ -4,14 +4,14 @@
 // #include <Application.h>
 // #include <Templates.h>
 // #include <Scene.h>
-// #include <Renderer.h>
+#include <Renderer.h>
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 // #include <NoMath.h>
 #if defined(_EDITOR)
 // #include <Builder/ReleaseBuilder.h>
 #endif
 
-// extern std::unique_ptr<JRenderer> renderer;
+extern std::unique_ptr<JRenderer> renderer;
 
 #if defined(_EDITOR)
 // namespace Editor
@@ -105,7 +105,7 @@ namespace Scene
 
 		UpdateProjection();
 		CreateUniformsBuffer();
-// 		CreateRenderPasses();
+ 		CreateRenderPasses();
 // 		CreateIBLTextures();
 
 // #if defined(_EDITOR)
@@ -228,49 +228,6 @@ namespace Scene
 #endif
 */
 
-/*
-	XMVECTOR Camera::positionV()
-	{
-		XMFLOAT3 pos = position();
-		return XMLoadFloat3(&pos);
-	}
-*/
-
-/*
-	void Camera::positionV(XMVECTOR v)
-	{
-		XMFLOAT3 pos;
-		XMStoreFloat3(&pos, v);
-		position(pos);
-	}
-*/
-
-/*
-	void Camera::updateRotationQ()
-	{
-		XMFLOAT3 v = rotation();
-		rotationQuaternion = XMQuaternionRotationRollPitchYaw(
-			XMConvertToRadians(v.x),
-			XMConvertToRadians(v.y),
-			XMConvertToRadians(v.z)
-		);
-	}
-*/
-
-/*
-	XMVECTOR Camera::rotationQ()
-	{
-		return rotationQuaternion;
-	}
-*/
-
-/*
-	void Camera::rotationQ(XMVECTOR q)
-	{
-		rotationQuaternion = q;
-	}
-*/
-
 	XMVECTOR Camera::forward()
 	{
 		/*
@@ -339,7 +296,6 @@ namespace Scene
 		return (projectionType() == PROJ_Orthographic) ? orthographicProjection.projectionMatrix : perspectiveProjection.projectionMatrix;
 	}
 
-/*
 	void Camera::CopyProjection(CameraID cam)
 	{
 		projectionType(cam->projectionType());
@@ -348,7 +304,6 @@ namespace Scene
 		orthographic(cam->orthographic());
 		UpdateProjection();
 	}
-*/
 
 /*
 	std::tuple<unsigned int, unsigned int, bool> Camera::Project(XMVECTOR world_pos)
@@ -424,7 +379,6 @@ namespace Scene
 		return (projectionType() == PROJ_Perspective) ? perspective().fovAngleY : 0.0f;
 	}
 
-/*
 	void Camera::CreateRenderPasses()
 	{
 		using namespace Templates;
@@ -447,7 +401,6 @@ namespace Scene
 			renderPassesUUID.push_back(CreateRenderPass(passUUID, static_cast<unsigned int>(renderPassesUUID.size())));
 		}
 	}
-*/
 
 /*
 	RenderPassJsonID Camera::GetRenderPassTemplateFromInstanceIndex(unsigned int passIndex)
@@ -456,14 +409,15 @@ namespace Scene
 	}
 */
 
-/*
 	RenderPassInstanceID Camera::CreateRenderPass(RenderPassJsonID pass, unsigned int passIndex)
 	{
+		using namespace Templates;
+
 		unsigned int projW = static_cast<unsigned int>(projectionWidth());
 		unsigned int projH = static_cast<unsigned int>(projectionHeight());
-		return CreateRenderPassInstance(SUuuid(), pass, passIndex, projW, projH);
+		return JUUID("");
+		//return CreateRenderPassInstance(uuid, pass, passIndex, projW, projH);
 	}
-*/
 
 /*
 	void Camera::CreateRenderPassAtIndex(RenderPassJsonID pass, unsigned int passIndex)
@@ -706,7 +660,6 @@ namespace Scene
 	}
 */
 
-/*
 	bool Camera::ResolvesToSwapChain()
 	{
 		using namespace Templates;
@@ -721,41 +674,36 @@ namespace Scene
 		}
 		return false;
 	}
-*/
 
-/*
 	bool Camera::RenderReady()
 	{
 		return renderReady;
 	}
-*/
 
-/*
 	void Camera::RenderReady(bool value)
 	{
 		renderReady = value;
 	}
-*/
 
-/*
 	void Camera::Render()
 	{
-		unsigned int frame = GetSceneUnit(unit)->Frame();
-		WriteConstantsBuffer(frame);
-		CalculateBoundingFrustum();
+		// unsigned int frame = GetSceneUnit(unit)->Frame();
+		// WriteConstantsBuffer(frame);
+		// CalculateBoundingFrustum();
 
 		//first make a set of objects which are not meant to be rendered first
 		std::set<RenderableID> nonRoot;
 		for (auto r : renderables)
 		{
 			std::vector<JUUID> uuids = r->renderNext();
-			for (std::string& uuid : uuids)
+			for (JUUID& uuid : uuids)
 			{
-				if (!SceneObjectExists(unit, uuid)) continue;
-				nonRoot.insert(MAKESUUUID(unit, uuid));
+				if (!ControllerExists(uuid)) continue;
+				nonRoot.insert(uuid);
 			}
 		}
 
+		/*
 #if defined(_EDITOR)
 		using namespace Editor;
 
@@ -776,6 +724,7 @@ namespace Scene
 
 		HideBillboards(unit);
 #endif
+		*/
 
 		//create the renderable set recursivelly
 		nostd::VectorSet<RenderableID> renVecSet;
@@ -786,26 +735,26 @@ namespace Scene
 				renVecSet.insert(r);
 				for (auto& uuid : r->renderNext())
 				{
-					if (!SceneObjectExists(unit, uuid)) continue;
-					addToRenderablesVecSet(MAKESUUUID(unit, uuid));
+					if (!ControllerExists(uuid)) continue;
+					addToRenderablesVecSet(uuid);
 				}
 			};
 
 		//add the objects to the vecset only if are root objects
 		for (auto r : renderables)
 		{
-			if (nonRoot.contains(r())) continue;
-			addToRenderablesVecSet(r());
+			if (nonRoot.contains(r)) continue;
+			addToRenderablesVecSet(r);
 		}
 
 		auto draw = [&](SceneUnitId unit, auto& rpi)
 			{
 				auto drawRenderable = [&](RenderableID renderable)
 					{
-						if (renderable->checkBoundingBox() && boundingFrustum.Contains(renderable->GetBoundingBox()) == ContainmentType::DISJOINT)
-							return;
-						//OutputDebugStringA(std::string(rpi->renderPassTemplate->name() + ":" + renderable->name() + "\n").c_str());
-						renderable->Render(unit, rpi, SUuuid());
+						// if (renderable->checkBoundingBox() && boundingFrustum.Contains(renderable->GetBoundingBox()) == ContainmentType::DISJOINT)
+						// 	return;
+						// //OutputDebugStringA(std::string(rpi->renderPassTemplate->name() + ":" + renderable->name() + "\n").c_str());
+						// renderable->Render(unit, rpi, SUuuid());
 					};
 				for (auto it = renVecSet.begin(); it != renVecSet.end(); it++)
 				{
@@ -813,6 +762,7 @@ namespace Scene
 				}
 
 #if defined(_EDITOR)
+				/*
 				for (auto& [draw, list] : drawPhysicsObjects)
 				{
 					if (!draw) continue;
@@ -830,7 +780,9 @@ namespace Scene
 						if (phO->behavior() != PB_Trigger && !phO->boundary) { phO->visible(false); }
 					}
 				}
-
+				*/
+				
+				/*
 				if (!IsPlaying(unit))
 				{
 					ShowBillboards(unit);
@@ -841,6 +793,7 @@ namespace Scene
 						drawRenderable(*it);
 					}
 				}
+				*/
 #endif
 			};
 
@@ -855,7 +808,6 @@ namespace Scene
 			rp->Pass(unit, [&rp, draw](SceneUnitId unit) { draw(unit, rp); });
 		}
 	}
-*/
 
 /*
 	void Camera::CalculateBoundingFrustum()

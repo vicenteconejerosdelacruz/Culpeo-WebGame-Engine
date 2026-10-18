@@ -1,5 +1,9 @@
 #pragma once
 
+#define CONTROLLER_DECL_FULL(Class) \
+	DEF_CONTROLLER_ID(Class, GetController<Class>)
+
+/*
 #define SODECL_TUPLE(SOClass) typedef std::tuple<JNAME, std::unique_ptr<SOClass>> SOClass##Tuple;\
 typedef SceneObjectsContainer<SOClass##Tuple> SOClass##SceneObjects;\
 typedef std::map<SceneUnitId, SOClass##SceneObjects> SOClass##SUSceneObjects
@@ -33,3 +37,4 @@ typedef std::map<SceneUnitId, SOClass##SceneObjects> SOClass##SUSceneObjects
 	SODECL_EXIST(SOClass);\
 	SODECL_RENAME(SOClass);\
 	SODECL_DELETE(SOClass)
+*/

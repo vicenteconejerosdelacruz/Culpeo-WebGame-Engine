@@ -23,7 +23,7 @@ namespace Scene
 		~SceneUnit();
 		SceneUnitId Id() const;
 // 		void MarkForDelete(std::function<void()> cb = nullptr);
-// 		bool MarkedForDelete();
+		bool MarkedForDelete();
 // 		bool BeingCreated();
 // 		void BeingCreated(bool value) { beingCreated = value; };
 // 		bool BeingDestroyed();
@@ -31,8 +31,8 @@ namespace Scene
 // 		unsigned int DeleteFrames();
 // 		void DecreaseDeleteFrames();
 // 		void CallDeleteCallback();
-// 		void SetIsolated(bool value);
-// 		bool IsIsolated();
+		void SetIsolated(bool value);
+		bool IsIsolated();
 // 		void DestroySceneObjects();
 // 		std::unordered_map<JUUID, SceneObjectType>& GetSceneObjectTypes();
 // 		std::unordered_map<SceneObjectType, std::set<JUUID>>& GetSceneObjects();
@@ -62,7 +62,7 @@ namespace Scene
 // 		unsigned int Frame() const;
 
 // 		//Render
-// 		void Render();
+		void Render();
 // 		void PostRender();
 
 // 		//Compute
@@ -92,12 +92,12 @@ namespace Scene
 	private:
 		SceneUnitId id;
 		std::string unitName;
-// 		bool markedForDelete;
+		bool markedForDelete;
 // 		bool beingCreated;
 // 		bool beingDestroyed;
 // 		unsigned int deleteFrames = JRenderer::numFrames;
 // 		std::function<void()> deleteCallback;
-// 		bool isolated;
+		bool isolated;
 // #if defined(_EDITOR)
 // 		std::unique_ptr<std::atomic_uint> canBuildAssetsTree;
 // #else

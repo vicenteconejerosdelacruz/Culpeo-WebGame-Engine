@@ -241,9 +241,9 @@ namespace Scene
 
 	// SODECL_FULL(Renderable);
 
-// #include <TrackUUID/JDecl.h>
-// #include "RenderableAtt.h"
-// #include <JEnd.h>
+#include <TrackUUID/JDecl.h>
+#include "RenderableAtt.h"
+#include <JEnd.h>
 
 	// void RenderablesStep(SceneUnitId id, float dt);
 	// void DestroyRenderables();

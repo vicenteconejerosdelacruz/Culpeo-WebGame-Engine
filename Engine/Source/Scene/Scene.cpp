@@ -4,6 +4,7 @@
 #include <Renderer.h>
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 #include <Level.h>
+#include <Camera/Camera.h>
 // #include <unordered_map>
 // #include <Application.h>
 
@@ -68,6 +69,7 @@ namespace Scene
 
 			LoadLevel(scene, filename, data, progress);
 
+			levelLoaded(id);
 		// 		if (levelThreadsStack.at(id)->fetch_sub(1U) == 1U)
 		// 		{
 		// 			Scripting::CreateScriptingSceneTemplate(id);
@@ -238,10 +240,10 @@ namespace Scene
 // 		}
 // 	}
 
-// 	bool SceneUnitExits(SceneUnitId unit)
-// 	{
-// 		return scenesUnits.contains(unit);
-// 	}
+	bool SceneUnitExits(SceneUnitId id)
+	{
+		return scenesUnits.contains(id);
+	}
 
 // 	void SceneUnitsStep()
 // 	{
@@ -442,25 +444,25 @@ namespace Scene
 // 		moveObject.at(type)(uuid, fromId, toId);
 // 	}
 
-// 	void ResetRenderableScenes()
-// 	{
-// 		renderableSceneUnits.clear();
-// 	}
+	void ResetRenderableScenes()
+	{
+		renderableSceneUnits.clear();
+	}
 
-// 	void EnableSceneUnitRendering(SceneUnitId id)
-// 	{
-// 		renderableSceneUnits.insert(id);
-// 	}
+	void EnableSceneUnitRendering(SceneUnitId id)
+	{
+		renderableSceneUnits.insert(id);
+	}
 
-// 	void RemoveSceneUnitRendering(SceneUnitId id)
-// 	{
-// 		renderableSceneUnits.erase(id);
-// 	}
+	void RemoveSceneUnitRendering(SceneUnitId id)
+	{
+		renderableSceneUnits.erase(id);
+	}
 
-// 	bool SceneUnitRenderingExists(SceneUnitId id)
-// 	{
-// 		return renderableSceneUnits.contains(id);
-// 	}
+	bool SceneUnitRenderingExists(SceneUnitId id)
+	{
+		return renderableSceneUnits.contains(id);
+	}
 
 // #if defined(_EDITOR)
 // 	bool SceneCanBuildAssetsTree(SceneUnitId id)
@@ -828,86 +830,86 @@ namespace Scene
 // 		}
 // 	}
 
-// 	void RenderSceneCameras(SceneUnitId id)
-// 	{
-// 		auto cameras(GetCameras(id));
-// 		//get all the available cameras and start filtering thing we don't want to render
-// 		for (auto it = cameras.begin(); it != cameras.end();)
-// 		{
-// 			JUUID uuid = *it;
-// 			//filter out cameras which doesn't exists
-// 			if (!SceneObjectExists(id, uuid))
-// 			{
-// 				it = cameras.erase(it);
-// 				continue;
-// 			}
+	void RenderSceneCameras(SceneUnitId id)
+	{
+		auto cameras(GetCameras(id));
+		//get all the available cameras and start filtering thing we don't want to render
+		for (auto it = cameras.begin(); it != cameras.end();)
+		{
+			JUUID uuid = *it;
+			//filter out cameras which doesn't exists
+			if (!ControllerExists(uuid))
+			{
+				it = cameras.erase(it);
+				continue;
+			}
 
-// 			//filter out cameras used to render shadow maps
-// 			CameraID cam = MAKESUUUID(id, uuid);
-// 			if (!cam->RenderReady() || !cam->shadowMapLight().empty())
-// 			{
-// 				it = cameras.erase(it);
-// 				continue;
-// 			}
-// 			it++;
-// 		}
+			//filter out cameras used to render shadow maps
+ 			CameraID cam(uuid);
+			if (!cam->RenderReady() || !cam->shadowMapLight().empty())
+			{
+				it = cameras.erase(it);
+				continue;
+			}
+			it++;
+		}
 
-// 		//create a vector of cameras rendering to rtt's
-// 		std::vector<JUUID> nonSwapChainCams;
-// 		std::copy_if(cameras.begin(), cameras.end(), std::back_inserter(nonSwapChainCams), [&](JUUID uuid)
-// 			{
-// 				CameraID cam = MAKESUUUID(id, uuid);
-// 				//we skip swap chain cams
-// 				if (cam->useSwapChain()) return false;
-// 				//we skip cameras which resolves to the swapchain
-// 				if (cam->renderPassesUUID.size() > 0ULL && cam->renderPassesUUID.back()->type == RenderPassType_SwapChainPass) return false;
-// 				return true;
-// 			}
-// 		);
+		//create a vector of cameras rendering to rtt's
+		std::vector<JUUID> nonSwapChainCams;
+		std::copy_if(cameras.begin(), cameras.end(), std::back_inserter(nonSwapChainCams), [&](JUUID uuid)
+			{
+				CameraID cam(uuid);
+				//we skip swap chain cams
+				if (cam->useSwapChain()) return false;
+				//we skip cameras which resolves to the swapchain
+				if (cam->renderPassesUUID.size() > 0ULL && cam->renderPassesUUID.back()->type == RenderPassType_SwapChainPass) return false;
+				return true;
+			}
+		);
 
 // 		auto& commandList = GetSceneUnit(id)->GetCommandList();
 
 // 		//render non swapchain buffer cameras(rtt stuff)
-// 		for (auto& uuid : nonSwapChainCams)
-// 		{
-// 			CameraID cam = MAKESUUUID(id, uuid);
+		for (auto& uuid : nonSwapChainCams)
+		{
+			CameraID cam(uuid);
 // #if defined(_DEVELOPMENT)
 // 			{
 // 				PIXScopedEvent(commandList.p, 0, std::string("nonSwapChain:" + cam->name()).c_str());
 // #endif
-// 				cam->Render();
+				cam->Render();
 // #if defined(_DEVELOPMENT)
 // 			}
 // #endif
-// 		}
+		}
 
-// 		//check if there is any camera with any render pass resolving to the swapchain
-// 		bool resolvedToSwapchain = std::any_of(nonSwapChainCams.begin(), nonSwapChainCams.end(), [&](JUUID uuid)
-// 			{
-// 				CameraID cam = MAKESUUUID(id, uuid);
-// 				return std::any_of(cam->renderPassesUUID.begin(), cam->renderPassesUUID.end(), [](RenderPassInstanceID& pass)
-// 					{
-// 						return pass->renderCallbackOverride == RenderPassRenderCallbackOverride_Resolve;
-// 					}
-// 				);
-// 			}
-// 		);
+		//check if there is any camera with any render pass resolving to the swapchain
+		bool resolvedToSwapchain = std::any_of(nonSwapChainCams.begin(), nonSwapChainCams.end(), [&](JUUID uuid)
+			{
+				CameraID cam(uuid);
+				return std::any_of(cam->renderPassesUUID.begin(), cam->renderPassesUUID.end(), [](RenderPassInstanceID& pass)
+					{
+						return pass->renderCallbackOverride == RenderPassRenderCallbackOverride_Resolve;
+					}
+				);
+			}
+		);
 
-// 		//if there are cameras resolving to swapchain but there was nothing already resolving to one. we render with the swapchain cameras
-// 		if (GetCountFromSwapChainCameras(id) > 0ULL && !resolvedToSwapchain)
-// 		{
-// 			JUUID camUUID = *GetSwapChainCameras(id).begin();
-// 			auto& cam = GetFromSwapChainCameras(id, camUUID);
+		//if there are cameras resolving to swapchain but there was nothing already resolving to one. we render with the swapchain cameras
+		if (GetCountFromSwapChainCameras(id) > 0ULL && !resolvedToSwapchain)
+		{
+			JUUID camUUID = *GetSwapChainCameras(id).begin();
+			CameraID cam(camUUID);
 // #if defined(_DEVELOPMENT)
 // 			{
 // 				PIXScopedEvent(commandList.p, 0, std::string("SwapChain:" + cam->name()).c_str());
 // #endif
-// 				cam->Render();
+				cam->Render();
 // #if defined(_DEVELOPMENT)
 // 			}
 // #endif
-// 		}
-// 	}
+		}
+	}
 
 // 	void RenderControllers(SceneUnitId id)
 // 	{
@@ -931,8 +933,8 @@ namespace Scene
 // 		}
 // 	}
 
-// 	void SceneRender()
-// 	{
+	void SceneRender()
+	{
 // #if defined(_EDITOR)
 // 		using namespace Editor;
 // 		UpdateBillboards();
@@ -940,9 +942,13 @@ namespace Scene
 // #if defined(_DEVELOPMENT)
 // 		PIXScopedEvent(0, L"SceneRender");
 // #endif
-// 		for (auto& [id, scene] : scenesUnits)
-// 		{
-// 			if (!SceneUnitExits(id) || !SceneUnitRenderingExists(id) || scene->MarkedForDelete()) continue;
+		for (auto& [id, scene] : scenesUnits)
+		{
+			std::cout << "!SceneUnitExits(id) " << !SceneUnitExits(id) << std::endl;
+			std::cout << "!SceneUnitRenderingExists(id) " << !SceneUnitRenderingExists(id) << std::endl;
+			std::cout << "scene->MarkedForDelete() " << scene->MarkedForDelete() << std::endl;
+
+			if (!SceneUnitExits(id) || !SceneUnitRenderingExists(id) || scene->MarkedForDelete()) continue;
 
 // 			//scene->Loading();
 // 			//
@@ -954,18 +960,18 @@ namespace Scene
 // 				SwitchToSceneUnitEditorCamera(id);
 // 			}
 // #endif
-// 			scene->Render();
+			scene->Render();
 // #if defined(_EDITOR)
 // 			if (!Editor::IsPlaying(id) && !scene->IsIsolated())
 // 			{
 // 				SwitchToSceneUnitEditorPlayCamera(id);
 // 			}
 // #endif
-// 		}
+		}
 // #if defined(_EDITOR)
 // 		DrawEditor();
 // #endif
-// 	}
+	}
 
 // 	void ScenePostRender()
 // 	{

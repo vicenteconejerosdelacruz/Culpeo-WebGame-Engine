@@ -27,9 +27,9 @@ namespace Scene
 {
 	// SODEF_FULL(Renderable);
 
-// #include <TrackUUID/JDef.h>
-// #include "RenderableAtt.h"
-// #include <JEnd.h>
+#include <TrackUUID/JDef.h>
+#include "RenderableAtt.h"
+#include <JEnd.h>
 
 // #if defined(_EDITOR)
 
@@ -108,11 +108,19 @@ namespace Scene
     void Renderable::Map(SUUUID so)
     {
 		Controller::Map(so);
+
+#include <TrackUUID/JInsert.h>
+#include "RenderableAtt.h"
+#include <JEnd.h>
+
 		CreateMeshInstances();
     }
 
     void Renderable::Unmap()
     {
+#include <TrackUUID/JErase.h>
+#include "RenderableAtt.h"
+#include <JEnd.h>
 		Controller::Unmap();
     }
 

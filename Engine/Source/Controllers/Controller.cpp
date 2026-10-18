@@ -224,6 +224,11 @@ namespace Game
 		return controllers;
 	}
 
+	bool ControllerExists(JUUID uuid)
+	{
+		return controllersUUIDs.contains(uuid);
+	}
+
 	std::unique_ptr<Controller>& GetController(JUUID uuid)
 	{
 		return controllersUUIDs.at(uuid);

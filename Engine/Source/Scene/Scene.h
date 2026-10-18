@@ -37,7 +37,7 @@ std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName =
 // 	void CreateSceneUnitSceneObjects(SceneUnitId unit);
 // 	void DestroyScene(SceneUnitId unit);
 // 	void DestroyScenes(bool inmediate = false);
-// 	bool SceneUnitExits(SceneUnitId unit);
+	bool SceneUnitExits(SceneUnitId id);
 // 	void SceneUnitsStep();
 // 	std::unique_ptr<SceneUnit>& GetSceneUnit(SceneUnitId unit);
 // 	size_t GetSceneUnitsCount();
@@ -118,10 +118,10 @@ std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName =
 // 		sceneObjects.erase(uuid);
 // 	}
 
-// 	void ResetRenderableScenes();
-// 	void EnableSceneUnitRendering(SceneUnitId id);
-// 	void RemoveSceneUnitRendering(SceneUnitId id);
-// 	bool SceneUnitRenderingExists(SceneUnitId id);
+	void ResetRenderableScenes();
+	void EnableSceneUnitRendering(SceneUnitId id);
+	void RemoveSceneUnitRendering(SceneUnitId id);
+	bool SceneUnitRenderingExists(SceneUnitId id);
 // #if defined(_EDITOR)
 // 	bool SceneCanBuildAssetsTree(SceneUnitId id);
 // #endif
@@ -138,11 +138,11 @@ std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName =
 // 	void SimulatePhysicScenes(DX::StepTimer& timer);
 // 	void WriteConstantsBuffers(SceneUnitId id);
 // 	void RenderSceneShadowMaps(SceneUnitId id);
-// 	void RenderSceneCameras(SceneUnitId id);
+	void RenderSceneCameras(SceneUnitId id);
 // 	void RenderControllers(SceneUnitId id);
 
 // 	void AnimableStep(SceneUnitId id, double elapsedSeconds);
-// 	void SceneRender();
+	void SceneRender();
 // 	void ScenePostRender();
 // 	void RunComputeShaders();
 // 	void SolveComputeShaders();

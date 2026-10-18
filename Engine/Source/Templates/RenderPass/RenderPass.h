@@ -5,13 +5,16 @@
 #include <unordered_map>
 #include <functional>
 #include <vector>
-//#include <dxgiformat.h>
-//#include <DeviceUtils/RenderPass/RenderToTexturePass.h>
-//#include <DeviceUtils/RenderPass/SwapChainPass.h>
+#include <webgpu/webgpu_cpp.h>
+#include <DeviceUtils/RenderPass/RenderToTexturePass.h>
+#include <DeviceUtils/RenderPass/SwapChainPass.h>
 #include <RenderPass/Override/OverridePass.h>
 #include "PassMaterialOverride.h"
 #include <Templates.h>
 #include <JTemplate.h>
+#include <Camera/Camera.h>
+#include <Controller.h>
+#include <DirectXColors.h>
 
 enum RenderPassType
 {
@@ -82,6 +85,9 @@ inline static std::unordered_map<std::string, RenderPassRenderCallbackOverride> 
 	{ "MinMaxChainResult", RenderPassRenderCallbackOverride_MinMaxChainResult },
 };
 
+DEF_CONTROLLER_ID_DEP(Scene, Camera, GetController<Camera>);
+
+using namespace wgpu;
 namespace Templates
 {
 #if defined(_EDITOR)
@@ -124,8 +130,6 @@ namespace Templates
 		inline static const TemplateType templateType = T_RenderPasses;
 		inline static const std::string shadowMapMaterialName = "ShadowMap";
 		inline static const std::string pickingMaterialName = "Picking";
-		// void CreateRenderPassMainHeap();
-		// void DestroyRenderPassMainHeap();
 		void ResizeRelease();
 		void Resize(unsigned int width, unsigned int height);
 	};
@@ -167,15 +171,15 @@ namespace Templates
 
 	void UpdateRenderPassInstances(std::unordered_map<RenderPassJsonID, std::set<RenderPassInstanceID>> changes);
 
-	//RenderPassInstanceID CreateRenderPassInstance(CameraID camera, RenderPassJsonID renderPassTemplate, unsigned int renderPassIndex, unsigned int width = 0U, unsigned int height = 0U);
+	RenderPassInstanceID CreateRenderPassInstance(CameraID camera, RenderPassJsonID renderPassTemplate, unsigned int renderPassIndex, unsigned int width = 0U, unsigned int height = 0U);
 	void DestroyRenderPassInstance(RenderPassInstanceID renderPassInstanceID);
 
 	struct RenderPassInstance
 	{
 		RenderPassInstance(JUUID uuid) { assert(!!!"do not use"); }
-		//explicit RenderPassInstance(CameraID camera, RenderPassJsonID renderPassTemplate, RenderPassInstanceID renderPassInstance, unsigned int renderPassIndex, unsigned int width, unsigned int height);
+		explicit RenderPassInstance(CameraID camera, RenderPassJsonID renderPassTemplate, RenderPassInstanceID renderPassInstance, unsigned int renderPassIndex, unsigned int width, unsigned int height);
 		~RenderPassInstance();
-		//void Pass(SceneUnitId unit, std::function<void(SceneUnitId)> renderCallback = [](SceneUnitId) {}, bool clearRTV = true, XMVECTORF32 clearColor = DirectX::Colors::Black);
+		void Pass(SceneUnitId unit, std::function<void(SceneUnitId)> renderCallback = [](SceneUnitId) {}, bool clearRTV = true, XMVECTORF32 clearColor = DirectX::Colors::Black);
 		JUUID GetRenderPassMaterialInstance(
 			SceneUnitId id,
 			MaterialJsonID material,
@@ -188,23 +192,23 @@ namespace Templates
 		void ResizeRelease();
 		void Resize(unsigned int width, unsigned int height);
 		void CreateRenderTargets();
-		//std::vector<DXGI_FORMAT> GetRenderTargetsFormats();
-		//DXGI_FORMAT GetDepthStencilFormat();
+		std::vector<wgpu::TextureFormat> GetRenderTargetsFormats();
+		wgpu::TextureFormat GetDepthStencilFormat();
 		void MarkForDelete();
 
 		//bool markedForDelete = false;
 		unsigned int renderPassIndex;
 		unsigned int width;
 		unsigned int height;
-		//CameraID camera;
+		CameraID camera;
 		RenderPassJsonID renderPassTemplate;
 		RenderPassInstanceID renderPassInstance;
 		RenderPassType type = RenderPassType_SwapChainPass;
 		RenderPassMaterialOverride materialOverride;
 		RenderPassRenderCallbackOverride renderCallbackOverride;
 		std::unique_ptr<OverridePass> overridePass;
-		//SwapChainPassID swapChainPass;
-		//RenderToTexturePassID renderToTexturePass;
+		SwapChainPassID swapChainPass;
+		RenderToTexturePassID renderToTexturePass;
 	};
 
 	DEF_TEMPLATE_ID(RenderPassInstance, GetRenderPassInstance);

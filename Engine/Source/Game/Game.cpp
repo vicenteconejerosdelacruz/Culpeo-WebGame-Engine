@@ -60,7 +60,9 @@ namespace Game
 		LoadLevelIntoSceneUnit(
 			"default",
 			GetDefaultLevel,
-			[](SceneUnitId id){},
+			[](SceneUnitId id){
+				EnableSceneUnitRendering(id);
+			},
 			[](std::string asset, unsigned int count, unsigned int total) {}
 		);
 

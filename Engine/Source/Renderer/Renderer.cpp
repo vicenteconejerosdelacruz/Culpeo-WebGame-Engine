@@ -68,7 +68,7 @@ void JRenderer::Initialize() {
 // 	CreateRenderToTextureDescriptorHeap();
 // 	CreateRenderPassMainHeap();
 // 	UpdateViewportPerspective();
-// 	CreateSwapChainPass();
+	CreateSwapChainPass();
 
 // 	fence = CreateFence(d3dDevice, "Renderer");
 // 	fenceEvent = CreateEventHandle();
@@ -117,15 +117,17 @@ void JRenderer::ConfigureSurface(uint32_t width, uint32_t height) {
   wgpu::SurfaceConfiguration config{.device = device,
                                     .format = format,
                                     .width = width,
-                                    .height = height};
+                                    .height = height,
+									.presentMode = wgpu::PresentMode::Fifo
+								};
   surface.Configure(&config);
 }
 
-// void JRenderer::CreateSwapChainPass()
-// {
-// 	using namespace Templates;
-// 	swapChainPass = CreateRenderPassInstance(CameraID(), GetRenderPassUUIDByName("simplePass"), 0);
-// }
+void JRenderer::CreateSwapChainPass()
+{
+	using namespace Templates;
+	swapChainPass = CreateRenderPassInstance(CameraID(), GetRenderPassUUIDByName("simplePass"), 0);
+}
 
 // unsigned int JRenderer::GetBackBufferIndex()
 // {

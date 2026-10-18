@@ -19,6 +19,7 @@ using SUUUID = std::tuple<SceneUnitId, JUUID>;
 #define SUUUIDUNIT(tup) std::get<0>(tup)
 #define SUUUIDUUID(tup) std::get<1>(tup)
 
+//Templates
 template<typename T, std::unique_ptr<T>& F(JUUID)>
 struct TUUID {
 	JUUID uuid;
@@ -125,6 +126,123 @@ struct std::hash<TYPE##ID>\
 	}\
 }
 
+//Controllers
+template<typename T, T* F(JUUID)>
+struct CUUID {
+	JUUID uuid;
+	CUUID() {}
+	CUUID(const CUUID& other)
+	{
+		uuid = other.uuid;
+	}
+	CUUID(const JUUID& nuuid)
+	{
+		uuid = nuuid;
+	}
+	CUUID operator=(CUUID other)
+	{
+		uuid = other.uuid;
+		return *this;
+	}
+	CUUID operator=(JUUID nuuid)
+	{
+		uuid = nuuid;
+		return *this;
+	}
+	bool operator==(const CUUID& other) const
+	{
+		return other.uuid == uuid;
+	}
+	T* operator->()
+	{
+		return F(uuid);
+	}
+	T* operator->() const
+	{
+		return F(uuid);
+	}
+	T* operator*()
+	{
+		return F(uuid);
+	}
+	bool operator<(const CUUID& other) const
+	{
+		return uuid < other.uuid;
+	}
+	JUUID operator()() const
+	{
+		return uuid;
+	}
+	JUUID operator()()
+	{
+		return uuid;
+	}
+	bool operator!() const
+	{
+		return empty();
+	}
+	bool operator!()
+	{
+		return empty();
+	}
+	explicit operator bool() const
+	{
+		return !empty();
+	}
+	explicit operator bool()
+	{
+		return !empty();
+	}
+	JUUID operator+()
+	{
+		return uuid;
+	}
+	bool empty() const
+	{
+		return uuid.empty();
+	}
+	bool empty()
+	{
+		return uuid.empty();
+	}
+	void clear()
+	{
+		uuid = "";
+	}
+	void replace(JUUID u)
+	{
+		uuid = u;
+	}
+};
+
+#define DEF_CONTROLLER_ID(TYPE,GETTER)\
+using TYPE##ID = CUUID<TYPE, GETTER>;
+
+// #define DEF_CONTROLLER_ID_DEP(TYPE,GETTER)\
+// struct TYPE;\
+// extern TYPE* GETTER(JUUID uuid);\
+// DEF_CONTROLLER_ID(TYPE,GETTER)
+
+#define DEF_CONTROLLER_ID_DEP(TYPE_NAMESPACE,TYPE,GETTER)\
+namespace TYPE_NAMESPACE\
+{\
+	struct TYPE;\
+	using namespace Game;\
+	using TYPE##ID = CUUID<TYPE, GETTER>;\
+};\
+using namespace TYPE_NAMESPACE;
+
+#define DEF_CONTROLLER_ID_HASH(TYPE)\
+template <>\
+struct std::hash<TYPE##ID>\
+{\
+	std::size_t operator()(const TYPE##ID& other) const\
+	{\
+		return std::hash<std::string>{}(other.uuid);\
+	}\
+}
+
+//SceneObject
 template<typename T, std::unique_ptr<T>& F(SceneUnitId, JUUID)>
 struct TSUUUID {
 	SUUUID SUuuid;
@@ -248,6 +366,7 @@ struct TSUUUID {
 	}
 };
 
+/*
 #define DEF_SCENEOBJECT_ID(TYPE)\
 using TYPE##ID = TSUUUID<TYPE, Get##TYPE##SceneObject>;
 
@@ -267,6 +386,7 @@ struct std::hash<TYPE##ID>\
 		return hash;\
 	}\
 }
+*/
 
 // Create a new UUID (v4) cross-platform (Web / Desktop)
 inline std::string getUUID()

@@ -1,5 +1,6 @@
 #pragma once
 
+/*
 #define SODEF_TUPLE(SOClass) SOClass##SUSceneObjects SOClass##SUsceneObjects
 
 #define SODEF_CREATESCENEOBJECTS(SOClass) void Create##SOClass##SceneObjects(SceneUnitId id)\
@@ -94,3 +95,4 @@ markedForDelete.Hook([&]\
 		Rename##SOClass##SceneObject(SUuuid(), "delete-" + uuid());\
 	}\
 )
+*/

@@ -1,10 +1,9 @@
 #pragma once
 #include <SimpleMath.h>
 #include <bit>
-//#include <corecrt_math_defines.h>
 #include <nlohmann/json.hpp>
-//#include "GraphicsFloat.h"
 #include "Json.h"
+#include <webgpu/webgpu_cpp.h>
 // #include <foundation/PxVec3.h>
 // #include <foundation/PxQuat.h>
 
@@ -220,4 +219,10 @@ inline XMFLOAT3 XMClamp(XMFLOAT3 v, float min, float max)
 	v.y = std::clamp(v.y, min, max);
 	v.z = std::clamp(v.z, min, max);
 	return v;
+}
+
+inline wgpu::Color ToWGPUColor(XMVECTORF32 &v)
+{
+	wgpu::Color c{ .r = v.f[0], .g = v.f[1], .b = v.f[2], .a = v.f[3] };
+	return c;
 }

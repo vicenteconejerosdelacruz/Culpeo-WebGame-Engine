@@ -13,6 +13,11 @@
 #include <Renderer.h>
 #include <Templates.h>
 
+namespace Scene
+{
+  extern void SceneRender();
+};
+
 using namespace Templates;
 using namespace Game;
 
@@ -63,15 +68,21 @@ void CreateRenderPipeline() {
 }
 
 void Render() {
+  using namespace Scene;
+
   // 1. Polling de eventos de GLFW (resize, teclado, mouse)
   glfwPollEvents();
 
+  SceneRender();
+  /*
   for(auto& cb:renderer->executionCallback)
   {
     cb();
   }
   renderer->executionCallback.clear();
+  */
 
+  /*
   wgpu::SurfaceTexture surfaceTexture;
   renderer->surface.GetCurrentTexture(&surfaceTexture);
 
@@ -103,6 +114,7 @@ void Render() {
   // Solo en ejecuciones nativas de escritorio (Dawn C++ nativo)
   renderer->surface.Present();
 #endif
+*/
 
   // 2. Procesar eventos de WebGPU
   renderer->GetInstance().ProcessEvents();
