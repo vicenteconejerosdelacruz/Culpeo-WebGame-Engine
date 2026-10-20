@@ -24,7 +24,7 @@ namespace DeviceUtils
 		// CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDepthStencilTextureHandle;
 
 		~RenderToTexturePass() { Destroy(); }
-		void Pass(SceneUnitId unit, std::function<void(SceneUnitId)> renderCallback, XMVECTORF32 clearColor = DirectX::Colors::Black);
+		void Pass(SceneUnitId unit, std::function<void(SceneUnitId, wgpu::RenderPassEncoder&)> renderCallback, XMVECTORF32 clearColor = DirectX::Colors::Black);
 		// void BeginRenderPass(SceneUnitId unit, XMVECTORF32 clearColor = DirectX::Colors::Black);
 		// void EndRenderPass(SceneUnitId unit);
 		void Destroy();
@@ -33,12 +33,7 @@ namespace DeviceUtils
 	};
 
 	std::unique_ptr<RenderToTexturePass>& GetRenderToTexturePass(JUUID uuid);
-	DEF_TEMPLATE_ID(RenderToTexturePass, GetRenderToTexturePass);
 
 	RenderToTexturePassID CreateRenderToTexturePass(const std::string name, std::vector<wgpu::TextureFormat> renderTargetsFormats, wgpu::TextureFormat depthStencilFormat, unsigned int width, unsigned int height);
 	void DeleteRenderToTexturePass(RenderToTexturePassID renderToTexturePassId);
 };
-
-using namespace DeviceUtils;
-DEF_TEMPLATE_ID_HASH(RenderToTexturePass);
-

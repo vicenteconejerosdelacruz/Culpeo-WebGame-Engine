@@ -313,7 +313,7 @@ static const std::map<VertexComponent, std::string> VertexComponentDefines = {
 	{ VertexComponent::_SKINNING,"_HAS_SKINNING" }
 };
 
-static const std::set<std::string> VertexTextureCompoentsString =
+static const std::set<std::string> VertexTextureComponentsString =
 {
 	VertexComponentDefines.at(VertexComponent::_TEXCOORD0),
 	VertexComponentDefines.at(VertexComponent::_TEXCOORD1),

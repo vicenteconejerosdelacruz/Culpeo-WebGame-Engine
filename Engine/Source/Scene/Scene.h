@@ -39,7 +39,7 @@ std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName =
 // 	void DestroyScenes(bool inmediate = false);
 	bool SceneUnitExits(SceneUnitId id);
 // 	void SceneUnitsStep();
-// 	std::unique_ptr<SceneUnit>& GetSceneUnit(SceneUnitId unit);
+	std::unique_ptr<SceneUnit>& GetSceneUnit(SceneUnitId unit);
 // 	size_t GetSceneUnitsCount();
 // 	std::set<SceneUnitId> GetSceneUnitIds();
 // 	SceneUnitId GetNextSceneUnitId(SceneUnitId id);
@@ -126,7 +126,7 @@ std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName =
 // 	bool SceneCanBuildAssetsTree(SceneUnitId id);
 // #endif
 
-// 	void BindSceneObjects(SceneUnitId id);
+	void BindSceneObjects(SceneUnitId id);
 // #if defined(_EDITOR)
 // 	JUUID CloneSceneObject(SceneUnitId id, JUUID, nlohmann::json parameters = {});
 // #endif

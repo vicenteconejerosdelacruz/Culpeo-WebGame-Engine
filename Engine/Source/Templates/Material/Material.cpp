@@ -256,7 +256,6 @@ namespace Templates
 
 		MaterialJsonID material = materialUUID;
 
-		/*
 		auto matTextures = material->textures();
 		std::transform(matTextures.begin(), matTextures.end(), std::inserter(textures, textures.end()), [&](auto& pair)
 			{
@@ -279,7 +278,6 @@ namespace Templates
 			}
 		);
 		if (textures.size() > 0ULL) samplers = material->samplers();
-		*/
 	
 		vertexShaderUUID = material->shader_vs();
 		pixelShaderUUID = material->shader_ps();
@@ -298,7 +296,6 @@ namespace Templates
 
 		std::vector<std::string> vertexClassDefines = VertexClassDefines.at(vertexClass);
 
-		/*
 		auto& mat = materialUUID;
 		TextureShaderUsageMap texMap = mat->textures();
 
@@ -307,7 +304,7 @@ namespace Templates
 			//remove textures components
 			std::copy_if(vertexClassDefines.begin(), vertexClassDefines.end(), std::back_inserter(defines), [](auto& def)
 				{
-					return !VertexTextureCompoentsString.contains(def);
+					return !VertexTextureComponentsString.contains(def);
 				}
 			);
 		}
@@ -319,7 +316,7 @@ namespace Templates
 				defines.push_back(textureShaderUsageToShaderDefine.at(texType));
 
 				std::unique_ptr<TextureJson>& tex = GetTextureTemplate(texUUID);
-				if (NonLinearDxgiFormats.contains(tex->format()))
+				if (NonLinearWgpuFormats.contains(tex->format()))
 				{
 					std::string srgbTexDefine = textureShaderUsageInGammaSpaceToShaderDefine.at(texType);
 					defines.push_back(srgbTexDefine);
@@ -338,7 +335,6 @@ namespace Templates
 			defines.push_back(textureShaderUsageToShaderDefine.at(TextureShaderUsage_IBLPreFilteredEnvironment));
 			defines.push_back(textureShaderUsageToShaderDefine.at(TextureShaderUsage_IBLBRDFLUT));
 		}
-		*/
 	}
 
 	void MaterialInstance::CreateShaderInstances()

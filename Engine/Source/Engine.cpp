@@ -9,6 +9,7 @@
 #include <webgpu/webgpu_glfw.h>
 #include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
+#include <RenderPass/RenderPass.h>
 #include <Game.h>
 #include <Renderer.h>
 #include <Templates.h>
@@ -29,6 +30,7 @@ wgpu::RenderPipeline pipeline;
 bool InitInstance()
 {
   CreateSystemTemplates(); 
+  CreateTemplates();
 
   renderer = std::make_unique<JRenderer>();
   renderer->Initialize(); 
@@ -73,14 +75,13 @@ void Render() {
   // 1. Polling de eventos de GLFW (resize, teclado, mouse)
   glfwPollEvents();
 
-  SceneRender();
-  /*
   for(auto& cb:renderer->executionCallback)
   {
     cb();
   }
   renderer->executionCallback.clear();
-  */
+  
+  SceneRender();
 
   /*
   wgpu::SurfaceTexture surfaceTexture;

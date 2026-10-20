@@ -13,6 +13,8 @@ using JNAME = std::string;
 using JUUIDName = std::tuple<JUUID, JNAME>;
 using SUUUID = std::tuple<SceneUnitId, JUUID>;
 
+#include "NoStd.h"
+
 #define MAKESUUUID(id,juuid) std::make_tuple(id,juuid)
 #define FROMSUUUID(tup) std::get<0>(tup),std::get<1>(tup)
 #define SUUUIDSTR(tup) std::string(std::to_string(std::get<0>(tup))+"/"+std::get<1>(tup))
@@ -541,4 +543,57 @@ inline std::vector<JUUIDName> GetNonHiddenUUIDsNames(auto& items)
 	}
 	SortUUIDByName(uuidsNames);
 	return uuidsNames;
+}
+
+#define DEF_TYPE_ID(NAMESPACE, TEMPLATE, TYPE, GETTER) \
+namespace NAMESPACE {\
+	struct TYPE;\
+	extern std::unique_ptr<TYPE>& GETTER(JUUID uuid);\
+	using TYPE##ID = TEMPLATE<TYPE, GETTER>;\
+}\
+namespace std {\
+    template <>\
+    struct hash<NAMESPACE::TYPE##ID>\
+    {\
+        std::size_t operator()(const NAMESPACE::TYPE##ID& other) const\
+        {\
+            return std::hash<std::string>{}(other.uuid);\
+        }\
+    };\
+}
+
+#define DEF_TYPE_CID(NAMESPACE, TEMPLATE, TYPE, GETTER) \
+namespace NAMESPACE {\
+	struct TYPE;\
+	extern TYPE* GETTER(JUUID uuid);\
+	using TYPE##ID = TEMPLATE<TYPE, GETTER>;\
+}\
+namespace std {\
+    template <>\
+    struct hash<NAMESPACE::TYPE##ID>\
+    {\
+        std::size_t operator()(const NAMESPACE::TYPE##ID& other) const\
+        {\
+            return std::hash<std::string>{}(other.uuid);\
+        }\
+    };\
+}
+
+#define DEF_TYPE_SID(NAMESPACE, TEMPLATE, TYPE, GETTER) \
+namespace NAMESPACE {\
+	struct TYPE;\
+	extern std::unique_ptr<TYPE>& GETTER(SceneUnitId id, JUUID uuid);\
+	using TYPE##ID = TEMPLATE<TYPE, GETTER>;\
+}\
+namespace std {\
+    template <>\
+    struct hash<NAMESPACE::TYPE##ID>\
+    {\
+        std::size_t operator()(const NAMESPACE::TYPE##ID& other) const\
+        {\
+			size_t hash = 0;\
+			nostd::hash_combine(hash, std::get<0>(other.SUuuid), std::get<1>(other.SUuuid));\
+			return hash;\
+        }\
+    };\
 }

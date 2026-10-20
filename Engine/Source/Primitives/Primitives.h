@@ -33,8 +33,8 @@ namespace Primitives
 		std::vector<uint32_t> indices = p.GetIndices();
 		std::vector<Vertex<T::VertexClass>> vertices = p.GetVertices();
 
-		mesh->vertexBufferId = CreateVertexBuffer(vertices.data(), sizeof(typename T::VertexType),  static_cast<unsigned int>(vertices.size()));
-		mesh->indexBufferId = CreateIndexBuffer(indices.data(), static_cast<unsigned int>(indices.size()));
+		mesh->vertexBufferId = CreateVertexBuffer(id, vertices.data(), sizeof(typename T::VertexType),  static_cast<unsigned int>(vertices.size()));
+		mesh->indexBufferId = CreateIndexBuffer(id, indices.data(), static_cast<unsigned int>(indices.size()));
 
 		BoundingBox::CreateFromPoints(mesh->boundingBox, vertices.size(), &vertices.at(0).Position, sizeof(typename T::VertexType));
 	}

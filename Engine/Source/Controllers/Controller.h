@@ -10,14 +10,6 @@
 // #include <StepTimer.h>
 // #include <NoV8.h>
 
-namespace Scene
-{
-	struct SceneObject;
-	extern std::unique_ptr<SceneObject>& GetSceneObject(SceneUnitId id, JUUID uuid);
-};
-using namespace Scene;
-using SceneObjectID = TSUUUID<SceneObject, GetSceneObject>;
-
 // #define DECL_CONTROLLER_DRAWER(JClass,ParentJClass)\
 // std::map<std::string, JEdvEditorDrawerFunction> GetControllerDrawers() override\
 // {\
@@ -119,6 +111,7 @@ inline void from_json(const nlohmann::json& j, ControllerBinding& d) {
 
 using namespace nov8;
 */
+using namespace Scene;
 namespace Game
 {
 #if defined(_EDITOR)
@@ -162,6 +155,14 @@ namespace Game
 #endif
 		virtual void Map(SUUUID so);
 		virtual void Unmap();
+
+		virtual void BindToScene() {}
+		virtual void Bind(JUUID uuid) {}
+		virtual void UnbindFromScene() {}
+		virtual void Unbind(JUUID uuid) {}
+
+		virtual void BindToCamera(JUUID camId){}
+
 		// virtual void Step(float delta) {};
 		// virtual void Render(SceneUnitId id) {};
 		// //Scripting

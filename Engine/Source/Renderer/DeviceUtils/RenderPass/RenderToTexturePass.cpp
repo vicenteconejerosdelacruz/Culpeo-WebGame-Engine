@@ -98,7 +98,7 @@ namespace DeviceUtils {
 		}
 	}
 
-	void RenderToTexturePass::Pass(SceneUnitId unit, std::function<void(SceneUnitId)> renderCallback, XMVECTORF32 clearColor)
+	void RenderToTexturePass::Pass(SceneUnitId unit, std::function<void(SceneUnitId, wgpu::RenderPassEncoder&)> renderCallback, XMVECTORF32 clearColor)
 	{
 // #if defined(_DEVELOPMENT)
 // 		{

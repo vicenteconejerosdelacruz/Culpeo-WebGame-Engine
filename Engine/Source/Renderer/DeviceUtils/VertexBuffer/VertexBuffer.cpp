@@ -1,5 +1,6 @@
 #include "VertexBuffer.h"
 #include <Renderer.h>
+#include <Scene.h>
 
 extern std::unique_ptr<JRenderer> renderer;
 
@@ -12,7 +13,7 @@ namespace DeviceUtils
 		return vertexBuffers.at(uuid);
 	}
 
-	VertexBufferID CreateVertexBuffer(const void* vertices, unsigned int vertexSize, unsigned int verticesCount)
+	VertexBufferID CreateVertexBuffer(SceneUnitId id,const void* vertices, unsigned int vertexSize, unsigned int verticesCount)
 	{
 		using namespace wgpu;
 
@@ -23,7 +24,7 @@ namespace DeviceUtils
 		assert(!vertexBuffers.contains(vertexBufferID()));
 		vertexBuffers.insert_or_assign(vertexBufferID(), std::move(vb));
 
-		renderer->executionCallback.push_back([vertexBufferID, vertices, vertexSize, verticesCount]
+		GetSceneUnit(id)->PushToPreRender([vertexBufferID, vertices, vertexSize, verticesCount]
 			{
 				BufferDescriptor bufferDesc{};
 				bufferDesc.usage = BufferUsage::CopyDst | BufferUsage::Vertex;

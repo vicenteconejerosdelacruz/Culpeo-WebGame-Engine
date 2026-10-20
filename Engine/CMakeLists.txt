@@ -125,6 +125,8 @@ add_executable(CulpeoEngine
     "Source/pch/UUID.h"
     "Source/pch/NoStd.h"
     "Source/pch/SceneUnitId.h"
+    "Source/Utils/FileSystem.h"
+    "Source/Utils/FileSystem.cpp"
 )
 
 # 2. Configura la ruta de salida usando directamente el nombre de la configuración
@@ -155,7 +157,9 @@ target_include_directories(CulpeoEngine PRIVATE
 # 4. Configurar Precompiled Header (PCH) global para el motor
 target_precompile_headers(CulpeoEngine PRIVATE
     "Source/pch/Application.h"
+    "Source/pch/Debug.h"
     "Source/pch/DeleteHook.h"
+    "Source/pch/IDTypes.h"
     "Source/pch/UUID.h"
     "Source/pch/NoStd.h"
     "Source/pch/NoMath.h"
@@ -222,6 +226,7 @@ if(EMSCRIPTEN)
         $<$<CONFIG:Debug>:-sASSERTIONS=2>
         -pthread
         "-sPTHREAD_POOL_SIZE=4"
+        "-sFETCH=1"
         "-sASYNCIFY=1" 
         "-sUSE_GLFW=3" 
         "-sALLOW_MEMORY_GROWTH=1"

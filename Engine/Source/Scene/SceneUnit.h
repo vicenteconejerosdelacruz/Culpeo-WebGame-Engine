@@ -59,10 +59,12 @@ namespace Scene
 // 			SubmitCommandList();
 // 			NextCommandList();
 // 		}
-// 		unsigned int Frame() const;
-
-// 		//Render
+		unsigned int Frame() const;
+		
+		// 		//Render
 		void Render();
+		void PushToPreRender(std::function<void()> cb);
+		void PreRender();
 // 		void PostRender();
 
 // 		//Compute
@@ -93,6 +95,8 @@ namespace Scene
 		SceneUnitId id;
 		std::string unitName;
 		bool markedForDelete;
+		unsigned int frame;
+		std::vector<std::function<void()>> preRenderCallbacks;
 // 		bool beingCreated;
 // 		bool beingDestroyed;
 // 		unsigned int deleteFrames = JRenderer::numFrames;

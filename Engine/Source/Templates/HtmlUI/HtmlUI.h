@@ -75,8 +75,6 @@ namespace Templates
 
 	TEMPDECL_FULL(HtmlUI);
 	TEMPDECL_REFTRACKER(HtmlUI);
-	DEF_TEMPLATE_ID(HtmlUIJson, GetHtmlUITemplate);
-	DEF_TEMPLATE_ID(HtmlUIInstance, GetHtmlUIInstance);
 
 	struct HtmlUIInstance// : public LoadListener
 	{
@@ -105,7 +103,3 @@ namespace Templates
 	void ResizeReleaseHtmlUIInstances();
 	void ResizeHtmlUIInstances(uint32_t width, uint32_t height);
 };
-
-using namespace Templates;
-DEF_TEMPLATE_ID_HASH(HtmlUIJson);
-DEF_TEMPLATE_ID_HASH(HtmlUIInstance);

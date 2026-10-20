@@ -26,6 +26,7 @@
 
 namespace Scene
 {
+	extern void BindSceneObjects(SceneUnitId id);
 	// extern std::set<SceneUnitId> pendingPhysicsCreation;
 };
 
@@ -211,7 +212,7 @@ namespace Scene::Level
 // 		}
 // #endif
 
-// 		BindSceneObjects(id);
+		BindSceneObjects(id);
 // #if defined(_EDITOR)
 // 		if (!scene->IsIsolated())
 // 		{

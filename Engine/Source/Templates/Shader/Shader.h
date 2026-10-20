@@ -87,8 +87,6 @@ namespace Templates
 
 	TEMPDECL_FULL(Shader);
 	TEMPDECL_REFTRACKER(Shader);
-	DEF_TEMPLATE_ID(ShaderJson, GetShaderTemplate);
-	DEF_TEMPLATE_ID(ShaderInstance, GetShaderInstance);
 
 	struct ShaderInstance
 	{
@@ -147,7 +145,3 @@ namespace Templates
 		// void CreateByteCode(const ComPtr<IDxcResult>& result);
 	};
 };
-
-using namespace Templates;
-DEF_TEMPLATE_ID_HASH(ShaderJson);
-DEF_TEMPLATE_ID_HASH(ShaderInstance);

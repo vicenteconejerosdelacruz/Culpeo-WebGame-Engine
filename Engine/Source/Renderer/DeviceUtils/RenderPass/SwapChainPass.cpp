@@ -67,7 +67,7 @@ namespace DeviceUtils
 		swapChainPasses.erase(swapChainPassId);
 	}
 
-	void SwapChainPass::Pass(SceneUnitId unit, std::function<void(SceneUnitId)> renderCallback, bool clearRTV, XMVECTORF32 clearColor)
+	void SwapChainPass::Pass(SceneUnitId unit, std::function<void(SceneUnitId, wgpu::RenderPassEncoder&)> renderCallback, bool clearRTV, XMVECTORF32 clearColor)
 	{
 		wgpu::SurfaceTexture surfaceTexture;
 		renderer->surface.GetCurrentTexture(&surfaceTexture);
@@ -79,7 +79,7 @@ namespace DeviceUtils
 
 		wgpu::CommandEncoder encoder = renderer->GetDevice().CreateCommandEncoder();
 		wgpu::RenderPassEncoder pass = BeginRenderPass(unit, surfaceTexture, encoder, clearRTV, clearColor);
-		// renderCallback(unit);
+		renderCallback(unit, pass);
 		EndRenderPass(unit, encoder, pass);
 	}
 

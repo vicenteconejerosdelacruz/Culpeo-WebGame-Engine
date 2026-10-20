@@ -1,5 +1,6 @@
 #include "IndexBuffer.h"
 #include <Renderer.h>
+#include <Scene.h>
 
 extern std::unique_ptr<JRenderer> renderer;
 
@@ -12,7 +13,7 @@ namespace DeviceUtils
 		return indexBuffer.at(uuid);
 	}
 
-	IndexBufferID CreateIndexBuffer(const void* indices, unsigned int indicesCount)
+	IndexBufferID CreateIndexBuffer(SceneUnitId id,const void* indices, unsigned int indicesCount)
 	{
 		using namespace wgpu;
 
@@ -23,7 +24,7 @@ namespace DeviceUtils
 		assert(!indexBuffer.contains(indexBufferID()));
 		indexBuffer.insert_or_assign(indexBufferID(), std::move(ib));
 
-		renderer->executionCallback.push_back([indexBufferID, indices, indicesCount]
+		GetSceneUnit(id)->PushToPreRender([indexBufferID, indices, indicesCount]
 			{
 				BufferDescriptor bufferDesc{};
 				bufferDesc.usage = BufferUsage::CopyDst | BufferUsage::Index;

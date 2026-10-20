@@ -1,0 +1,5285 @@
+- materials:
+    - mat-00e60feb-1b40-42bc-b398-7a4789da4389-0
+  name: brawler/bosses/goblin_glider
+  path: brawler/bosses/goblin_glider/green_goblins_glider.glb
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: 00e60feb-1b40-42bc-b398-7a4789da4389
+- materials:
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-0
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-1
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-2
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-3
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-4
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-5
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-6
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-7
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-8
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-9
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-10
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-11
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-12
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-13
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-14
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-15
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-16
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-17
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-18
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-19
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-20
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-21
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-22
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-23
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-24
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-25
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-26
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-27
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-28
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-29
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-30
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-31
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-32
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-33
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-34
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-35
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-36
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-37
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-38
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-39
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-40
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-41
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-42
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-43
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-44
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-45
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-46
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-47
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-48
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-49
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-50
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-51
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-52
+    - mat-08366fac-680e-4f2c-9a58-c2094edab92f-53
+  name: brawler/scene/floor_stones
+  path: brawler/scene/floor_stones/scene.gltf
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: 08366fac-680e-4f2c-9a58-c2094edab92f
+- animationSequences:
+    ThucKick:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Kick
+                endTime: 2016.6666259765625
+                forward: true
+                frameEnd: 34
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 34
+                frameStart: 34
+                script: thug.OnCombatPunchAnimationEnd()
+              type: script
+          name: Channel 3
+      totalFrames: 34
+    ThugCombatIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Combat Idle
+                endTime: 4466.66650390625
+                forward: true
+                frameEnd: 75
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 25
+                frameStart: 25
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 50
+                frameStart: 50
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 75
+                frameStart: 75
+                script: thug.CombatIdleNextState()
+              type: script
+          name: Channel 3
+      totalFrames: 75
+    ThugDeath:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Death
+                endTime: 4350
+                forward: true
+                frameEnd: 73
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 73
+                frameStart: 73
+                script: thug.OnDeathAnimationEnd()
+              type: script
+          name: Channel 3
+      totalFrames: 73
+    ThugIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Idle
+                endTime: 16933.33203125
+                forward: true
+                frameEnd: 283
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+      totalFrames: 283
+    ThugPunch:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Hook
+                endTime: 2000
+                forward: true
+                frameEnd: 34
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 34
+                frameStart: 34
+                script: thug.OnCombatPunchAnimationEnd()
+              type: script
+          name: Channel 3
+        - elements:
+            - trigger:
+                bone: LeftForeArm
+                collisionMask: 4
+                color:
+                  - 0.6813725233078003
+                  - 0.14028258621692657
+                  - 0.6336295008659363
+                  - 0.4901960790157318
+                frameEnd: 15
+                frameStart: 8
+                objectMask: 8
+                onEnter: require("thug-punch-trigger")()
+                onLeave: ""
+                position:
+                  - 0
+                  - 0
+                  - 0
+                rotation:
+                  - 0
+                  - 0
+                  - 0
+                scale:
+                  - 0.30000001192092896
+                  - 0.5
+                  - 0.30000001192092896
+              type: trigger
+          name: Channel 4
+      totalFrames: 34
+    ThugWalk:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk
+                endTime: 1033.333251953125
+                forward: true
+                frameEnd: 18
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 18
+                frameStart: 18
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 18
+    ThugWalkFar:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk Far
+                endTime: 716.6666259765625
+                forward: true
+                frameEnd: 12
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 12
+                frameStart: 12
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 12
+    ThugWalkNear:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk Near
+                endTime: 733.3333740234375
+                forward: true
+                frameEnd: 13
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 13
+                frameStart: 13
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 13
+  materials:
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-0
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-1
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-2
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-3
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-4
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-5
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-6
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-7
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-8
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-9
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-10
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-11
+    - mat-163c304b-c67d-458d-88a9-6436fe72bf33-12
+  name: brawler/thugs/thug_05
+  path: brawler/thugs/thug_05/scene.gltf
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: 163c304b-c67d-458d-88a9-6436fe72bf33
+- animationSequences:
+    ThugCombatIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Fight-Idle
+                endTime: 3633.33349609375
+                forward: true
+                frameEnd: 61
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 20
+                frameStart: 20
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 40
+                frameStart: 40
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 61
+                frameStart: 61
+                script: thug.CombatIdleNextState()
+              type: script
+          name: Channel 3
+      totalFrames: 61
+    ThugCombatKick:
+      framesPerSecond: 20
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Roundhouse-Kick
+                endTime: 2150
+                forward: true
+                frameEnd: 36
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 36
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 9
+                    position:
+                      - -4.687340737774548e-09
+                      - 0
+                      - 0.029999999329447746
+                    rotation:
+                      - -179.99998474121094
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 0.9999995231628418
+                      - 0.9999995231628418
+                  - easing: Linear
+                    frame: 15
+                    position:
+                      - -1.1878753092275929e-08
+                      - 0
+                      - 0.6215900182723999
+                    rotation:
+                      - -179.99996948242188
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 0.9999994039535522
+                      - 0.9999994039535522
+                  - easing: Linear
+                    frame: 36
+                    position:
+                      - -3.7048696555075367e-08
+                      - 0
+                      - 0.6100000143051147
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 36
+                frameStart: 36
+                script: thug.OnCombatPunchAnimationEnd()
+              type: script
+          name: Channel 3
+        - elements:
+            - trigger:
+                bone: LeftFoot
+                collisionMask: 4
+                color:
+                  - 0.6666666865348816
+                  - 0.5215686559677124
+                  - 0.6274510025978088
+                  - 0.7803921699523926
+                frameEnd: 20
+                frameStart: 15
+                objectMask: 8
+                onEnter: require("thug-punch-trigger")()
+                onLeave: ""
+                position:
+                  - 0
+                  - 0.10000000149011612
+                  - -0.029999999329447746
+                rotation:
+                  - 0
+                  - -40
+                  - 0
+                scale:
+                  - 0.10000000149011612
+                  - 0.6000000238418579
+                  - 0.30000001192092896
+              type: trigger
+          name: Channel 4
+      totalFrames: 36
+    ThugCombatMoveFar:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk-Right
+                endTime: 1216.666748046875
+                forward: true
+                frameEnd: 21
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 21
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 21
+                    position:
+                      - 1.7400000095367432
+                      - 0
+                      - 0
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 21
+                frameStart: 21
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 21
+    ThugCombatMoveFw:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk
+                endTime: 1333.3333740234375
+                forward: true
+                frameEnd: 23
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 23
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 23
+                    position:
+                      - -7.772165844244228e-08
+                      - 0
+                      - 1.3039530515670776
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 23
+                frameStart: 23
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 23
+    ThugCombatMoveNear:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk-Left
+                endTime: 1216.666748046875
+                forward: true
+                frameEnd: 21
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 21
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 21
+                    position:
+                      - -1.6200000047683716
+                      - 0
+                      - -9.518046795164992e-08
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 21
+                frameStart: 21
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 21
+    ThugDeath:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Death
+                endTime: 2566.66650390625
+                forward: true
+                frameEnd: 43
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 43
+                frameStart: 43
+                script: thug.OnDeathAnimationEnd()
+              type: script
+          name: Channel 3
+      totalFrames: 43
+    ThugIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Dancing
+                endTime: 15200
+                forward: true
+                frameEnd: 254
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 180
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Channel 2
+      totalFrames: 254
+  materials:
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-0
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-1
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-2
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-3
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-4
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-5
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-6
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-7
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-8
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-9
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-10
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-11
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-12
+    - mat-261007fd-8538-4d03-a101-89e8f59f5b71-13
+  name: brawler/thugs/thug_02
+  path: brawler/thugs/thug_02/scene.gltf
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: 261007fd-8538-4d03-a101-89e8f59f5b71
+- materials:
+    - mat-379011d0-8ea6-41bd-9c4e-59bfc11412d2-0
+  name: brawler/scene/building_rows
+  path: brawler/scene/building_rows/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: 379011d0-8ea6-41bd-9c4e-59bfc11412d2
+- materials:
+    - mat-3e951d0e-e1f3-4d27-b431-0a5555123560-0
+    - mat-3e951d0e-e1f3-4d27-b431-0a5555123560-1
+    - mat-3e951d0e-e1f3-4d27-b431-0a5555123560-2
+    - mat-3e951d0e-e1f3-4d27-b431-0a5555123560-3
+    - mat-3e951d0e-e1f3-4d27-b431-0a5555123560-4
+    - mat-3e951d0e-e1f3-4d27-b431-0a5555123560-5
+    - mat-3e951d0e-e1f3-4d27-b431-0a5555123560-6
+    - mat-3e951d0e-e1f3-4d27-b431-0a5555123560-7
+  name: sommerhaus
+  path: sommerhaus/scene.gltf
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: 3e951d0e-e1f3-4d27-b431-0a5555123560
+- animationSequences:
+    Block:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Cobweb_Pose
+                endTime: 41.66666793823242
+                forward: true
+                frameEnd: 1
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - boneTransformation:
+                bone: upperarm_l_43
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 63.52899932861328
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: boneTransformation
+          name: BoneTransformation
+      totalFrames: 1
+    Death:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Dead_F
+                endTime: 1041.6666259765625
+                forward: true
+                frameEnd: 18
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 18
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 5
+                    position:
+                      - 0
+                      - 0.009999999776482582
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 6
+                    position:
+                      - 0
+                      - 0.05999999865889549
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 7
+                    position:
+                      - 0
+                      - 0.15000000596046448
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 9
+                    position:
+                      - 0
+                      - 0.10000000149011612
+                      - 0
+                    rotation:
+                      - -3.999999761581421
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 0
+                frameStart: 0
+                script: animationUseTransformation = true
+              type: script
+            - script:
+                frameEnd: 18
+                frameStart: 18
+                script: venom.OnDeathAnimationEnd()
+              type: script
+          name: Channel 3
+        - elements:
+            - soundfx:
+                frameEnd: 0
+                frameStart: 0
+                loop: false
+                sound: 1c27358d-60fd-4f91-bc6b-66a4db9dc5e9
+                volume: 1
+              type: soundfx
+          name: Channel 4
+      totalFrames: 18
+    DetachFromWall:
+      framesPerSecond: 90
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: LowCrawl_To_Onwall
+                endTime: 651.0416259765625
+                forward: true
+                frameEnd: 17
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: Onwall_To_Jump
+                endTime: 602.0833129882812
+                forward: true
+                frameEnd: 43
+                frameStart: 18
+                startTime: 0
+              type: animation
+            - animation:
+                animation: 103571_Devouring_Loop
+                endTime: 541.6666870117188
+                forward: true
+                frameEnd: 54
+                frameStart: 44
+                startTime: 0
+              type: animation
+          name: animation
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - -90
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 32
+                frameStart: 32
+                keyframes:
+                  - easing: Linear
+                    frame: 32
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 54
+                frameStart: 44
+                keyframes:
+                  - easing: Linear
+                    frame: 44
+                    position:
+                      - 0
+                      - 4
+                      - -0.800000011920929
+                    rotation:
+                      - 154.99998474121094
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 48
+                    position:
+                      - 0
+                      - 3.950000047683716
+                      - -0.800000011920929
+                    rotation:
+                      - 154.99996948242188
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 0.9999999403953552
+                      - 0.9999999403953552
+                  - easing: Linear
+                    frame: 54
+                    position:
+                      - 0
+                      - 4
+                      - -0.800000011920929
+                    rotation:
+                      - 154.99998474121094
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: transformation
+        - elements:
+            - script:
+                frameEnd: 54
+                frameStart: 54
+                script: venom.SwitchToState("Falling")
+              type: script
+          name: script
+      totalFrames: 54
+    FloorToSwing:
+      framesPerSecond: 300
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103551_Fire_L_Loop
+                endTime: 875.0000610351562
+                forward: true
+                frameEnd: 14
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - boneTransformation:
+                bone: upperarm_l_43
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -47.74041748046875
+                      - -14.351899147033691
+                      - -38.21044158935547
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: boneTransformation
+          name: BoneT
+        - elements:
+            - script:
+                frameEnd: 14
+                frameStart: 14
+                script: venom.ThrowFloorWeb()
+              type: script
+          name: Script
+      totalFrames: 14
+    FloorToWall:
+      framesPerSecond: 90
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Turn_L90_C
+                endTime: 958.3333129882812
+                forward: true
+                frameEnd: 23
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: SwingingStart_To_LowCrawl
+                endTime: 750
+                forward: true
+                frameEnd: 60
+                frameStart: 24
+                startTime: 173.07691955566406
+              type: animation
+          name: anim
+        - elements:
+            - transformation:
+                frameEnd: 24
+                frameStart: 24
+                keyframes:
+                  - easing: Linear
+                    frame: 24
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - -90
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: transformation
+        - elements:
+            - script:
+                frameEnd: 60
+                frameStart: 60
+                script: venom.SwitchToState("WallIdle")
+              type: script
+          name: Channel 3
+      totalFrames: 60
+    Idle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Idle_C
+                endTime: 5375
+                forward: true
+                frameEnd: 90
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+      totalFrames: 90
+    Intro:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Jump_Falling_F_C
+                endTime: 1708.3333740234375
+                forward: true
+                frameEnd: 45
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Falling
+        - elements:
+            - animation:
+                animation: 103531_Descent_End
+                endTime: 127.03251647949219
+                forward: true
+                frameEnd: 54
+                frameStart: 46
+                startTime: 0
+              type: animation
+          name: Descent
+        - elements:
+            - animation:
+                animation: 103541_Shackle
+                endTime: 1375
+                forward: true
+                frameEnd: 192
+                frameStart: 55
+                startTime: 0
+              type: animation
+          name: Scream
+        - elements:
+            - soundfx:
+                frameEnd: 91
+                frameStart: 91
+                loop: false
+                sound: 2a168053-c2e9-4054-beb8-7a63eb228e4f
+                volume: 1
+              type: soundfx
+          name: Sound
+        - elements:
+            - transformation:
+                frameEnd: 53
+                frameStart: 0
+                keyframes:
+                  - easing: Sine_Ease_In
+                    frame: 0
+                    position:
+                      - 0
+                      - 1
+                      - 10
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Sine_Ease_Out
+                    frame: 45
+                    position:
+                      - 0
+                      - 0
+                      - 0.10000000149011612
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 50
+                    position:
+                      - 0
+                      - -0.1875
+                      - 0.03750000149011612
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 51
+                    position:
+                      - 0
+                      - -0.02500000037252903
+                      - 0.02500000037252903
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 52
+                    position:
+                      - 0
+                      - -0.016300000250339508
+                      - 0.012500000186264515
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 53
+                    position:
+                      - 0
+                      - -0.029999999329447746
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 54
+                frameStart: 54
+                keyframes: ~
+              type: transformation
+          name: Transformation
+        - elements:
+            - script:
+                frameEnd: 192
+                frameStart: 192
+                script: "venom.PlayerReady()\nscene.sceneControllers[\"scene.controller\"].controllers[\"brawler-scene\"].HeroReady(venom.uuid)"
+              type: script
+          name: Player Ready
+      totalFrames: 192
+    JumpBegin:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Jump_Start_F_C
+                endTime: 118.05555725097656
+                forward: true
+                frameEnd: 14
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - transformation:
+                frameEnd: 14
+                frameStart: 1
+                keyframes:
+                  - easing: Linear
+                    frame: 5
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 6
+                    position:
+                      - 0
+                      - 0.11999999731779099
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 7
+                    position:
+                      - 0
+                      - 0.17000000178813934
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 8
+                    position:
+                      - 0
+                      - 0.2800000011920929
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 9
+                    position:
+                      - 0
+                      - 0.33000001311302185
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 10
+                    position:
+                      - 0
+                      - 0.4000000059604645
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 11
+                    position:
+                      - 0
+                      - 0.4399999976158142
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 14
+                    position:
+                      - 0
+                      - 0.47999998927116394
+                      - 0
+                    rotation:
+                      - 7.999999523162842
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Transformation
+        - elements:
+            - script:
+                frameEnd: 14
+                frameStart: 14
+                script: venom.BeginJump()
+              type: script
+          name: Channel 3
+      totalFrames: 14
+    JumpDash1:
+      framesPerSecond: 90
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103551_Dash_L_End
+                endTime: 385.4166564941406
+                forward: true
+                frameEnd: 22
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - transformation:
+                frameEnd: 22
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0.5
+                      - 0.5
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 3
+                    position:
+                      - 0.05000000074505806
+                      - 0.5
+                      - 0.47999998927116394
+                    rotation:
+                      - 0
+                      - 1.9999998807907104
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 6
+                    position:
+                      - 0.30000001192092896
+                      - 0.5
+                      - 0.30000001192092896
+                    rotation:
+                      - 0
+                      - 6
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 22
+                    position:
+                      - 0.4000000059604645
+                      - 0
+                      - -1
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Transformation
+        - elements:
+            - trigger:
+                bone: Chest_Scale_02_Jnt_147
+                collisionMask: 8
+                color:
+                  - 0.08235294371843338
+                  - 0.3921568691730499
+                  - 0.20000000298023224
+                  - 0.7372549176216125
+                frameEnd: 22
+                frameStart: 18
+                objectMask: 4
+                onEnter: require("venom-attack-trigger")()
+                onLeave: ""
+                position:
+                  - 0
+                  - 0
+                  - 0
+                rotation:
+                  - 0
+                  - 0
+                  - 0
+                scale:
+                  - 1
+                  - 1
+                  - 1
+              type: trigger
+          name: Trigger
+      totalFrames: 22
+    JumpDash1Landing:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103551_Dash_L_End
+                endTime: 385.4166564941406
+                forward: false
+                frameEnd: 22
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: Jump_Land_F_C
+                endTime: 291.6666564941406
+                forward: true
+                frameEnd: 28
+                frameStart: 23
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - transformation:
+                frameEnd: 22
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0.4000000059604645
+                      - 0
+                      - -1
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 7
+                    position:
+                      - 0.27272728085517883
+                      - 0.2590000033378601
+                      - -0.5227272510528564
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 14
+                    position:
+                      - 0.1454545557498932
+                      - 0.4180000126361847
+                      - 0.10000000149011612
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Sine_Ease_In
+                    frame: 18
+                    position:
+                      - 0.0727272778749466
+                      - 0.45899999141693115
+                      - 0.30000001192092896
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 22
+                    position:
+                      - 0
+                      - 0.5
+                      - 0.5
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 23
+                frameStart: 23
+                keyframes: ~
+              type: transformation
+          name: Transformation
+        - elements:
+            - script:
+                frameEnd: 28
+                frameStart: 28
+                script: venom.EndJumpLanding()
+              type: script
+          name: Script
+        - elements:
+            - trigger:
+                bone: spine_01_170
+                collisionMask: 8
+                color:
+                  - 0.2235294133424759
+                  - 0.6470588445663452
+                  - 0.3843137323856354
+                  - 0.545098066329956
+                frameEnd: 2
+                frameStart: 0
+                objectMask: 4
+                onEnter: require("venom-attack-trigger")()
+                onLeave: ""
+                position:
+                  - 1
+                  - 0
+                  - -0.3499999940395355
+                rotation:
+                  - 30
+                  - -37
+                  - -1.9999998807907104
+                scale:
+                  - 1
+                  - 1
+                  - 1
+              type: trigger
+          name: Channel 4
+      totalFrames: 28
+    JumpDash2:
+      framesPerSecond: 90
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103551_Dash_R_End
+                endTime: 416.6666564941406
+                forward: true
+                frameEnd: 22
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - transformation:
+                frameEnd: 22
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0.6499999761581421
+                      - 0.30000001192092896
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 2
+                    position:
+                      - 0
+                      - 0.6499999761581421
+                      - 0.30000001192092896
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 7
+                    position:
+                      - 0
+                      - 0.5
+                      - 0.20000000298023224
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 22
+                    position:
+                      - 0
+                      - -0.4000000059604645
+                      - -1.2000000476837158
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Transformation
+        - elements:
+            - trigger:
+                bone: Chest_Scale_02_Jnt_147
+                collisionMask: 8
+                color:
+                  - 0.5686274766921997
+                  - 0.7490196228027344
+                  - 0.5764706134796143
+                  - 0.6235294342041016
+                frameEnd: 22
+                frameStart: 19
+                objectMask: 4
+                onEnter: require("venom-attack-trigger")()
+                onLeave: ""
+                position:
+                  - 0
+                  - 0
+                  - 0
+                rotation:
+                  - 0
+                  - 0
+                  - 0
+                scale:
+                  - 1
+                  - 1
+                  - 1
+              type: trigger
+          name: Trigger
+      totalFrames: 22
+    JumpKick:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103551_Swing_Start
+                endTime: 508.6875915527344
+                forward: true
+                frameEnd: 9
+                frameStart: 0
+                startTime: 415.0641174316406
+              type: animation
+          name: animation
+        - elements:
+            - transformation:
+                frameEnd: 9
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 2.5
+                      - 1.5
+                      - -1.2000000476837158
+                    rotation:
+                      - 10
+                      - -169.99998474121094
+                      - -95.29399871826172
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 4
+                    position:
+                      - 1.2999999523162842
+                      - 0.3499999940395355
+                      - -1.899999976158142
+                    rotation:
+                      - -10
+                      - -150
+                      - -62.1766242980957
+                    scale:
+                      - 0.9999997019767761
+                      - 0.9999998807907104
+                      - 0.9999996423721313
+                  - easing: Linear
+                    frame: 7
+                    position:
+                      - 0
+                      - -0.550000011920929
+                      - -1.100000023841858
+                    rotation:
+                      - 0
+                      - -140
+                      - -30
+                    scale:
+                      - 0.9999997019767761
+                      - 0.9999998807907104
+                      - 0.9999996423721313
+                  - easing: Linear
+                    frame: 9
+                    position:
+                      - 0.10000000149011612
+                      - -0.5
+                      - -0.9700000286102295
+                    rotation:
+                      - 0
+                      - -130.45700073242188
+                      - -29.197847366333008
+                    scale:
+                      - 0.9999998211860657
+                      - 1
+                      - 0.9999998211860657
+              type: transformation
+          name: transformation
+        - elements:
+            - trigger:
+                bone: ik_foot_l_252
+                collisionMask: 8
+                color:
+                  - 0.250980406999588
+                  - 0.6039215922355652
+                  - 0.1411764770746231
+                  - 0.5098039507865906
+                frameEnd: 9
+                frameStart: 4
+                objectMask: 4
+                onEnter: require("venom-attack-trigger")()
+                onLeave: ""
+                position:
+                  - -0.4000000059604645
+                  - 0
+                  - -0.20000000298023224
+                rotation:
+                  - 0
+                  - 0
+                  - 0
+                scale:
+                  - 0.699999988079071
+                  - 1.2000000476837158
+                  - 0.6000000238418579
+              type: trigger
+          name: trigger
+        - elements:
+            - boneTransformation:
+                bone: calf_l_195
+                frameEnd: 4
+                frameStart: 4
+                keyframes:
+                  - easing: Linear
+                    frame: 4
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - -21.177000045776367
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: boneTransformation
+          name: Channel 4
+        - elements:
+            - boneTransformation:
+                bone: spine_01_170
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - -63.52899932861328
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: boneTransformation
+          name: Channel 5
+      totalFrames: 9
+    JumpLanding:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Jump_Land_F_C
+                endTime: 291.6666564941406
+                forward: true
+                frameEnd: 5
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - script:
+                frameEnd: 5
+                frameStart: 5
+                script: venom.EndJumpLanding()
+              type: script
+          name: Script
+      totalFrames: 5
+    JumpLoop:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103571_Devouring_Loop
+                endTime: 541.6666870117188
+                forward: true
+                frameEnd: 30
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - transformation:
+                frameEnd: 30
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 3.619999885559082
+                      - -0.30000001192092896
+                    rotation:
+                      - 165
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 15
+                    position:
+                      - 0
+                      - 3.549999952316284
+                      - -0.3199999928474426
+                    rotation:
+                      - 165
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 30
+                    position:
+                      - 0
+                      - 3.619999885559082
+                      - -0.30000001192092896
+                    rotation:
+                      - 165
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Transformation
+      totalFrames: 30
+    Punch1:
+      framesPerSecond: 80
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103511_Attack01
+                endTime: 709.1195068359375
+                forward: true
+                frameEnd: 15
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: 103511_Attack01
+                endTime: 1708.3333740234375
+                forward: true
+                frameEnd: 27
+                frameStart: 16
+                startTime: 709.1195068359375
+              type: animation
+          name: Animation
+        - elements:
+            - script:
+                frameEnd: 10
+                frameStart: 10
+                script: venom.StartNextPunchWindow()
+              type: script
+            - script:
+                frameEnd: 27
+                frameStart: 27
+                script: venom.EvaluateNextPunch()
+              type: script
+          name: Scripts
+        - elements:
+            - trigger:
+                bone: hand_r_74
+                collisionMask: 8
+                color:
+                  - 0.21806517243385315
+                  - 0.22909680008888245
+                  - 0.593137264251709
+                  - 0.5254902243614197
+                frameEnd: 13
+                frameStart: 7
+                objectMask: 4
+                onEnter: require("venom-attack-trigger")()
+                onLeave: ""
+                position:
+                  - -0.20000000298023224
+                  - 0
+                  - 0
+                rotation:
+                  - 0
+                  - 0
+                  - 0
+                scale:
+                  - 0.4000000059604645
+                  - 0.4000000059604645
+                  - 0.4000000059604645
+              type: trigger
+          name: Trigger
+        - elements:
+            - soundfx:
+                frameEnd: 4
+                frameStart: 4
+                loop: false
+                sound: f90fd4da-381f-4092-b6d8-251687364f7b
+                volume: 1
+              type: soundfx
+          name: SFX
+      totalFrames: 27
+    Punch2:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103511_Attack02
+                endTime: 296.474365234375
+                forward: true
+                frameEnd: 11
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: 103511_Attack02
+                endTime: 1363.781982421875
+                forward: true
+                frameEnd: 27
+                frameStart: 12
+                startTime: 652.2435913085938
+              type: animation
+          name: Animation
+        - elements:
+            - script:
+                frameEnd: 6
+                frameStart: 6
+                script: venom.StartNextPunchWindow()
+              type: script
+            - script:
+                frameEnd: 27
+                frameStart: 27
+                script: venom.EvaluateNextPunch()
+              type: script
+          name: Scripting
+        - elements:
+            - trigger:
+                bone: hand_l_24
+                collisionMask: 8
+                color:
+                  - 0.1452566534280777
+                  - 0.45588237047195435
+                  - 0.32797762751579285
+                  - 0.8078431487083435
+                frameEnd: 7
+                frameStart: 6
+                objectMask: 4
+                onEnter: require("venom-attack-trigger")()
+                onLeave: ""
+                position:
+                  - 0.4000000059604645
+                  - 0
+                  - 0
+                rotation:
+                  - 0
+                  - -30.63800048828125
+                  - 0
+                scale:
+                  - 0.6000000238418579
+                  - 0.6000000238418579
+                  - 0.6000000238418579
+              type: trigger
+          name: Trigger
+      totalFrames: 27
+    Run:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Run_Fwd_C
+                endTime: 833.3333129882812
+                forward: true
+                frameEnd: 46
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+      totalFrames: 46
+    RunDash2Landing:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103551_Dash_R_End
+                endTime: 416.6666564941406
+                forward: false
+                frameEnd: 22
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: Jump_Land_F_C
+                endTime: 291.6666564941406
+                forward: true
+                frameEnd: 28
+                frameStart: 23
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - transformation:
+                frameEnd: 22
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - -0.4000000059604645
+                      - -1.2000000476837158
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 15
+                    position:
+                      - 0
+                      - 0.5
+                      - 0.20000000298023224
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 20
+                    position:
+                      - 0
+                      - 0.6499999761581421
+                      - 0.30000001192092896
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 22
+                    position:
+                      - 0
+                      - 0.6499999761581421
+                      - 0.30000001192092896
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 23
+                frameStart: 23
+                keyframes: ~
+              type: transformation
+          name: Transformation
+        - elements:
+            - script:
+                frameEnd: 28
+                frameStart: 28
+                script: venom.EndJumpLanding()
+              type: script
+          name: Script
+        - elements:
+            - trigger:
+                bone: Chest_Scale_02_Jnt_147
+                collisionMask: 0
+                color:
+                  - 0.3345588445663452
+                  - 0.5833333730697632
+                  - 0.4589460492134094
+                  - 0.7490196228027344
+                frameEnd: 3
+                frameStart: 0
+                objectMask: 0
+                onEnter: require("venom-attack-trigger")()
+                onLeave: ""
+                position:
+                  - 0
+                  - 0
+                  - 0
+                rotation:
+                  - 0
+                  - 0
+                  - 0
+                scale:
+                  - 1
+                  - 1
+                  - 1
+              type: trigger
+          name: Trigger
+      totalFrames: 28
+    RunJumpBegin:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Jump_Start_F_C
+                endTime: 708.3333129882812
+                forward: true
+                frameEnd: 23
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - transformation:
+                frameEnd: 23
+                frameStart: 2
+                keyframes:
+                  - easing: Linear
+                    frame: 2
+                    position:
+                      - 0
+                      - 0.17000000178813934
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 3
+                    position:
+                      - 0
+                      - 0.3799999952316284
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Transformation
+        - elements:
+            - script:
+                frameEnd: 23
+                frameStart: 23
+                script: venom.BeginRunJump()
+              type: script
+          name: Script
+      totalFrames: 23
+    RunJumpLanding:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Jump_Land_F_C
+                endTime: 291.6666564941406
+                forward: true
+                frameEnd: 11
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - transformation:
+                frameEnd: 4
+                frameStart: 4
+                keyframes: ~
+              type: transformation
+          name: Transformation
+        - elements:
+            - script:
+                frameEnd: 11
+                frameStart: 11
+                script: venom.RunJumpLanding()
+              type: script
+          name: Script
+      totalFrames: 11
+    RunJumpLoop:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Jump_Falling_F_C
+                endTime: 1025.0001220703125
+                forward: true
+                frameEnd: 29
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+      totalFrames: 29
+    Swing:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Onwall_To_Spawn_Web
+                endTime: 500
+                forward: true
+                frameEnd: 9
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: A4_1_R
+                endTime: 41.66666793823242
+                forward: true
+                frameEnd: 15
+                frameStart: 10
+                startTime: 0
+              type: animation
+            - animation:
+                animation: A4_8_R
+                endTime: 41.66666793823242
+                forward: true
+                frameEnd: 17
+                frameStart: 16
+                startTime: 0
+              type: animation
+            - animation:
+                animation: A4_9_R
+                endTime: 41.66666793823242
+                forward: true
+                frameEnd: 19
+                frameStart: 18
+                startTime: 0
+              type: animation
+            - animation:
+                animation: A4_10_R
+                endTime: 41.66666793823242
+                forward: true
+                frameEnd: 21
+                frameStart: 20
+                startTime: 0
+              type: animation
+            - animation:
+                animation: A4_11_R
+                endTime: 41.66666793823242
+                forward: true
+                frameEnd: 23
+                frameStart: 22
+                startTime: 0
+              type: animation
+            - animation:
+                animation: A4_12_R
+                endTime: 41.66666793823242
+                forward: true
+                frameEnd: 25
+                frameStart: 24
+                startTime: 0
+              type: animation
+            - animation:
+                animation: A4_13_R
+                endTime: 41.66666793823242
+                forward: true
+                frameEnd: 27
+                frameStart: 26
+                startTime: 0
+              type: animation
+          name: animation
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - -0.20000000298023224
+                      - -0.527999997138977
+                    rotation:
+                      - 0
+                      - 180
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 15
+                frameStart: 10
+                keyframes:
+                  - easing: Linear
+                    frame: 10
+                    position:
+                      - -1
+                      - -0.800000011920929
+                      - -1.7999999523162842
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 11
+                    position:
+                      - -1
+                      - -0.7799999713897705
+                      - -2.1599998474121094
+                    rotation:
+                      - 8
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 0.9999999403953552
+                      - 0.9999999403953552
+                  - easing: Linear
+                    frame: 12
+                    position:
+                      - -1
+                      - -0.699999988079071
+                      - -2.5199999809265137
+                    rotation:
+                      - 15.99999713897705
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 0.9999999403953552
+                      - 0.9999999403953552
+                  - easing: Linear
+                    frame: 13
+                    position:
+                      - -1
+                      - -0.6000000238418579
+                      - -2.51587176322937
+                    rotation:
+                      - 23.999990463256836
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 0.9999999403953552
+                      - 0.9999999403953552
+                  - easing: Linear
+                    frame: 14
+                    position:
+                      - -1
+                      - -0.41999998688697815
+                      - -2.7797632217407227
+                    rotation:
+                      - 31.999984741210938
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 0.9999999403953552
+                      - 0.9999999403953552
+                  - easing: Linear
+                    frame: 15
+                    position:
+                      - -1
+                      - -0.20000000298023224
+                      - -2.955174446105957
+                    rotation:
+                      - 40
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 17
+                frameStart: 16
+                keyframes:
+                  - easing: Linear
+                    frame: 16
+                    position:
+                      - -1.2658190939873748e-07
+                      - 1.2999999523162842
+                      - 1.7236918210983276
+                    rotation:
+                      - 118.23499298095703
+                      - 0
+                      - 120
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 18
+                frameStart: 18
+                keyframes:
+                  - easing: Linear
+                    frame: 18
+                    position:
+                      - -1.4108151447089767e-07
+                      - -1
+                      - 0.46695476770401
+                    rotation:
+                      - 0
+                      - -90
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 20
+                frameStart: 20
+                keyframes:
+                  - easing: Linear
+                    frame: 20
+                    position:
+                      - -1.3364822848416225e-07
+                      - -1.100000023841858
+                      - 0.24224497377872467
+                    rotation:
+                      - 0
+                      - -20
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 22
+                frameStart: 22
+                keyframes:
+                  - easing: Linear
+                    frame: 22
+                    position:
+                      - -1.3906200990732032e-07
+                      - -1.2000000476837158
+                      - 0.533073902130127
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: transformation
+        - elements:
+            - boneTransformation:
+                bone: upperarm_l_43
+                frameEnd: 15
+                frameStart: 10
+                keyframes:
+                  - easing: Linear
+                    frame: 10
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -16.93701171875
+                      - -7.316022872924805
+                      - 19.057491302490234
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 15
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 105.12516784667969
+                      - 174.40835571289062
+                      - 24.572824478149414
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: boneTransformation
+            - boneTransformation:
+                bone: upperarm_l_43
+                frameEnd: 16
+                frameStart: 16
+                keyframes:
+                  - easing: Linear
+                    frame: 16
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: boneTransformation
+          name: upper arm
+        - elements:
+            - boneTransformation:
+                bone: lowerarm_l_33
+                frameEnd: 15
+                frameStart: 10
+                keyframes:
+                  - easing: Linear
+                    frame: 10
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+                  - easing: Linear
+                    frame: 15
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -60.07900619506836
+                      - 8.349799156188965
+                      - -21.027503967285156
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: boneTransformation
+          name: low arm
+        - elements:
+            - trigger:
+                bone: pelvis_251
+                collisionMask: 8
+                color:
+                  - 0.43921566009521484
+                  - 0.5370242595672607
+                  - 0.6470588445663452
+                  - 0.6470588445663452
+                frameEnd: 27
+                frameStart: 16
+                objectMask: 4
+                onEnter: require('venom-attack-trigger')()
+                onLeave: ""
+                position:
+                  - -0.75
+                  - 0
+                  - -0.20000000298023224
+                rotation:
+                  - 0
+                  - 0
+                  - 0
+                scale:
+                  - 1
+                  - 1
+                  - 0.5
+              type: trigger
+          name: Channel 5
+      totalFrames: 27
+    Walk:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk_Fwd_C
+                endTime: 1708.3333740234375
+                forward: true
+                frameEnd: 59
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+      totalFrames: 59
+    WallCrawl:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103501_LowCrawl_Move
+                endTime: 833.3333129882812
+                forward: true
+                frameEnd: 60
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - -90
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: Channel 2
+      totalFrames: 60
+    WallIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103501_LowCrawl_Idle_L
+                endTime: 5375
+                forward: true
+                frameEnd: 90
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: animation
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - -90
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: transformation
+      totalFrames: 90
+    WallToSwing:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: LowCrawl_To_Onwall
+                endTime: 231.48147583007812
+                forward: true
+                frameEnd: 3
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: Onwall_To_Spawn_Web
+                endTime: 500
+                forward: true
+                frameEnd: 13
+                frameStart: 4
+                startTime: 0
+              type: animation
+          name: animation
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - -90
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+            - transformation:
+                frameEnd: 4
+                frameStart: 4
+                keyframes:
+                  - easing: Linear
+                    frame: 4
+                    position:
+                      - -4.004111531230592e-08
+                      - -0.20000000298023224
+                      - -0.5282213091850281
+                    rotation:
+                      - 0
+                      - 180
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: transformation
+          name: transformation
+        - elements:
+            - boneTransformation:
+                bone: lowerarm_l_33
+                frameEnd: 4
+                frameStart: 4
+                keyframes:
+                  - easing: Linear
+                    frame: 4
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 35.29399490356445
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: boneTransformation
+          name: low_arm
+        - elements:
+            - boneTransformation:
+                bone: hand_l_24
+                frameEnd: 4
+                frameStart: 4
+                keyframes:
+                  - easing: Linear
+                    frame: 4
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 40
+                      - 0
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: boneTransformation
+          name: hand
+        - elements:
+            - script:
+                frameEnd: 13
+                frameStart: 13
+                script: venom.ThrowWeb()
+              type: script
+          name: script
+      totalFrames: 13
+    WebGrab:
+      framesPerSecond: 220
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: 103551_Fire_L_Loop
+                endTime: 875.0000610351562
+                forward: true
+                frameEnd: 14
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - boneTransformation:
+                bone: upperarm_l_43
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -18.988779067993164
+                      - 11.605612754821777
+                      - -36.589744567871094
+                    scale:
+                      - 1
+                      - 1
+                      - 1
+              type: boneTransformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 14
+                frameStart: 14
+                script: venom.ThrowWebForGrabbing()
+              type: script
+          name: Channel 3
+      totalFrames: 14
+  materials:
+    - mat-459def7e-f4a1-4b6d-8402-25bad250d502-0
+    - mat-459def7e-f4a1-4b6d-8402-25bad250d502-1
+    - mat-459def7e-f4a1-4b6d-8402-25bad250d502-2
+  name: brawler/heroes/venom/model
+  path: brawler/heroes/venom/model/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: 459def7e-f4a1-4b6d-8402-25bad250d502
+- materials:
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-0
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-1
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-2
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-3
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-4
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-5
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-6
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-7
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-8
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-9
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-10
+    - mat-4821ee56-9aa7-4f1a-8693-ebdcdd74c42c-11
+  name: knight
+  path: knight/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: 4821ee56-9aa7-4f1a-8693-ebdcdd74c42c
+- materials:
+    - mat-6a46229c-3cfa-455c-bffd-f6e74096a69c-0
+    - mat-6a46229c-3cfa-455c-bffd-f6e74096a69c-1
+    - mat-6a46229c-3cfa-455c-bffd-f6e74096a69c-2
+  name: brawler/scene/fence
+  path: brawler/scene/fence/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: 6a46229c-3cfa-455c-bffd-f6e74096a69c
+- animationSequences:
+    ThugCombatIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Combat Idle
+                endTime: 2383.33349609375
+                forward: true
+                frameEnd: 40
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -90
+                      - 0
+                      - 0
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 20
+                frameStart: 20
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 40
+                frameStart: 40
+                script: thug.CombatIdleNextState()
+              type: script
+          name: Channel 3
+      totalFrames: 40
+    ThugCombatPunch:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Punch
+                endTime: 1488.09521484375
+                forward: true
+                frameEnd: 24
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -90
+                      - 0
+                      - 0
+                    scale:
+                      - -0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 24
+                frameStart: 24
+                script: thug.OnCombatPunchAnimationEnd()
+              type: script
+          name: Channel 3
+        - elements:
+            - trigger:
+                bone: mixamorig:RightHand
+                collisionMask: 4
+                color:
+                  - 0.30588236451148987
+                  - 0.6470588445663452
+                  - 0.27450981736183167
+                  - 0.7058823704719543
+                frameEnd: 15
+                frameStart: 14
+                objectMask: 8
+                onEnter: require("thug-punch-trigger")()
+                onLeave: ""
+                position:
+                  - 0
+                  - 0
+                  - 0
+                rotation:
+                  - 0
+                  - 0
+                  - 0
+                scale:
+                  - 40
+                  - 40
+                  - 40
+              type: trigger
+          name: Channel 4
+      totalFrames: 24
+    ThugCombatWalk:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk
+                endTime: 1050
+                forward: true
+                frameEnd: 18
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -90
+                      - 0
+                      - 0
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 18
+                frameStart: 18
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 18
+    ThugCombatWalkFar:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk Far
+                endTime: 1050
+                forward: true
+                frameEnd: 18
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -90
+                      - 0
+                      - 0
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 18
+                frameStart: 18
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 18
+    ThugCombatWalkNear:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk Near
+                endTime: 1050
+                forward: true
+                frameEnd: 18
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -90
+                      - 0
+                      - 0
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 18
+                frameStart: 18
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 18
+    ThugDeath:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Death
+                endTime: 2966.666748046875
+                forward: true
+                frameEnd: 50
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -90
+                      - 0
+                      - 0
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 50
+                frameStart: 50
+                script: thug.OnDeathAnimationEnd()
+              type: script
+          name: Channel 3
+      totalFrames: 50
+    ThugIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Idle
+                endTime: 1883.3333740234375
+                forward: true
+                frameEnd: 32
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - -90
+                      - 0
+                      - 0
+                    scale:
+                      - -0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+      totalFrames: 32
+  materials:
+    - mat-6d6715cc-5ec5-4646-8151-17a9c48d7820-0
+    - mat-6d6715cc-5ec5-4646-8151-17a9c48d7820-1
+    - mat-6d6715cc-5ec5-4646-8151-17a9c48d7820-2
+  name: brawler/thugs/thug_04
+  path: brawler/thugs/thug_04/scene.gltf
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: 6d6715cc-5ec5-4646-8151-17a9c48d7820
+- materials:
+    - mat-79aaeb67-9912-44e2-8915-a06f923a9599-0
+  name: brawler/scene/sky
+  path: brawler/scene/sky/scene.gltf
+  shader_ps: 63d8b8c7-3dde-454f-b390-096815d7778e
+  shader_vs: afa3e3b4-25eb-476e-9dea-46d2aad2974a
+  uuid: 79aaeb67-9912-44e2-8915-a06f923a9599
+- materials:
+    - mat-82577eba-1fa2-400e-b36f-2f0d01c2f944-0
+    - mat-82577eba-1fa2-400e-b36f-2f0d01c2f944-1
+  name: brawler/heroes/venom/web
+  path: brawler/heroes/venom/web/scene.gltf
+  shader_ps: d8eb5523-76f4-4f60-9d32-c49f2cc010c4
+  shader_vs: 146fdaa7-d050-4f7b-9085-8846718393bb
+  uuid: 82577eba-1fa2-400e-b36f-2f0d01c2f944
+- animationSequences:
+    ThugCombatIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Combat Idle
+                endTime: 2700
+                forward: true
+                frameEnd: 45
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 9.999999747378752e-05
+                      - -9.999999747378752e-05
+                      - -9.999999747378752e-05
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 22
+                frameStart: 22
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 45
+                frameStart: 45
+                script: thug.CombatIdleNextState()
+              type: script
+          name: Channel 3
+      totalFrames: 45
+    ThugCombatLowKick:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Low Kick
+                endTime: 1516.6666259765625
+                forward: true
+                frameEnd: 26
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 9.999999747378752e-05
+                      - -9.999999747378752e-05
+                      - -9.999999747378752e-05
+              type: transformation
+          name: Transformation
+        - elements:
+            - script:
+                frameEnd: 26
+                frameStart: 26
+                script: thug.OnCombatPunchAnimationEnd()
+              type: script
+          name: Script
+        - elements:
+            - trigger:
+                bone: mixamorig:RightLeg
+                collisionMask: 4
+                color:
+                  - 0.7411764860153198
+                  - 0.09803921729326248
+                  - 0.09803921729326248
+                  - 0.5882353186607361
+                frameEnd: 13
+                frameStart: 9
+                objectMask: 8
+                onEnter: require("thug-punch-trigger")()
+                onLeave: ""
+                position:
+                  - 0
+                  - 3000
+                  - 0
+                rotation:
+                  - 0
+                  - 122.5530014038086
+                  - 0
+                scale:
+                  - 6000
+                  - 2000
+                  - 2000
+              type: trigger
+          name: Trigger
+      totalFrames: 26
+    ThugCombatMoveFw:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk Forward
+                endTime: 1183.333251953125
+                forward: true
+                frameEnd: 20
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 9.999999747378752e-05
+                      - -9.999999747378752e-05
+                      - -9.999999747378752e-05
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 20
+                frameStart: 20
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 20
+    ThugCombatWalkFar:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk Far
+                endTime: 933.3333129882812
+                forward: true
+                frameEnd: 16
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 9.999999747378752e-05
+                      - -9.999999747378752e-05
+                      - -9.999999747378752e-05
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 16
+                frameStart: 16
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 16
+    ThugCombatWalkNear:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk Near
+                endTime: 933.3333129882812
+                forward: true
+                frameEnd: 16
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 9.999999747378752e-05
+                      - -9.999999747378752e-05
+                      - -9.999999747378752e-05
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 16
+                frameStart: 16
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 16
+    ThugDeath:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Death
+                endTime: 2416.666748046875
+                forward: true
+                frameEnd: 41
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 9.999999747378752e-05
+                      - -9.999999747378752e-05
+                      - -9.999999747378752e-05
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 41
+                frameStart: 41
+                script: thug.OnDeathAnimationEnd()
+              type: script
+          name: Channel 3
+      totalFrames: 41
+    ThugIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Idle
+                endTime: 38850
+                forward: true
+                frameEnd: 648
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 9.999999747378752e-05
+                      - -9.999999747378752e-05
+                      - -9.999999747378752e-05
+              type: transformation
+          name: Channel 2
+      totalFrames: 648
+  materials:
+    - mat-8826c636-9ff2-456a-a905-90a8a8ad7d9e-0
+  name: brawler/thugs/thug_03
+  path: brawler/thugs/thug_03/scene.gltf
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: 8826c636-9ff2-456a-a905-90a8a8ad7d9e
+- animationSequences:
+    ThugCombatDeath:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Death
+                endTime: 3916.666748046875
+                forward: true
+                frameEnd: 66
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 66
+                frameStart: 66
+                script: thug.OnDeathAnimationEnd()
+              type: script
+          name: Channel 3
+      totalFrames: 66
+    ThugCombatIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: CombatIdle
+                endTime: 3316.66650390625
+                forward: true
+                frameEnd: 56
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 18
+                frameStart: 18
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 38
+                frameStart: 38
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 56
+                frameStart: 56
+                script: thug.CombatIdleNextState()
+              type: script
+          name: Channel 3
+      totalFrames: 56
+    ThugCombatMoveFar:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: CombatMoveFar
+                endTime: 716.6666259765625
+                forward: true
+                frameEnd: 12
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 12
+                frameStart: 12
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 12
+    ThugCombatMoveFw:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: CombatWalk
+                endTime: 1033.333251953125
+                forward: true
+                frameEnd: 18
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 18
+                frameStart: 18
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 18
+    ThugCombatMoveNear:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: CombatMoveNear
+                endTime: 733.3333740234375
+                forward: true
+                frameEnd: 13
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 13
+                frameStart: 13
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 13
+    ThugCombatPunch:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: CombatPunch
+                endTime: 1050
+                forward: true
+                frameEnd: 18
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 18
+                frameStart: 18
+                script: thug.OnCombatPunchAnimationEnd()
+              type: script
+          name: Channel 3
+        - elements:
+            - trigger:
+                bone: LeftForeArm2
+                collisionMask: 4
+                color:
+                  - 0.10588236898183823
+                  - 0.5758940577507019
+                  - 0.7450980544090271
+                  - 0.7960784435272217
+                frameEnd: 12
+                frameStart: 8
+                objectMask: 8
+                onEnter: require("thug-punch-trigger")()
+                onLeave: ""
+                position:
+                  - 0
+                  - 0.10000000149011612
+                  - 0
+                rotation:
+                  - 0
+                  - 0
+                  - 0
+                scale:
+                  - 0.20000000298023224
+                  - 0.30000001192092896
+                  - 0.20000000298023224
+              type: trigger
+          name: Channel 4
+      totalFrames: 18
+    ThugIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Idle
+                endTime: 5433.33349609375
+                forward: true
+                frameEnd: 91
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - -1
+              type: transformation
+          name: Channel 2
+      totalFrames: 91
+  materials:
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-0
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-1
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-2
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-3
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-4
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-5
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-6
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-7
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-8
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-9
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-10
+    - mat-89fc0a16-8db5-4bb5-9878-f91fdd603b60-11
+  name: brawler/thugs/thug_06
+  path: brawler/thugs/thug_06/scene.gltf
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: 89fc0a16-8db5-4bb5-9878-f91fdd603b60
+- animationSequences:
+    GoblinBlock:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: mixamo.com.005
+                endTime: 1600
+                forward: true
+                frameEnd: 27
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+              type: transformation
+          name: Channel 2
+      totalFrames: 27
+    GoblinDeath:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: mixamo.com.001
+                endTime: 2616.66650390625
+                forward: true
+                frameEnd: 44
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Animation
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+              type: transformation
+          name: Transformation
+        - elements:
+            - script:
+                frameEnd: 44
+                frameStart: 44
+                script: "//scene.sceneControllers[\"scene.controller\"].controllers[\"brawler-scene\"].LevelComplete()\nbrawler.LevelComplete()"
+              type: script
+          name: Script
+        - elements:
+            - soundfx:
+                frameEnd: 8
+                frameStart: 8
+                loop: false
+                sound: 2335b7a9-279c-4e84-8908-a3c1c3b62f12
+                volume: 1
+              type: soundfx
+          name: Sound
+      totalFrames: 44
+    GoblinGlideIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: mixamo.com.002
+                endTime: 3383.33349609375
+                forward: true
+                frameEnd: 24
+                frameStart: 0
+                startTime: 2671.052734375
+              type: animation
+            - animation:
+                animation: mixamo.com.002
+                endTime: 3383.33349609375
+                forward: false
+                frameEnd: 50
+                frameStart: 25
+                startTime: 2671.052734375
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+              type: transformation
+          name: Channel 2
+      totalFrames: 50
+    GoblinIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Idle
+                endTime: 4183.33349609375
+                forward: true
+                frameEnd: 70
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 35
+                frameStart: 35
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 70
+                frameStart: 70
+                script: thug.CombatIdleNextState()
+              type: script
+          name: Channel 3
+      totalFrames: 70
+    GoblinKick:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: mixamo.com.002
+                endTime: 3383.33349609375
+                forward: true
+                frameEnd: 57
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+              type: transformation
+          name: Channel 2
+      totalFrames: 57
+    GoblinPunch:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: mixamo.com.004
+                endTime: 866.6666870117188
+                forward: true
+                frameEnd: 15
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - trigger:
+                bone: mixamorig:RightHand
+                collisionMask: 4
+                color:
+                  - 0.7058823704719543
+                  - 0.09803921729326248
+                  - 0.09803921729326248
+                  - 0.6078431606292725
+                frameEnd: 11
+                frameStart: 4
+                objectMask: 8
+                onEnter: require("thug-punch-trigger")()
+                onLeave: ""
+                position:
+                  - 0
+                  - 20
+                  - 0
+                rotation:
+                  - 0
+                  - 0
+                  - 0
+                scale:
+                  - 30
+                  - 30
+                  - 30
+              type: trigger
+          name: Channel 3
+        - elements:
+            - script:
+                frameEnd: 15
+                frameStart: 15
+                script: thug.OnCombatPunchAnimationEnd()
+              type: script
+          name: Channel 4
+      totalFrames: 15
+    GoblinThrowBomb:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: mixamo.com
+                endTime: 2200
+                forward: true
+                frameEnd: 37
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 13
+                frameStart: 13
+                script: "greengoblin.ThrowBombAtTarget()\ngreengoblin.GetBackGlideIdleAnimation()"
+              type: script
+          name: Channel 3
+      totalFrames: 37
+    GoblinWalk:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Armature.002|mixamo.com|Layer0
+                endTime: 533.3333740234375
+                forward: true
+                frameEnd: 27
+                frameStart: 0
+                startTime: 53.33333969116211
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 27
+                frameStart: 27
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 27
+    GoblinWalkFar:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: mixamo.com.006
+                endTime: 1050
+                forward: true
+                frameEnd: 18
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 18
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+                  - easing: Linear
+                    frame: 18
+                    position:
+                      - -200
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 18
+                frameStart: 18
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 18
+    GoblinWalkNear:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: mixamo.com.007
+                endTime: 1050
+                forward: true
+                frameEnd: 18
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 18
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+                  - easing: Linear
+                    frame: 18
+                    position:
+                      - 200
+                      - 0
+                      - 0
+                    rotation:
+                      - 0
+                      - 0
+                      - 0
+                    scale:
+                      - 1
+                      - -1
+                      - 1
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 18
+                frameStart: 18
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 18
+  materials:
+    - mat-95d9d130-8c7a-4c83-a7ea-ae71c714ae35-0
+    - mat-95d9d130-8c7a-4c83-a7ea-ae71c714ae35-1
+    - mat-95d9d130-8c7a-4c83-a7ea-ae71c714ae35-2
+    - mat-95d9d130-8c7a-4c83-a7ea-ae71c714ae35-3
+    - mat-95d9d130-8c7a-4c83-a7ea-ae71c714ae35-4
+    - mat-95d9d130-8c7a-4c83-a7ea-ae71c714ae35-5
+    - mat-95d9d130-8c7a-4c83-a7ea-ae71c714ae35-6
+    - mat-95d9d130-8c7a-4c83-a7ea-ae71c714ae35-7
+    - mat-95d9d130-8c7a-4c83-a7ea-ae71c714ae35-8
+  name: brawler/bosses/goblin
+  path: brawler/bosses/goblin_01/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: 95d9d130-8c7a-4c83-a7ea-ae71c714ae35
+- animationSequences:
+    StreetTalkLoop:
+      framesPerSecond: 30
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Female_Idle
+                endTime: 10133.3330078125
+                frameEnd: 169
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: Female_Idle
+                endTime: 10133.3330078125
+                frameEnd: 339
+                frameStart: 170
+                startTime: 0
+              type: animation
+            - animation:
+                animation: Female_Talk
+                endTime: 8000
+                frameEnd: 474
+                frameStart: 340
+                startTime: 0
+              type: animation
+          name: Animation
+      totalFrames: 474
+  materials:
+    - mat-997167c6-23a5-49db-89eb-607f93687b35-0
+  name: female
+  path: female/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: 997167c6-23a5-49db-89eb-607f93687b35
+- animationSequences:
+    ThugCombatIdle:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Combat Idle
+                endTime: 3316.66650390625
+                forward: true
+                frameEnd: 166
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 1.0499999523162842
+                      - 1
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 55
+                frameStart: 55
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 94
+                frameStart: 94
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 136
+                frameStart: 136
+                script: thug.CombatIdleNextState()
+              type: script
+            - script:
+                frameEnd: 166
+                frameStart: 166
+                script: thug.CombatIdleNextState()
+              type: script
+          name: Channel 3
+      totalFrames: 166
+    ThugCombatMoveBack:
+      framesPerSecond: 120
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk Fw
+                endTime: 1016.6666259765625
+                forward: false
+                frameEnd: 60
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 60
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 1.0499999523162842
+                      - 1.7000000476837158
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                  - easing: Linear
+                    frame: 60
+                    position:
+                      - 0
+                      - 1.0499999523162842
+                      - 1
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 60
+                frameStart: 60
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 60
+    ThugCombatMoveFar:
+      framesPerSecond: 120
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Combat Side
+                endTime: 1050
+                forward: true
+                frameEnd: 60
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 60
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 1
+                      - 1
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                  - easing: Linear
+                    frame: 60
+                    position:
+                      - -0.25
+                      - 1
+                      - 1
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 60
+                frameStart: 60
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 60
+    ThugCombatMoveFw:
+      framesPerSecond: 120
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Walk Fw
+                endTime: 1016.6666259765625
+                forward: true
+                frameEnd: 60
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 60
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 1.0499999523162842
+                      - 1
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                  - easing: Linear
+                    frame: 60
+                    position:
+                      - 0
+                      - 1.0499999523162842
+                      - 1.7000000476837158
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 60
+                frameStart: 60
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 60
+    ThugCombatMoveNear:
+      framesPerSecond: 120
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Combat Side
+                endTime: 1050
+                forward: false
+                frameEnd: 60
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 60
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - -0.25
+                      - 1
+                      - 1
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                  - easing: Linear
+                    frame: 60
+                    position:
+                      - 0
+                      - 1
+                      - 1
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 60
+                frameStart: 60
+                script: thug.followAnimationPlaying=false
+              type: script
+          name: Channel 3
+      totalFrames: 60
+    ThugCombatPunch:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Combat Punching
+                endTime: 1000
+                forward: true
+                frameEnd: 17
+                frameStart: 0
+                startTime: 0
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 1
+                      - 1
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Channel 2
+        - elements:
+            - script:
+                frameEnd: 17
+                frameStart: 17
+                script: thug.OnCombatPunchAnimationEnd()
+              type: script
+          name: Channel 3
+        - elements:
+            - trigger:
+                bone: mixamorig:RightHand
+                collisionMask: 4
+                color:
+                  - 0.5583429336547852
+                  - 0.5645566582679749
+                  - 0.7696078419685364
+                  - 0.686274528503418
+                frameEnd: 12
+                frameStart: 5
+                objectMask: 8
+                onEnter: require("thug-punch-trigger")()
+                onLeave: ""
+                position:
+                  - 0
+                  - 10
+                  - 0
+                rotation:
+                  - 4.590513639281668e-41
+                  - 0
+                  - 4.591634678053128e-41
+                scale:
+                  - 20
+                  - 30
+                  - 20
+              type: trigger
+          name: Channel 4
+      totalFrames: 17
+    ThugDeath:
+      framesPerSecond: 60
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Death
+                endTime: 3300
+                forward: true
+                frameEnd: 54
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: Death
+                endTime: 3300
+                forward: true
+                frameEnd: 200
+                frameStart: 55
+                startTime: 3300
+              type: animation
+          name: Animaton
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - 0
+                      - 1
+                      - 1
+                    rotation:
+                      - 0
+                      - 180
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+              type: transformation
+          name: Transformation
+        - elements:
+            - script:
+                frameEnd: 200
+                frameStart: 200
+                script: thug.OnDeathAnimationEnd()
+              type: script
+          name: Script
+        - elements:
+            - soundfx:
+                frameEnd: 0
+                frameStart: 0
+                loop: false
+                sound: d6f9423d-29a3-47a6-bce9-d2d70a1be981
+                volume: 1
+              type: soundfx
+          name: Channel 4
+      totalFrames: 200
+    ThugIdle:
+      framesPerSecond: 40
+      sequenceChannels:
+        - elements:
+            - animation:
+                animation: Idle
+                endTime: 58.82352828979492
+                forward: true
+                frameEnd: 23
+                frameStart: 0
+                startTime: 0
+              type: animation
+            - animation:
+                animation: Idle
+                endTime: 2000
+                forward: true
+                frameEnd: 111
+                frameStart: 24
+                startTime: 58.82352828979492
+              type: animation
+          name: Channel 1
+        - elements:
+            - transformation:
+                frameEnd: 0
+                frameStart: 0
+                keyframes:
+                  - easing: Linear
+                    frame: 0
+                    position:
+                      - -0.10000000149011612
+                      - 1
+                      - 1
+                    rotation:
+                      - 0
+                      - 0
+                      - 180
+                    scale:
+                      - 0.009999999776482582
+                      - 0.009999999776482582
+                      - -0.009999999776482582
+              type: transformation
+          name: Channel 2
+      totalFrames: 111
+  materials:
+    - mat-a123949a-9322-4fd2-be3b-3304697776ea-0
+  name: brawler/thugs/thug_01
+  path: brawler/thugs/thug_01/gangster1.glb
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: a123949a-9322-4fd2-be3b-3304697776ea
+- materials:
+    - mat-a590ead1-bfe4-45d3-8bb3-5a5a80a014e3-0
+    - mat-a590ead1-bfe4-45d3-8bb3-5a5a80a014e3-1
+    - mat-a590ead1-bfe4-45d3-8bb3-5a5a80a014e3-2
+    - mat-a590ead1-bfe4-45d3-8bb3-5a5a80a014e3-3
+    - mat-a590ead1-bfe4-45d3-8bb3-5a5a80a014e3-4
+    - mat-a590ead1-bfe4-45d3-8bb3-5a5a80a014e3-5
+    - mat-a590ead1-bfe4-45d3-8bb3-5a5a80a014e3-6
+    - mat-a590ead1-bfe4-45d3-8bb3-5a5a80a014e3-7
+    - mat-a590ead1-bfe4-45d3-8bb3-5a5a80a014e3-8
+    - mat-a590ead1-bfe4-45d3-8bb3-5a5a80a014e3-9
+  name: spartan
+  path: spartan/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: a590ead1-bfe4-45d3-8bb3-5a5a80a014e3
+- materials:
+    - mat-afb82693-0f73-41ca-95a4-f4bf39ceb73a-0
+  name: brawler/scene/building_02
+  path: brawler/scene/building_02/night_alley.glb
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: afb82693-0f73-41ca-95a4-f4bf39ceb73a
+- materials:
+    - mat-b0303a12-654a-44a6-b018-54b7a580db3c-0
+  name: brawler/scene/road
+  path: brawler/scene/road/scene.gltf
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: b0303a12-654a-44a6-b018-54b7a580db3c
+- materials:
+    - mat-cd8bad63-8d0a-4cb4-8de1-5c7fce85d975-0
+    - mat-cd8bad63-8d0a-4cb4-8de1-5c7fce85d975-1
+    - mat-cd8bad63-8d0a-4cb4-8de1-5c7fce85d975-2
+    - mat-cd8bad63-8d0a-4cb4-8de1-5c7fce85d975-3
+    - mat-cd8bad63-8d0a-4cb4-8de1-5c7fce85d975-4
+  name: brawler/scene/morwick_alley
+  path: brawler/scene/morwick_alley/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: cd8bad63-8d0a-4cb4-8de1-5c7fce85d975
+- materials:
+    - mat-e5e16cab-4915-4371-92ef-d47c39e961d8-0
+    - mat-e5e16cab-4915-4371-92ef-d47c39e961d8-1
+    - mat-e5e16cab-4915-4371-92ef-d47c39e961d8-2
+    - mat-e5e16cab-4915-4371-92ef-d47c39e961d8-3
+    - mat-e5e16cab-4915-4371-92ef-d47c39e961d8-4
+  name: brawler/scene/pipe_alley
+  path: brawler/scene/pipe_alley/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: e5e16cab-4915-4371-92ef-d47c39e961d8
+- materials: ~
+  name: she_bu_tou
+  path: she_bu_tou/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: e739c6b1-4998-4db1-9077-7cfdf5191740
+- materials:
+    - mat-f277af16-b1c7-4a09-9e08-0368f8f7c795-0
+    - mat-f277af16-b1c7-4a09-9e08-0368f8f7c795-1
+    - mat-f277af16-b1c7-4a09-9e08-0368f8f7c795-2
+    - mat-f277af16-b1c7-4a09-9e08-0368f8f7c795-3
+    - mat-f277af16-b1c7-4a09-9e08-0368f8f7c795-4
+    - mat-f277af16-b1c7-4a09-9e08-0368f8f7c795-5
+    - mat-f277af16-b1c7-4a09-9e08-0368f8f7c795-6
+  name: messy_tavern
+  path: messy_tavern/scene.gltf
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: f277af16-b1c7-4a09-9e08-0368f8f7c795
+- materials:
+    - mat-f3c6034f-3ddb-4660-b3ac-5a9721de2e5d-0
+    - mat-f3c6034f-3ddb-4660-b3ac-5a9721de2e5d-1
+    - mat-f3c6034f-3ddb-4660-b3ac-5a9721de2e5d-2
+  name: brawler/bosses/goblin_bomb
+  path: brawler/bosses/goblin_bomb/goblin_bomb.glb
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: f3c6034f-3ddb-4660-b3ac-5a9721de2e5d
+- materials:
+    - mat-f57a697f-114d-4929-a53e-16dd2df4cfab-0
+  name: skybox
+  path: skybox\scene.gltf
+  shader_ps: d1ad23c8-bbdd-4ade-89be-ae937563ed62
+  shader_vs: 38e71d99-4412-4272-98bb-4f6a225f71c7
+  uuid: f57a697f-114d-4929-a53e-16dd2df4cfab
+- materials:
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-0
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-1
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-2
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-3
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-4
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-5
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-6
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-7
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-8
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-9
+    - mat-fbf4cd48-921f-4e48-ae56-f1d9b9160f89-10
+  name: brawler/heroes/invisible_woman/model
+  path: brawler/heroes/invisible_woman/model/scene.gltf
+  shader_ps: b1102692-5c3b-4505-9c89-68a43ece55e8
+  shader_vs: 2c5d9b23-3024-4588-a74e-d6b9ce456ccb
+  uuid: fbf4cd48-921f-4e48-ae56-f1d9b9160f89

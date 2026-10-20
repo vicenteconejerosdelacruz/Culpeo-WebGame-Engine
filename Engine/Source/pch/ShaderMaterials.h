@@ -149,8 +149,10 @@ enum TextureShaderUsage
 	TextureShaderUsage_AverageLuminance,
 };
 
-typedef std::map<TextureShaderUsage, std::string> TextureShaderUsageMap;
-typedef std::pair<TextureShaderUsage, std::string> TextureShaderUsagePair;
+using TextureShaderUsageMap = std::map<TextureShaderUsage, std::string> ;
+using TextureShaderUsagePair = std::pair<TextureShaderUsage, std::string> ;
+using TextureUsageInstanceMap = std::map<TextureShaderUsage, std::string> ;
+using TextureUsageInstancePair = std::pair<TextureShaderUsage, std::string>;
 
 inline static std::map<TextureShaderUsage, std::string> TextureShaderUsageToString = {
 	{ TextureShaderUsage_Base, "BaseTexture" },

@@ -4,19 +4,22 @@
 // #include <Scene.h>
 // #include <SceneObject.h>
 //#include <Model3D/Model3D.h>
+#include <Material/Material.h>
 #include <Material/MeshMaterial.h>
 #include <Mesh/Mesh.h>
-// #include <RenderPass/PassMaterialOverride.h>
+#include <Camera/Camera.h>
+#include <RenderPass/RenderPass.h>
+#include <RenderPass/PassMaterialOverride.h>
 // #include <Sequence/AnimationSequences.h>
 // #include <Sequence/SequencePlayer.h>
-// #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
+#include <DeviceUtils/UniformBuffer/UniformBuffer.h>
 //#include <Renderable/RenderableBoundingBox.h>
 // #include <PhysicObject.h>
 // #include <NoV8.h>
 
 using RenderableMeshes = std::vector<MeshInstanceID>;
-// using RenderableMaterials = std::unordered_map<RenderPassInstanceID, std::vector<MaterialInstanceID>>; //RenderPassInstanceID -> MaterialInstanceID
-// using RenderableConstantsBuffer = std::unordered_map<RenderPassInstanceID, std::vector<std::vector<ConstantsBufferID>>>; //RenderPassUUID -> vector:vector:ConstantsBufferID
+using RenderableMaterials = std::unordered_map<RenderPassInstanceID, std::vector<MaterialInstanceID>>; //RenderPassInstanceID -> MaterialInstanceID
+using RenderableUniformBuffer = std::unordered_map<RenderPassInstanceID, std::vector<std::vector<UniformBufferID>>>; //RenderPassUUID -> vector:vector:UniformBufferID
 // using RenderableRootSignatures = std::unordered_map<RenderPassInstanceID, std::vector<CComPtr<ID3D12RootSignature>>>; //RenderPassUUID -> vector:RootSignature
 // using RenderablePipelineStates = std::unordered_map<RenderPassInstanceID, std::vector<CComPtr<ID3D12PipelineState>>>; //RenderPassUUID -> vector:PipelineState
 // using DescriptorTableSetter = std::function<void(CComPtr<ID3D12GraphicsCommandList2>& commandList, unsigned int backBufferIndex, unsigned int& slot)>;
@@ -66,9 +69,11 @@ namespace Scene
 #endif
 
 	using namespace Game;
+	using namespace DeviceUtils;
+	using namespace Templates;
 	struct Renderable : Controller
 	{
-		// inline static const std::string fallbackMaterialName = "BaseLighting";
+		inline static const std::string fallbackMaterialName = "BaseLighting";
 
 #include <Attributes/JFlags.h>
 #include "RenderableAtt.h"
@@ -106,6 +111,7 @@ namespace Scene
 		// virtual void SetInitialConditions();
 		// virtual void BindToScene();
 		// virtual void Bind(JUUID uuid);
+		void BindToCamera(JUUID camId) override;
 		// void BindCameras();
 		// void BindCamera(JUUID cuuid);
 		// void BindShadowMapCameras();
@@ -115,21 +121,21 @@ namespace Scene
 		// void UnbindCamera(JUUID cuuid);
 
 		//Render Passes
-		// std::vector<RenderPassInstanceID> GetCameraRenderPasses(CameraID cam);
+		std::vector<RenderPassInstanceID> GetCameraRenderPasses(CameraID cam);
 
 		//Meshes
 		void CreateMeshInstances();
 
 		//Materials
-		// void CreateMaterialsInstances(CameraID cam);
-		// void CreateRenderPassMaterialsInstances(RenderPassInstanceID pass);
-		// void DestroyMaterialsInstances(CameraID cam);
-		// void DestroyRenderPassMaterialsInstances(RenderPassInstanceID pass);
-		//Constants Buffers
-		// void CreateConstantsBuffersInstances(CameraID cam);
-		// void CreateRenderPassConstantsBuffersInstances(RenderPassInstanceID pass);
-		// void DestroyConstantsBuffersInstances(CameraID cam);
-		// void DestroyRenderPassConstantsBuffersInstances(RenderPassInstanceID pass);
+		void CreateMaterialsInstances(CameraID cam);
+		void CreateRenderPassMaterialsInstances(RenderPassInstanceID pass);
+		void DestroyMaterialsInstances(CameraID cam);
+		void DestroyRenderPassMaterialsInstances(RenderPassInstanceID pass);
+		// //Uniform Buffers
+		void CreateUniformBuffersInstances(CameraID cam);
+		void CreateRenderPassUniformBuffersInstances(RenderPassInstanceID pass);
+		void DestroyUniformBuffersInstances(CameraID cam);
+		void DestroyRenderPassUniformBuffersInstances(RenderPassInstanceID pass);
 		//Root Signatures
 		// void CreateRootSignatures(CameraID cam);
 		// void CreateRenderPassRootSignatures(RenderPassInstanceID rp);
@@ -178,7 +184,7 @@ namespace Scene
 		//DESTROY
 		// void Destroy();
 
-		// void Render(SceneUnitId unit, RenderPassInstanceID renderPass, CameraID camera);
+		void Render(SceneUnitId unit, wgpu::RenderPassEncoder& pass, RenderPassInstanceID renderPass, CameraID camera);
 		// bool RenderReady();
 		// void RenderReady(bool value);
 
@@ -204,8 +210,8 @@ namespace Scene
 		// Model3DInstanceID model3D;
 		//Meshes
 		RenderableMeshes meshes;
-		// RenderableMaterials materials;
-		// RenderableConstantsBuffer constantsBuffers;
+		RenderableMaterials materials;
+		RenderableUniformBuffer uniformBuffers;
 		// std::unique_ptr<std::atomic_bool> constantsBuffersLock[JRenderer::numFrames];
 		// std::unordered_map<std::string, std::vector<ConstantsBufferWritter>> constantsWriter;
 		// std::unordered_map<std::string, std::vector<ConstantsBufferReader>> constantsReader;
@@ -232,6 +238,7 @@ namespace Scene
 		//RenderableBoundingBoxID boundingBoxCompute; //used for animables
 	};
 
+	CONTROLLER_DECL_FULL(Renderable);
 	// SODECL_FULL(Renderable);
 
 #include <TrackUUID/JDecl.h>

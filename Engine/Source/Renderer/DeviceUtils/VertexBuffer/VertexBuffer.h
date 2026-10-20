@@ -12,10 +12,6 @@ namespace DeviceUtils
 	};
 
 	std::unique_ptr<VertexBuffer>& GetVertexBuffer(JUUID uuid);
-	DEF_TEMPLATE_ID(VertexBuffer, GetVertexBuffer);
 
-	VertexBufferID CreateVertexBuffer(const void* vertices, unsigned int vertexSize, unsigned int verticesCount);
+	VertexBufferID CreateVertexBuffer(SceneUnitId id,const void* vertices, unsigned int vertexSize, unsigned int verticesCount);
 };
-
-using namespace DeviceUtils;
-DEF_TEMPLATE_ID_HASH(VertexBuffer);

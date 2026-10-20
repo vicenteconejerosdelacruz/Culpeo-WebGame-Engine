@@ -28,6 +28,7 @@ namespace Scene
 		id = unit;
 		unitName = name;
 		markedForDelete = false;
+		frame = 0U;
 // 		beingCreated = true;
 // 		beingDestroyed = false;
 // 		deleteCallback = nullptr;
@@ -182,10 +183,11 @@ namespace Scene
 // 		commandsProcessor->Next();
 // 	}
 
-// 	unsigned int SceneUnit::Frame() const
-// 	{
+	unsigned int SceneUnit::Frame() const
+	{
+		return frame;
 // 		return commandsProcessor->frame;
-// 	}
+	}
 
 // 	void SceneUnit::CloseCommandList()
 // 	{
@@ -201,8 +203,8 @@ namespace Scene
 	{
 		using namespace Scene;
 
-		std::cout << "SceneUnit::Render()" << std::endl;
-
+		PreRender();
+		
 // #if defined(_EDITOR)
 // 		using namespace Editor;
 // #endif
@@ -239,6 +241,20 @@ namespace Scene
 // 			}
 // 			CloseSubmitAndNextCommandList();
 		}
+	}
+
+	void SceneUnit::PushToPreRender(std::function<void()> cb)
+	{
+		preRenderCallbacks.push_back(cb);
+	}
+
+	void SceneUnit::PreRender()
+	{
+		for(auto& cb:preRenderCallbacks)
+		{
+			cb();
+		}
+		preRenderCallbacks.clear();
 	}
 
 // 	void SceneUnit::PostRender()

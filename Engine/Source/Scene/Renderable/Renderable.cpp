@@ -1,7 +1,7 @@
 #include "Renderable.h"
 #include <SceneObject.h>
 // #include <Scene.h>
-// #include <Renderer.h>
+#include <Renderer.h>
 // #include <DeviceUtils/RootSignature/RootSignature.h>
 // #include <DeviceUtils/PipelineState/PipelineState.h>
 // #include <Renderable/RenderableBoundingBox.h>
@@ -10,7 +10,7 @@
 // #include <Builder/ReleaseBuilder.h>
 // #endif
 
-// extern std::unique_ptr<JRenderer> renderer;
+extern std::unique_ptr<JRenderer> renderer;
 
 // #if defined(_EDITOR)
 // namespace Editor
@@ -212,6 +212,12 @@ namespace Scene
 	}
 	*/
 
+	void Renderable::BindToCamera(JUUID camId)
+	{
+		CameraID cam(camId);
+		cam->BindRenderable(uuid());
+	}
+
 	/*
 	void Renderable::BindCameras()
 	{
@@ -395,7 +401,6 @@ namespace Scene
 		}
 	}
 
-/*
 	std::vector<RenderPassInstanceID> Renderable::GetCameraRenderPasses(CameraID cam)
 	{
 		if (!cam->useSwapChain()) return cam->renderPassesUUID;
@@ -404,8 +409,7 @@ namespace Scene
 		rpiv.push_back(renderer->swapChainPass);
 		return rpiv;
 	}
-*/
-/*
+
 	void Renderable::CreateMaterialsInstances(CameraID cam)
 	{
 		for (auto& rp : GetCameraRenderPasses(cam))
@@ -413,8 +417,7 @@ namespace Scene
 			CreateRenderPassMaterialsInstances(rp);
 		}
 	}
-*/
-/*
+
 	void Renderable::CreateRenderPassMaterialsInstances(RenderPassInstanceID pass)
 	{
 		std::vector<PassMaterialOverride> pmo = passMaterialOverrides();
@@ -424,18 +427,19 @@ namespace Scene
 			return;
 		}
 
-		if (!model3D.empty())
-		{
-			for (unsigned int i = 0; i < meshes.size(); i++)
-			{
-				std::vector<PassMaterialOverride> mpmo;
-				std::copy_if(pmo.begin(), pmo.end(), std::back_inserter(mpmo), [i](PassMaterialOverride& o) { return o.meshIndex == i; });
-				auto& mesh = meshes.at(i);
-				JUUID matUUID = model3D->materials.at(i)();
-				materials[pass].push_back(pass->GetRenderPassMaterialInstance(unit, matUUID, mesh, shadowed(), mpmo, uuid()));
-			}
-		}
-		else if (!meshMaterial().mesh.empty() && meshMaterial().mesh.contains("primitive") && !meshMaterial().mesh.at("primitive").empty() && !meshMaterial().materialUUID.empty())
+		// if (!model3D.empty())
+		// {
+		// 	for (unsigned int i = 0; i < meshes.size(); i++)
+		// 	{
+		// 		std::vector<PassMaterialOverride> mpmo;
+		// 		std::copy_if(pmo.begin(), pmo.end(), std::back_inserter(mpmo), [i](PassMaterialOverride& o) { return o.meshIndex == i; });
+		// 		auto& mesh = meshes.at(i);
+		// 		JUUID matUUID = model3D->materials.at(i)();
+		// 		materials[pass].push_back(pass->GetRenderPassMaterialInstance(unit, matUUID, mesh, shadowed(), mpmo, uuid()));
+		// 	}
+		// }
+		// else
+		if (!meshMaterial().mesh.empty() && meshMaterial().mesh.contains("primitive") && !meshMaterial().mesh.at("primitive").empty() && !meshMaterial().materialUUID.empty())
 		{
 			std::vector<PassMaterialOverride> mpmo;
 			std::copy_if(pmo.begin(), pmo.end(), std::back_inserter(mpmo), [](PassMaterialOverride& o) { return o.meshIndex == 0; });
@@ -448,8 +452,7 @@ namespace Scene
 			materials[pass].push_back(pass->GetRenderPassMaterialInstance(unit, matUUID, mesh, shadowed(), mpmo, uuid()));
 		}
 	}
-*/
-/*
+
 	void Renderable::DestroyMaterialsInstances(CameraID cam)
 	{
 		for (auto& rp : GetCameraRenderPasses(cam))
@@ -457,76 +460,74 @@ namespace Scene
 			DestroyRenderPassMaterialsInstances(rp);
 		}
 	}
-*/
-/*
+
 	void Renderable::DestroyRenderPassMaterialsInstances(RenderPassInstanceID rp)
 	{
-		if (!materials.contains(rp))
-		{
-			return;
-		}
-		for (auto& m : materials.at(rp))
-		{
-			DeleteMaterialInstance(m());
-		}
-		materials.erase(rp);
+		// if (!materials.contains(rp))
+		// {
+		// 	return;
+		// }
+		// for (auto& m : materials.at(rp))
+		// {
+		// 	DeleteMaterialInstance(m());
+		// }
+		// materials.erase(rp);
 	}
-*/
-/*
-	void Renderable::CreateConstantsBuffersInstances(CameraID cam)
+
+	void Renderable::CreateUniformBuffersInstances(CameraID cam)
 	{
 		for (auto& rp : GetCameraRenderPasses(cam))
 		{
-			CreateRenderPassConstantsBuffersInstances(rp);
+			CreateRenderPassUniformBuffersInstances(rp);
 		}
 	}
-*/
-/*
-	void Renderable::CreateRenderPassConstantsBuffersInstances(RenderPassInstanceID pass)
+
+	void Renderable::CreateRenderPassUniformBuffersInstances(RenderPassInstanceID pass)
 	{
-		//wait until every lock is free
-		for (unsigned int i = 0; i < JRenderer::numFrames; i++)
-		{
-			if (constantsBuffersLock[i]->load() == true)
-				constantsBuffersLock[i]->wait(true);
-		}
+		// //wait until every lock is free
+		// for (unsigned int i = 0; i < JRenderer::numFrames; i++)
+		// {
+		// 	if (constantsBuffersLock[i]->load() == true)
+		// 		constantsBuffersLock[i]->wait(true);
+		// }
 
-		//mark every lock as being worked
-		for (unsigned int i = 0; i < JRenderer::numFrames; i++)
-		{
-			constantsBuffersLock[i]->store(true);
-		}
+		// //mark every lock as being worked
+		// for (unsigned int i = 0; i < JRenderer::numFrames; i++)
+		// {
+		// 	constantsBuffersLock[i]->store(true);
+		// }
 
-		//if the constants buffer exists wew restore the non-working state and notify each of the locks and return
-		if (constantsBuffers.contains(pass))
-		{
-			for (unsigned int i = 0; i < JRenderer::numFrames; i++)
-			{
-				constantsBuffersLock[i]->store(false);
-				constantsBuffersLock[i]->notify_one();
-			}
-			return;
-		}
+		// //if the constants buffer exists wew restore the non-working state and notify each of the locks and return
+		// if (constantsBuffers.contains(pass))
+		// {
+		// 	for (unsigned int i = 0; i < JRenderer::numFrames; i++)
+		// 	{
+		// 		constantsBuffersLock[i]->store(false);
+		// 		constantsBuffersLock[i]->notify_one();
+		// 	}
+		// 	return;
+		// }
 
-		for (unsigned int i = 0; i < meshes.size(); i++)
-		{
-			constantsBuffers[pass].push_back({});
-			auto& mi = materials[pass].at(i);
-			auto& mesh = meshes.at(i);
-			for (unsigned int j = 0; j < mi->variablesBufferSize.size(); j++)
-			{
-				size_t size = mi->variablesBufferSize[j];
-				ConstantsBufferID cbuffer = CreateConstantsBuffer(size, JRenderer::numFrames, name() + "." + std::to_string(j) + "." + mesh->uuid);
-				for (unsigned int n = 0; n < JRenderer::numFrames; n++)
-				{
-					WriteMaterialVariablesToConstantsBufferSpace(mi, cbuffer, n);
-				}
-				constantsBuffers[pass][i].push_back(cbuffer);
-			}
-		}
+		// for (unsigned int i = 0; i < meshes.size(); i++)
+		// {
+		// 	uniformBuffers[pass].push_back({});
+		// 	// auto& mi = materials[pass].at(i);
+		// 	auto& mesh = meshes.at(i);
+			// for (unsigned int j = 0; j < mi->variablesBufferSize.size(); j++)
+			// {
+			// 	size_t size = mi->variablesBufferSize[j];
+			// 	ConstantsBufferID cbuffer = CreateConstantsBuffer(size, JRenderer::numFrames, name() + "." + std::to_string(j) + "." + mesh->uuid);
+			// 	// for (unsigned int n = 0; n < JRenderer::numFrames; n++)
+			// 	// {
+			// 	// 	WriteMaterialVariablesToConstantsBufferSpace(mi, cbuffer, n);
+			// 	// }
+			// 	uniformBuffers[pass][i].push_back(cbuffer);
+			// }
+		// }
 
-		auto createConstantWriter = [this](DeviceUtils::ConstantsBufferID& cbuffer, size_t cbOffset, size_t cbSize)
-			{
+		// auto createConstantWriter = [this](UniformBufferID& cbuffer, size_t cbOffset, size_t cbSize)
+		// 	{
+				/*
 				auto* cbuffer_ptr = (*cbuffer).get();
 				unsigned int alignedConstantBufferSize = cbuffer_ptr->alignedConstantBufferSize;
 				byte* mappedConstantBuffer = cbuffer_ptr->mappedConstantBuffer;
@@ -553,10 +554,12 @@ namespace Scene
 
 						return cbOffset + cbSize;
 					};
-			};
+				*/
+			// };
 
-		auto createConstantReader = [this](DeviceUtils::ConstantsBufferID& cbuffer, size_t cbOffset, size_t cbSize)
-			{
+		// auto createConstantReader = [this](UniformBufferID& cbuffer, size_t cbOffset, size_t cbSize)
+		// 	{
+				/*
 				auto* cbuffer_ptr = (*cbuffer).get();
 				unsigned int alignedConstantBufferSize = cbuffer_ptr->alignedConstantBufferSize;
 				byte* mappedConstantBuffer = cbuffer_ptr->mappedConstantBuffer;
@@ -646,11 +649,13 @@ namespace Scene
 						break;
 						}
 					};
-			};
+				*/
+			// };
 
-		if (constantsBuffers.contains(pass))
-		{
-			auto& cbufferPass = constantsBuffers.at(pass);
+		// if (uniformBuffers.contains(pass))
+		// {
+		// 	auto& ubufferPass = uniformBuffers.at(pass);
+			/*
 			auto& meshMaterials = materials.at(pass);
 			for (unsigned int mesh = 0; mesh < meshMaterials.size(); mesh++)
 			{
@@ -679,57 +684,55 @@ namespace Scene
 					constantsReader[constantName].push_back(createConstantReader(cbuffers[psVar.bufferIndex], psVar.offset, psVar.size));
 				}
 			}
-		}
+			*/
+		// }
 
 		//same here but now the constant buffer has already been created
-		for (unsigned int i = 0; i < JRenderer::numFrames; i++)
-		{
-			constantsBuffersLock[i]->store(false);
-			constantsBuffersLock[i]->notify_one();
-		}
+		// for (unsigned int i = 0; i < JRenderer::numFrames; i++)
+		// {
+		// 	constantsBuffersLock[i]->store(false);
+		// 	constantsBuffersLock[i]->notify_one();
+		// }
 	}
-*/
-/*
-	void Renderable::DestroyConstantsBuffersInstances(CameraID cam)
-	{
-		for (unsigned int i = 0; i < JRenderer::numFrames; i++)
-		{
-			if (constantsBuffersLock[i]->load() == true)
-				constantsBuffersLock[i]->wait(true);
-		}
 
-		for (unsigned int i = 0; i < JRenderer::numFrames; i++)
-		{
-			constantsBuffersLock[i]->store(true);
-		}
+	void Renderable::DestroyUniformBuffersInstances(CameraID cam)
+	{
+		// for (unsigned int i = 0; i < JRenderer::numFrames; i++)
+		// {
+		// 	if (constantsBuffersLock[i]->load() == true)
+		// 		constantsBuffersLock[i]->wait(true);
+		// }
+
+		// for (unsigned int i = 0; i < JRenderer::numFrames; i++)
+		// {
+		// 	constantsBuffersLock[i]->store(true);
+		// }
 
 		for (auto& rp : GetCameraRenderPasses(cam))
 		{
-			DestroyRenderPassConstantsBuffersInstances(rp);
+			DestroyRenderPassUniformBuffersInstances(rp);
 		}
 
-		for (unsigned int i = 0; i < JRenderer::numFrames; i++)
-		{
-			constantsBuffersLock[i]->store(false);
-			constantsBuffersLock[i]->notify_one();
-		}
+		// for (unsigned int i = 0; i < JRenderer::numFrames; i++)
+		// {
+		// 	constantsBuffersLock[i]->store(false);
+		// 	constantsBuffersLock[i]->notify_one();
+		// }
 	}
-*/
-/*
-	void Renderable::DestroyRenderPassConstantsBuffersInstances(RenderPassInstanceID pass)
-	{
-		if (!constantsBuffers.contains(pass)) return;
 
-		for (unsigned int i = 0; i < constantsBuffers.at(pass).size(); i++)
+	void Renderable::DestroyRenderPassUniformBuffersInstances(RenderPassInstanceID pass)
+	{
+		if (!uniformBuffers.contains(pass)) return;
+
+		for (unsigned int i = 0; i < uniformBuffers.at(pass).size(); i++)
 		{
-			for (unsigned int c = 0; c < constantsBuffers.at(pass).at(i).size(); c++)
+			for (unsigned int c = 0; c < uniformBuffers.at(pass).at(i).size(); c++)
 			{
-				DestroyConstantsBuffer(constantsBuffers.at(pass).at(i)[c]());
+				DestroyUniformBuffer(uniformBuffers.at(pass).at(i)[c]());
 			}
 		}
-		constantsBuffers.erase(pass);
+		uniformBuffers.erase(pass);
 	}
-*/
 /*
 	void Renderable::CreateRootSignatures(CameraID cam)
 	{
@@ -1515,12 +1518,12 @@ namespace Scene
 	*/
 
 	//RENDER
-	/*
-	void Renderable::Render(SceneUnitId unit, RenderPassInstanceID renderPass, CameraID camera)
+	void Renderable::Render(SceneUnitId unit, wgpu::RenderPassEncoder& pass, RenderPassInstanceID renderPass, CameraID camera)
 	{
-		using namespace Animation;
+		// using namespace Animation;
 		using namespace Scene;
 
+		/*
 		if (!RenderReady() || markedForDelete || !visible() || !materials.contains(renderPass) || renderException) return;
 
 		std::tuple<CameraID, RenderPassInstanceID> key = std::make_tuple(camera, renderPass);
@@ -1532,37 +1535,30 @@ namespace Scene
 		unsigned int frame = scene->Frame();
 		auto& commandList = scene->GetCommandList();
 
-#if defined(_DEVELOPMENT)
+		auto& meshesRootSignatures = rootSignatures.at(renderPass);
+		auto& meshesPipelineStates = pipelineStates.at(renderPass);
+
+		for (unsigned int i = 0; i < meshes.size(); i++)
 		{
-			PIXScopedEvent(commandList.p, 0, name().c_str());
-#endif
-			auto& meshesRootSignatures = rootSignatures.at(renderPass);
-			auto& meshesPipelineStates = pipelineStates.at(renderPass);
+			if (skipMeshes_contains(i)) continue;
 
-			for (unsigned int i = 0; i < meshes.size(); i++)
+			commandList->IASetPrimitiveTopology(topology());
+			commandList->SetGraphicsRootSignature(meshesRootSignatures.at(i));
+			commandList->SetPipelineState(meshesPipelineStates.at(i));
+
+			unsigned int slot = 0U;
+			for (auto& setter : descriptorsRenders.at(key).at(i))
 			{
-				if (skipMeshes_contains(i)) continue;
-
-				commandList->IASetPrimitiveTopology(topology());
-				commandList->SetGraphicsRootSignature(meshesRootSignatures.at(i));
-				commandList->SetPipelineState(meshesPipelineStates.at(i));
-
-				unsigned int slot = 0U;
-				for (auto& setter : descriptorsRenders.at(key).at(i))
-				{
-					setter(commandList, frame, slot);
-				}
-
-				auto& mesh = meshes.at(i);
-				commandList->IASetVertexBuffers(0, 1, &mesh->vbvData.vertexBufferView);
-				commandList->IASetIndexBuffer(&mesh->ibvData.indexBufferView);
-				commandList->DrawIndexedInstanced(mesh->ibvData.indexBufferView.SizeInBytes / sizeof(unsigned int), 1, 0, 0, 0);
+				setter(commandList, frame, slot);
 			}
-#if defined(_DEVELOPMENT)
+
+			auto& mesh = meshes.at(i);
+			commandList->IASetVertexBuffers(0, 1, &mesh->vbvData.vertexBufferView);
+			commandList->IASetIndexBuffer(&mesh->ibvData.indexBufferView);
+			commandList->DrawIndexedInstanced(mesh->ibvData.indexBufferView.SizeInBytes / sizeof(unsigned int), 1, 0, 0, 0);
 		}
-#endif
+		*/
 	}
-	*/
 
 	/*
 	bool Renderable::RenderReady()

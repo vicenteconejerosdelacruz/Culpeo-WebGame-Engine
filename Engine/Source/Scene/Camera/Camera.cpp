@@ -3,7 +3,7 @@
 #include <SceneObject.h>
 // #include <Application.h>
 // #include <Templates.h>
-// #include <Scene.h>
+#include <Scene.h>
 #include <Renderer.h>
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 // #include <NoMath.h>
@@ -128,25 +128,6 @@ namespace Scene
 #include <JEnd.h>
 		Controller::Unmap();
 	}
-
-	/*
-	void Camera::create_rotation(XMFLOAT3 v)
-	{
-		if (!contains("rotation"))
-		{
-			rotation(v);
-		}
-	}
-	*/
-
-/*
-	void Camera::rotation(XMFLOAT3 v)
-	{
-		(*this)["rotation"] = FromXMFLOAT3(v);
-		updateRotationQ();
-	}
-
-	*/
 
 /*
 #if defined(_EDITOR)
@@ -529,21 +510,20 @@ namespace Scene
 		}
 	}
 
-/*
 	void Camera::BindToScene()
 	{
 #include <TrackUUID/JInsert.h>
 #include "CameraAtt.h"
 #include <JEnd.h>
 #if defined(_EDITOR)
-		SceneObject::BindToScene();
+		Controller::BindToScene();
 #endif
 	}
-*/
 
-/*
 	void Camera::Bind(JUUID uuid)
 	{
+		GetController(uuid)->BindToCamera(this->uuid());
+		/*
 		switch (GetSceneObjectType(unit, uuid))
 		{
 		case SO_Renderables:
@@ -557,22 +537,22 @@ namespace Scene
 		}
 		break;
 		}
+		*/
 	}
-*/
 
-/*
 	void Camera::BindRenderable(RenderableID renderable)
 	{
 		if (renderables.contains(renderable)) return;
 		renderables.insert(renderable);
 
-		renderable->CreateMaterialsInstances(SUuuid());
-		renderable->CreateConstantsBuffersInstances(SUuuid());
-		renderable->CreateRootSignatures(SUuuid());
-		renderable->CreatePipelineStates(SUuuid());
-		renderable->CreateRenderMethods(SUuuid());
+		/*
+		renderable->CreateMaterialsInstances(uuid());
+		renderable->CreateUniformBuffersInstances(uuid());
+		*/
+		// renderable->CreateRootSignatures(SUuuid());
+		// renderable->CreatePipelineStates(SUuuid());
+		// renderable->CreateRenderMethods(SUuuid());
 	}
-*/
 
 /*
 	void Camera::BindLight(LightID light)
@@ -592,24 +572,24 @@ namespace Scene
 	}
 */
 
-/*
 	void Camera::UnbindFromScene()
 	{
-#include <TrackUUID/JErase.h>
-#include "CameraAtt.h"
-#include <JEnd.h>
-
+	#include <TrackUUID/JErase.h>
+	#include "CameraAtt.h"
+	#include <JEnd.h>
+	
+		/*
 		Scene::UnbindFromScene(unit, uuid());
 		DestroyConstantsBuffer(cameraCb());
 		if (shadowMapLight().empty())
 		{
 		}
+		*/
 	}
-*/
 
-/*
 	void Camera::Unbind(JUUID uuid)
 	{
+		/*
 		if (!SceneObjectExists(unit, uuid)) return;
 
 		switch (GetSceneObjectType(unit, uuid))
@@ -626,12 +606,12 @@ namespace Scene
 		break;
 		}
 		//DEBUGEAR USANDO grid.hlsl como punto de partida para debugear el shadowmap del previewer
+		*/
 	}
-*/
 
-/*
 	void Camera::UnbindRenderable(RenderableID renderable)
 	{
+		/*
 		if (!renderables.contains(renderable)) return;
 		renderables.erase(renderable);
 
@@ -639,8 +619,8 @@ namespace Scene
 		renderable->DestroyConstantsBuffersInstances(SUuuid());
 		renderable->DestroyRootSignatures(SUuuid());
 		renderable->DestroyPipelineStates(SUuuid());
+		*/
 	}
-*/
 
 /*
 	void Camera::UnbindLight(LightID light)
@@ -687,8 +667,8 @@ namespace Scene
 
 	void Camera::Render()
 	{
-		// unsigned int frame = GetSceneUnit(unit)->Frame();
-		// WriteConstantsBuffer(frame);
+		unsigned int frame = GetSceneUnit(unit)->Frame();
+		WriteUniformsBuffer(frame);
 		CalculateBoundingFrustum();
 
 		//first make a set of objects which are not meant to be rendered first
@@ -747,14 +727,14 @@ namespace Scene
 			addToRenderablesVecSet(r);
 		}
 
-		auto draw = [&](SceneUnitId unit, auto& rpi)
+		auto draw = [&](SceneUnitId unit, wgpu::RenderPassEncoder& pass, auto& rpi)
 			{
 				auto drawRenderable = [&](RenderableID renderable)
 					{
-						// if (renderable->checkBoundingBox() && boundingFrustum.Contains(renderable->GetBoundingBox()) == ContainmentType::DISJOINT)
-						// 	return;
+						if (renderable->checkBoundingBox() && boundingFrustum.Contains(renderable->GetBoundingBox()) == ContainmentType::DISJOINT)
+							return;
 						// //OutputDebugStringA(std::string(rpi->renderPassTemplate->name() + ":" + renderable->name() + "\n").c_str());
-						// renderable->Render(unit, rpi, SUuuid());
+						renderable->Render(unit, pass, rpi, uuid());
 					};
 				for (auto it = renVecSet.begin(); it != renVecSet.end(); it++)
 				{
@@ -805,7 +785,7 @@ namespace Scene
 
 		for (auto& rp : rpiv)
 		{
-			rp->Pass(unit, [&rp, draw](SceneUnitId unit) { draw(unit, rp); });
+			rp->Pass(unit, [&rp, draw](SceneUnitId unit, wgpu::RenderPassEncoder& pass) { draw(unit, pass, rp); });
 		}
 	}
 
@@ -884,19 +864,18 @@ namespace Scene
 
 	void Camera::CreateUniformsBuffer()
 	{
-		cameraUb = DeviceUtils::CreateUniformBuffer(sizeof(CameraAttributes), name());
+		cameraUb = DeviceUtils::CreateUniformBuffer(unit, sizeof(CameraAttributes), name());
 	}
 
-/*
-	void Camera::WriteConstantsBuffer(unsigned int frame)
+	void Camera::WriteUniformsBuffer(unsigned int frame)
 	{
-		if (!cameraCb) return;
+		if (!cameraUb) return;
 
 		CameraAttributes atts{};
 
 		atts.view = view();
-		atts.viewProjection = XMMatrixMultiply(view(), projection());
-		XMStoreFloat4(&atts.eyePosition, positionV());
+		atts.viewProjection = XMMatrixMultiply(atts.view, projection());
+		XMStoreFloat4(&atts.eyePosition, sceneObject->positionV());
 		XMStoreFloat4(&atts.eyeForward, forward());
 		XMStoreFloat4(&atts.eyeUp, up());
 		XMStoreFloat4(&atts.eyeRight, right());
@@ -904,19 +883,18 @@ namespace Scene
 		atts.widthHeight.x = projectionWidth();
 		atts.widthHeight.y = projectionHeight();
 
-		if (iblTextures.contains(TextureShaderUsage_IBLPreFilteredEnvironment))
-		{
-			TextureJsonID tex = iblTextures.at(TextureShaderUsage_IBLPreFilteredEnvironment);
-			atts.IBLNumEnvLevels = static_cast<float>(tex->mipLevels());
-		}
-		else
+		// if (iblTextures.contains(TextureShaderUsage_IBLPreFilteredEnvironment))
+		// {
+		// 	TextureJsonID tex = iblTextures.at(TextureShaderUsage_IBLPreFilteredEnvironment);
+		// 	atts.IBLNumEnvLevels = static_cast<float>(tex->mipLevels());
+		// }
+		// else
 		{
 			atts.IBLNumEnvLevels = 0.0f;
 		}
 
-		cameraCb->push(atts, frame);
+		cameraUb->push(atts, frame);
 	}
-*/
 
 /*
 	void Camera::MoveAlongFwAxis(float dz)
@@ -1112,13 +1090,12 @@ namespace Scene
 	}
 */
 
-/*
 	//IBL
 	bool Camera::HasIBL()
 	{
-		return iblTextures.size() == 3ULL;
+		return false;
+		//return iblTextures.size() == 3ULL;
 	}
-*/
 
 /*
 	void Camera::CreateIBLTextures()

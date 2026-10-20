@@ -9,6 +9,7 @@
 #include <RenderPass/RenderPass.h>
 #include <SceneControllerDecl.h>
 #include <Renderable/Renderable.h>
+#include <Material/Material.h>
 
 enum ProjectionsTypes {
 	PROJ_Orthographic,
@@ -45,9 +46,6 @@ struct CameraAttributes {
 using namespace Scene::CameraProjections;
 using namespace Game;
 using namespace DeviceUtils;
-
-DEF_CONTROLLER_ID_DEP(Scene, Renderable, GetController<Renderable>);
-DEF_CONTROLLER_ID_DEP(Scene, Camera, GetController<Camera>);
 
 namespace Scene {
 #if defined(_EDITOR)
@@ -140,14 +138,14 @@ namespace Scene {
 
 		// void Initialize() override;
 		// virtual void SetInitialConditions();
-		// virtual void BindToScene();
-		// virtual void Bind(JUUID uuid);
-		// void BindRenderable(RenderableID renderable);
+		void BindToScene() override;
+		void Bind(JUUID uuid) override;
+		void BindRenderable(RenderableID renderable);
 		// void BindLight(LightID light);
 		// void BindLightWithShadowMap(LightID light);
-		// virtual void UnbindFromScene();
-		// virtual void Unbind(JUUID uuid);
-		// void UnbindRenderable(RenderableID renderable);
+		void UnbindFromScene() override;
+		void Unbind(JUUID uuid) override;
+		void UnbindRenderable(RenderableID renderable);
 		// void UnbindLight(LightID light);
 		// void UnbindLightWithShadowMap(LightID light);
 
@@ -166,7 +164,7 @@ namespace Scene {
 		// void Destroy();
 
 		void CreateUniformsBuffer();
-		// void WriteConstantsBuffer(unsigned int frame);
+		void WriteUniformsBuffer(unsigned int frame);
 		// void MoveAlongFwAxis(float dz);
 		// void MovePerpendicularFwAxis(float dx, float dy);
 		// void Rotate(float dx, float dy);
@@ -190,9 +188,9 @@ namespace Scene {
 		// void WriteShadowMapsConstantsBuffer(unsigned int frame);
 		// bool SceneHasShadowMaps() const { return !lightsWithShadowMaps.empty(); }
 
-		// //IBL
-		// TextureUsageInstanceMap iblTextures;
-		// bool HasIBL();
+		//IBL
+		TextureUsageInstanceMap iblTextures;
+		bool HasIBL();
 		// void CreateIBLTextures();
 		// void CreateIBLIrradianceTexture();
 		// void CreateIBLPreFilteredEnvironmentTexture();
@@ -257,6 +255,6 @@ namespace Scene {
 // #endif
 };
 
-using namespace Scene;
-DEF_CONTROLLER_ID_HASH(Camera);
+// using namespace Scene;
+// DEF_CONTROLLER_ID_HASH(Camera);
 // DEF_SCENEOBJECT_ID_HASH(Camera);

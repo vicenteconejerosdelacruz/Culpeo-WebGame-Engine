@@ -68,8 +68,4 @@ namespace Templates
 	};
 
 	TEMPDECL_FULL(Mold);
-	DEF_TEMPLATE_ID(MoldJson, GetMoldTemplate);
 };
-
-using namespace Templates;
-DEF_TEMPLATE_ID_HASH(MoldJson);

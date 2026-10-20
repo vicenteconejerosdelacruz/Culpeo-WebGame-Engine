@@ -42,6 +42,7 @@ namespace Scene
 		{
 			rotation(v);
 		}
+		updateRotationQ();
 	}
 
 	void SceneObject::rotation(XMFLOAT3 v)

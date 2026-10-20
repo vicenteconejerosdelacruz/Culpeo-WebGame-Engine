@@ -3,6 +3,7 @@
 #include <set>
 #include <yaml-cpp/yaml.h>
 #include <Mesh/Mesh.h>
+#include <Utils/FileSystem.h>
 
 namespace Templates {
 
@@ -221,19 +222,16 @@ namespace Templates {
     MultisampleEnable: false
     SlopeScaledDepthBias: 0.0
   samplers:
-    - AddressU: ADDRESS_MODE_BORDER
-      AddressV: ADDRESS_MODE_BORDER
-      AddressW: ADDRESS_MODE_BORDER
-      BorderColor: OPAQUE_WHITE
-      ComparisonFunc: NEVER
-      Filter: MIN_MAG_MIP_LINEAR
-      MaxAnisotropy: 0
-      MaxLOD: 3.4028234663852886e+38
-      MinLOD: 0.0
-      MipLODBias: 0
-      RegisterSpace: 0
-      ShaderRegister: 0
-      ShaderVisibility: PIXEL
+    - addressModeU: ADDRESS_MODE_CLAMP
+      addressModeV: ADDRESS_MODE_CLAMP
+      addressModeW: ADDRESS_MODE_CLAMP
+      magFilter: LINEAR
+      minFilter: LINEAR
+      mipmapFilter: LINEAR
+      lodMinClamp: 0.0
+      lodMaxClamp: 3.4028234663852886e+38
+      compare: NEVER
+      maxAnisotropy: 0
   shader_ps: 719c0122-1e9f-46e3-90aa-8f1e5e81c098
   shader_vs: bc331f48-6a40-4b48-b435-8276051d6993
   systemCreated: true
@@ -252,19 +250,16 @@ namespace Templates {
     MultisampleEnable: false
     SlopeScaledDepthBias: 0.0
   samplers:
-    - AddressU: ADDRESS_MODE_BORDER
-      AddressV: ADDRESS_MODE_BORDER
-      AddressW: ADDRESS_MODE_BORDER
-      BorderColor: OPAQUE_WHITE
-      ComparisonFunc: NEVER
-      Filter: MIN_MAG_MIP_LINEAR
-      MaxAnisotropy: 0
-      MaxLOD: 3.4028234663852886e+38
-      MinLOD: 0.0
-      MipLODBias: 0
-      RegisterSpace: 0
-      ShaderRegister: 0
-      ShaderVisibility: PIXEL
+    - addressModeU: ADDRESS_MODE_CLAMP
+      addressModeV: ADDRESS_MODE_CLAMP
+      addressModeW: ADDRESS_MODE_CLAMP
+      magFilter: LINEAR
+      minFilter: LINEAR
+      mipmapFilter: LINEAR
+      lodMinClamp: 0.0
+      lodMaxClamp: 3.4028234663852886e+38
+      compare: NEVER
+      maxAnisotropy: 0
   shader_ps: 5929c8f6-e9b7-4680-8447-a430b5accdbf
   shader_vs: 5af4ba59-a09c-41ef-bc1f-13a51fc68439
   systemCreated: true
@@ -283,19 +278,16 @@ namespace Templates {
     MultisampleEnable: false
     SlopeScaledDepthBias: 0.0
   samplers:
-    - AddressU: ADDRESS_MODE_BORDER
-      AddressV: ADDRESS_MODE_BORDER
-      AddressW: ADDRESS_MODE_BORDER
-      BorderColor: OPAQUE_WHITE
-      ComparisonFunc: NEVER
-      Filter: MIN_MAG_MIP_LINEAR
-      MaxAnisotropy: 0
-      MaxLOD: 3.4028234663852886e+38
-      MinLOD: 0.0
-      MipLODBias: 0
-      RegisterSpace: 0
-      ShaderRegister: 0
-      ShaderVisibility: PIXEL
+    - addressModeU: ADDRESS_MODE_CLAMP
+      addressModeV: ADDRESS_MODE_CLAMP
+      addressModeW: ADDRESS_MODE_CLAMP
+      magFilter: LINEAR
+      minFilter: LINEAR
+      mipmapFilter: LINEAR
+      lodMinClamp: 0.0
+      lodMaxClamp: 3.4028234663852886e+38
+      compare: NEVER
+      maxAnisotropy: 0
   shader_ps: ed41913d-1a28-40ce-9c92-07549714f367
   shader_vs: 0069d1e9-45b0-4fd3-a28f-1f7508503a91
   systemCreated: true
@@ -316,19 +308,16 @@ namespace Templates {
     MultisampleEnable: false
     SlopeScaledDepthBias: 0.0
   samplers:
-    - AddressU: ADDRESS_MODE_BORDER
-      AddressV: ADDRESS_MODE_BORDER
-      AddressW: ADDRESS_MODE_BORDER
-      BorderColor: OPAQUE_WHITE
-      ComparisonFunc: NEVER
-      Filter: MIN_MAG_MIP_POINT
-      MaxAnisotropy: 0
-      MaxLOD: 3.4028234663852886e+38
-      MinLOD: 0.0
-      MipLODBias: 0
-      RegisterSpace: 0
-      ShaderRegister: 0
-      ShaderVisibility: PIXEL
+    - addressModeU: ADDRESS_MODE_CLAMP
+      addressModeV: ADDRESS_MODE_CLAMP
+      addressModeW: ADDRESS_MODE_CLAMP
+      magFilter: LINEAR
+      minFilter: LINEAR
+      mipmapFilter: LINEAR
+      lodMinClamp: 0.0
+      lodMaxClamp: 3.4028234663852886e+38
+      compare: NEVER
+      maxAnisotropy: 0
   shader_ps: dd93a59f-a87e-4d9a-a57c-b91066e7520e
   shader_vs: 2ad43d9e-8dec-421c-b8f2-bda3520748bd
   systemCreated: true
@@ -348,19 +337,16 @@ namespace Templates {
     MultisampleEnable: false
     SlopeScaledDepthBias: 0.0
   samplers:
-    - AddressU: ADDRESS_MODE_BORDER
-      AddressV: ADDRESS_MODE_BORDER
-      AddressW: ADDRESS_MODE_BORDER
-      BorderColor: OPAQUE_WHITE
-      ComparisonFunc: NEVER
-      Filter: MIN_MAG_MIP_POINT
-      MaxAnisotropy: 0
-      MaxLOD: 3.4028234663852886e+38
-      MinLOD: 0.0
-      MipLODBias: 0
-      RegisterSpace: 0
-      ShaderRegister: 0
-      ShaderVisibility: PIXEL
+    - addressModeU: ADDRESS_MODE_CLAMP
+      addressModeV: ADDRESS_MODE_CLAMP
+      addressModeW: ADDRESS_MODE_CLAMP
+      magFilter: LINEAR
+      minFilter: LINEAR
+      mipmapFilter: LINEAR
+      lodMinClamp: 0.0
+      lodMaxClamp: 3.4028234663852886e+38
+      compare: NEVER
+      maxAnisotropy: 0
   shader_ps: 22c13e3e-5a88-4868-a5cf-bcc65864cf6c
   shader_vs: 9815152b-84ad-45e5-8b91-0642cfde0543
   systemCreated: true
@@ -380,19 +366,16 @@ namespace Templates {
     MultisampleEnable: false
     SlopeScaledDepthBias: 0.0
   samplers:
-    - AddressU: ADDRESS_MODE_BORDER
-      AddressV: ADDRESS_MODE_BORDER
-      AddressW: ADDRESS_MODE_BORDER
-      BorderColor: OPAQUE_WHITE
-      ComparisonFunc: NEVER
-      Filter: MIN_MAG_MIP_POINT
-      MaxAnisotropy: 0
-      MaxLOD: 3.4028234663852886e+38
-      MinLOD: 0.0
-      MipLODBias: 0
-      RegisterSpace: 0
-      ShaderRegister: 0
-      ShaderVisibility: PIXEL
+    - addressModeU: ADDRESS_MODE_CLAMP
+      addressModeV: ADDRESS_MODE_CLAMP
+      addressModeW: ADDRESS_MODE_CLAMP
+      magFilter: LINEAR
+      minFilter: LINEAR
+      mipmapFilter: LINEAR
+      lodMinClamp: 0.0
+      lodMaxClamp: 3.4028234663852886e+38
+      compare: NEVER
+      maxAnisotropy: 0
   shader_ps: 438f86fd-9ef3-433f-ad7b-c1e60643cd3e
   shader_vs: 173a942d-83e2-4d51-83cd-59016cb5be4e
   systemCreated: true
@@ -1137,15 +1120,15 @@ namespace Templates {
 	{
 		LoadTemplates(systemShadersYaml, CreateShader);
 		LoadTemplates(systemSoundsYaml, CreateSound);
-		// LoadTemplates(systemMaterialsYaml0, CreateMaterial);
-		// LoadTemplates(systemMaterialsYaml1, CreateMaterial);
-		// LoadTemplates(systemMaterialsYaml2, CreateMaterial);
-		// LoadTemplates(systemMaterialsYaml3, CreateMaterial);
-		// LoadTemplates(systemMaterialsYaml4, CreateMaterial);
-		// LoadTemplates(systemMaterialsYaml5, CreateMaterial);
-		// LoadTemplates(systemMaterialsYaml6, CreateMaterial);
+		LoadTemplates(systemMaterialsYaml0, CreateMaterial);
+		LoadTemplates(systemMaterialsYaml1, CreateMaterial);
+		LoadTemplates(systemMaterialsYaml2, CreateMaterial);
+		LoadTemplates(systemMaterialsYaml3, CreateMaterial);
+		LoadTemplates(systemMaterialsYaml4, CreateMaterial);
+		LoadTemplates(systemMaterialsYaml5, CreateMaterial);
+		LoadTemplates(systemMaterialsYaml6, CreateMaterial);
 		LoadTemplates(systemRenderPassesYaml, CreateRenderPass);
-		// LoadTemplates(systemTexturesYaml, CreateTexture);
+		LoadTemplates(systemTexturesYaml, CreateTexture);
 		// LoadTemplates(systemPhysicGeometriesYaml, CreatePhysicGeometry);
 
 		CreatePrimitiveMeshTemplate("d41e5c29-49bb-4f2c-aa2b-da781fbac512", "floor");
@@ -1158,6 +1141,25 @@ namespace Templates {
 		CreatePrimitiveMeshTemplate("ad73990a-c59d-45d2-8ec3-807b1f52f5b9", "cone");
 		CreatePrimitiveMeshTemplate("c900056b-9f67-47d1-a252-71e0ef1f9a65", "capsule");
 	}
+
+  void CreateTemplates()
+  {
+      // Lanzamos un hilo en segundo plano usando std::thread (se convierte en un Web Worker)
+      std::thread([]() {
+          LoadTemplates(defaultTemplatesFolder, Shader::templateName, CreateShader);
+          LoadTemplates(defaultTemplatesFolder, Material::templateName, CreateMaterial);
+          // LoadTemplates(defaultTemplatesFolder, Model3D::templateName, CreateModel3D);
+          // LoadTemplates(defaultTemplatesFolder, Sound::templateName, CreateSound);
+          LoadTemplates(defaultTemplatesFolder, Texture::templateName, CreateTexture);
+          LoadTemplates(defaultTemplatesFolder, RenderPass::templateName, CreateRenderPass);
+          // // LoadTemplates(defaultTemplatesFolder, PhysicGeometry::templateName, CreatePhysicGeometry);
+          LoadTemplates(defaultTemplatesFolder, HtmlUI::templateName, CreateHtmlUI);
+          LoadTemplates(defaultTemplatesFolder, Mold::templateName, CreateMold);
+          
+          // Opcional: un log o bandera cuando termine todo
+          // printf("[Templates] ¡Todas las plantillas cargadas con éxito!\n");
+      }).detach(); // .detach() permite que el hilo corra libremente en background
+  }
 
 	void LoadTemplates(nlohmann::json templates, std::function<void(nlohmann::json&)> loader)
 	{
@@ -1184,14 +1186,12 @@ namespace Templates {
 		std::filesystem::path directory(folder);
 		const std::string finalFilename = folder + fileName;
 		std::filesystem::path path(finalFilename);
-		if (!std::filesystem::exists(path)) return;
 		std::string pathStr = path.generic_string();
-		std::ifstream file(pathStr);
+    AssetStream assetStream(pathStr, pathStr);
 
+    auto& file = assetStream.get();
 		YAML::Node templates_yaml = YAML::Load(file);
 		nlohmann::json data = yaml_to_json(templates_yaml);
-
-		file.close();
 
 		for (unsigned int i = 0; i < data.size(); i++)
 		{
@@ -1201,14 +1201,14 @@ namespace Templates {
 	
 	void DestroyTemplates()
 	{
-		//ReleaseRenderPassTemplates();
-		//ReleaseTextureTemplates();
+		ReleaseRenderPassTemplates();
+		ReleaseTextureTemplates();
 		//ReleaseSoundTemplates();
 		//ReleaseModel3DTemplates();
-		//ReleaseMaterialTemplates();
+		ReleaseMaterialTemplates();
 		ReleaseShaderTemplates();
 		//ReleasePhysicGeometryTemplates();
-		//ReleaseHtmlUITemplates();
-		//ReleaseMoldTemplates();
+		ReleaseHtmlUITemplates();
+		ReleaseMoldTemplates();
 	}
 } // namespace Templates

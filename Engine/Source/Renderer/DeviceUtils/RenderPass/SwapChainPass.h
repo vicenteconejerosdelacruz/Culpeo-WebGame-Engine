@@ -22,7 +22,7 @@ namespace DeviceUtils
 		// CComPtr<ID3D12DescriptorHeap> depthStencilViewDescriptorHeap;
 		// CComPtr<ID3D12Resource> depthStencilTexture;
 
-		void Pass(SceneUnitId unit, std::function<void(SceneUnitId)> renderCallback, bool clearRTV = true, XMVECTORF32 clearColor = DirectX::Colors::Black);
+		void Pass(SceneUnitId unit, std::function<void(SceneUnitId, wgpu::RenderPassEncoder&)> renderCallback, bool clearRTV = true, XMVECTORF32 clearColor = DirectX::Colors::Black);
 		wgpu::RenderPassEncoder BeginRenderPass(SceneUnitId unit, wgpu::SurfaceTexture surfaceTexture, wgpu::CommandEncoder& encoder, bool clearRTV = true, XMVECTORF32 clearColor = DirectX::Colors::Black);
 		// void CopyFromRenderToTexture(SceneUnitId unit, JUUID RenderToTextureID);
 		void EndRenderPass(SceneUnitId unit, wgpu::CommandEncoder& encoder, wgpu::RenderPassEncoder &pass);
@@ -31,11 +31,7 @@ namespace DeviceUtils
 	};
 
 	std::unique_ptr<SwapChainPass>& GetSwapChainPass(JUUID uuid);
-	DEF_TEMPLATE_ID(SwapChainPass, GetSwapChainPass);
 
 	SwapChainPassID CreateSwapChainPass(const std::string name, wgpu::TextureFormat depthStencilFormat);
 	void DeleteSwapChainPass(SwapChainPassID swapChainPassId);
 };
-
-using namespace DeviceUtils;
-DEF_TEMPLATE_ID_HASH(SwapChainPass);

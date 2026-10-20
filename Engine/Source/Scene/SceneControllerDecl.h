@@ -1,7 +1,14 @@
 #pragma once
 
+#define CONTROLLER_GET(Class) inline Class* Get##Class(JUUID uuid)\
+{\
+	return GetController<Class>(uuid);\
+}\
+
 #define CONTROLLER_DECL_FULL(Class) \
-	DEF_CONTROLLER_ID(Class, GetController<Class>)
+	CONTROLLER_GET(Class)
+
+	//DEF_CONTROLLER_ID(Class, GetController<Class>)
 
 /*
 #define SODECL_TUPLE(SOClass) typedef std::tuple<JNAME, std::unique_ptr<SOClass>> SOClass##Tuple;\

@@ -1,10 +1,4 @@
 #pragma once
-#include <string>
-#include <tuple>
-#include <map>
-#include <unordered_map>
-#include <functional>
-#include <vector>
 #include <webgpu/webgpu_cpp.h>
 #include <DeviceUtils/RenderPass/RenderToTexturePass.h>
 #include <DeviceUtils/RenderPass/SwapChainPass.h>
@@ -85,9 +79,8 @@ inline static std::unordered_map<std::string, RenderPassRenderCallbackOverride> 
 	{ "MinMaxChainResult", RenderPassRenderCallbackOverride_MinMaxChainResult },
 };
 
-DEF_CONTROLLER_ID_DEP(Scene, Camera, GetController<Camera>);
-
 using namespace wgpu;
+using namespace DeviceUtils;
 namespace Templates
 {
 #if defined(_EDITOR)
@@ -161,16 +154,11 @@ namespace Templates
 		std::unordered_map<size_t, std::function<void()>> pipelineChangeCallbacks;
 	};
 
-	struct RenderPassInstance;
-
 	TEMPDECL_FULL(RenderPass);
 	TEMPDECL_REFTRACKER(RenderPass);
-	DEF_TEMPLATE_ID(RenderPassJson, GetRenderPassTemplate);
-	DEF_TEMPLATE_ID_DEP(MeshInstance, GetMeshInstance);
-	DEF_TEMPLATE_ID_DEP(MaterialJson, GetMaterialTemplate);
 
 	void UpdateRenderPassInstances(std::unordered_map<RenderPassJsonID, std::set<RenderPassInstanceID>> changes);
-
+	
 	RenderPassInstanceID CreateRenderPassInstance(CameraID camera, RenderPassJsonID renderPassTemplate, unsigned int renderPassIndex, unsigned int width = 0U, unsigned int height = 0U);
 	void DestroyRenderPassInstance(RenderPassInstanceID renderPassInstanceID);
 
@@ -179,7 +167,7 @@ namespace Templates
 		RenderPassInstance(JUUID uuid) { assert(!!!"do not use"); }
 		explicit RenderPassInstance(CameraID camera, RenderPassJsonID renderPassTemplate, RenderPassInstanceID renderPassInstance, unsigned int renderPassIndex, unsigned int width, unsigned int height);
 		~RenderPassInstance();
-		void Pass(SceneUnitId unit, std::function<void(SceneUnitId)> renderCallback = [](SceneUnitId) {}, bool clearRTV = true, XMVECTORF32 clearColor = DirectX::Colors::Black);
+		void Pass(SceneUnitId unit, std::function<void(SceneUnitId, wgpu::RenderPassEncoder&)> renderCallback = [](SceneUnitId, wgpu::RenderPassEncoder&) {}, bool clearRTV = true, XMVECTORF32 clearColor = DirectX::Colors::Black);
 		JUUID GetRenderPassMaterialInstance(
 			SceneUnitId id,
 			MaterialJsonID material,
@@ -211,10 +199,4 @@ namespace Templates
 		RenderToTexturePassID renderToTexturePass;
 	};
 
-	DEF_TEMPLATE_ID(RenderPassInstance, GetRenderPassInstance);
 };
-
-using namespace Templates;
-DEF_TEMPLATE_ID_HASH(RenderPassJson);
-DEF_TEMPLATE_ID_HASH(RenderPassInstance);
-

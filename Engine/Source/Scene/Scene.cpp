@@ -272,11 +272,10 @@ namespace Scene
 // 		}
 // 	}
 
-
-// 	std::unique_ptr<SceneUnit>& GetSceneUnit(SceneUnitId unit)
-// 	{
-// 		return scenesUnits.at(unit);
-// 	}
+	std::unique_ptr<SceneUnit>& GetSceneUnit(SceneUnitId unit)
+	{
+		return scenesUnits.at(unit);
+	}
 
 // 	size_t GetSceneUnitsCount()
 // 	{
@@ -475,8 +474,13 @@ namespace Scene
 // 	}
 // #endif
 
-// 	void BindSceneObjects(SceneUnitId id)
-// 	{
+	void BindSceneObjects(SceneUnitId id)
+	{
+		std::set<JUUID> cs = GetControllersInSceneUnit(id);
+		std::for_each(cs.begin(),cs.end(),[](JUUID uuid){
+			GetController(uuid)->BindToScene();			
+		});
+
 // 		std::unordered_map<SceneObjectType, std::function<void(SceneUnitId, JUUID)>> typeBinder =
 // 		{
 // 			{
@@ -558,7 +562,7 @@ namespace Scene
 // 		}
 
 // 		GetUnboundedSceneObjects(id).clear();
-// 	}
+	}
 
 // #if defined(_EDITOR)
 // 	JUUID CloneSceneObject(SceneUnitId id, JUUID sceneObject, nlohmann::json parameters)
@@ -873,14 +877,7 @@ namespace Scene
 		for (auto& uuid : nonSwapChainCams)
 		{
 			CameraID cam(uuid);
-// #if defined(_DEVELOPMENT)
-// 			{
-// 				PIXScopedEvent(commandList.p, 0, std::string("nonSwapChain:" + cam->name()).c_str());
-// #endif
-				cam->Render();
-// #if defined(_DEVELOPMENT)
-// 			}
-// #endif
+			cam->Render();
 		}
 
 		//check if there is any camera with any render pass resolving to the swapchain
@@ -900,14 +897,7 @@ namespace Scene
 		{
 			JUUID camUUID = *GetSwapChainCameras(id).begin();
 			CameraID cam(camUUID);
-// #if defined(_DEVELOPMENT)
-// 			{
-// 				PIXScopedEvent(commandList.p, 0, std::string("SwapChain:" + cam->name()).c_str());
-// #endif
-				cam->Render();
-// #if defined(_DEVELOPMENT)
-// 			}
-// #endif
+			cam->Render();
 		}
 	}
 
@@ -944,15 +934,9 @@ namespace Scene
 // #endif
 		for (auto& [id, scene] : scenesUnits)
 		{
-			std::cout << "!SceneUnitExits(id) " << !SceneUnitExits(id) << std::endl;
-			std::cout << "!SceneUnitRenderingExists(id) " << !SceneUnitRenderingExists(id) << std::endl;
-			std::cout << "scene->MarkedForDelete() " << scene->MarkedForDelete() << std::endl;
-
 			if (!SceneUnitExits(id) || !SceneUnitRenderingExists(id) || scene->MarkedForDelete()) continue;
 
 // 			//scene->Loading();
-// 			//
-// 			//if (!renderableSceneUnits.contains(unit) || !scene->IsLoadingComplete()) continue;
 // #if defined(_EDITOR)
 // 			if (!Editor::IsPlaying(id) && !scene->IsIsolated())
 // 			{

@@ -2,7 +2,7 @@
 
 #include <VertexFormats.h>
 #include "Variables.h"
-// #include "SamplerDesc.h"
+#include "SamplerDesc.h"
 // #include "RasterizerDesc.h"
 // #include "BlendDesc.h"
 // #include "DepthStencilDesc.h"
@@ -24,11 +24,6 @@ namespace Templates
 };
 
 using namespace Templates;
-
-enum TextureShaderUsage;
-
-typedef std::unordered_map<TextureShaderUsage, JUUID> TextureUsageInstanceMap; //JUUID(TextureInstance)
-typedef std::pair<TextureShaderUsage, JUUID> TextureUsageInstancePair;
 
 inline MaterialInitialValuePair ToMaterialInitialValuePair(nlohmann::json j)
 {
@@ -134,10 +129,6 @@ namespace Templates
 
 	TEMPDECL_FULL(Material);
 	TEMPDECL_REFTRACKER(Material);
-	DEF_TEMPLATE_ID(MaterialJson, GetMaterialTemplate);
-	DEF_TEMPLATE_ID(MaterialInstance, GetMaterialInstance);
-	DEF_TEMPLATE_ID_DEP(ShaderJson, GetShaderTemplate);
-	DEF_TEMPLATE_ID_DEP(ShaderInstance, GetShaderInstance);
 
 // #if defined(_EDITOR)
 // 	void UpdateMaterialTextures(std::unordered_map<TextureJsonID, std::set<std::tuple<TextureShaderUsage, MaterialInstanceID>>> changes);
@@ -173,7 +164,7 @@ namespace Templates
 		std::vector<std::string> defines;
 		ShaderInstanceID vertexShaderInstanceID;
 		ShaderInstanceID pixelShaderInstanceID;
-		// std::vector<MaterialSamplerDesc> samplers;
+		std::vector<MaterialSamplerDesc> samplers;
 		TextureUsageInstanceMap textures;
 		// std::map<unsigned int, ::CD3DX12_GPU_DESCRIPTOR_HANDLE> uav;
 
@@ -190,7 +181,3 @@ namespace Templates
 
 	void DestroyMaterialInstance(JUUID materialInstance);
 };
-
-using namespace Templates;
-DEF_TEMPLATE_ID_HASH(MaterialJson);
-DEF_TEMPLATE_ID_HASH(MaterialInstance);

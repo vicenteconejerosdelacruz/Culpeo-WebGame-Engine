@@ -1,0 +1,1590 @@
+- name: brawler/bosses/green_goblin/bomb/bomb
+  renderables:
+    - AABBCenter:
+        - 0
+        - 0
+        - 0
+      AABBExtent:
+        - 1
+        - 1
+        - 1
+      animation: ""
+      animationFrame: 0
+      animationLoop: false
+      animationPlay: false
+      animationSequence: ""
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: false
+      attachedBone: ""
+      attachedTo: ""
+      cameras: ~
+      castShadows: true
+      checkBoundingBox: true
+      controllers:
+        pumpkin-bomb:
+          enemy:
+            name: ""
+            uuid: ""
+          explosion: 83ea6541-6c05-4f45-bd67-f8fcd2a40ac7
+          explosion_offset:
+            - 0.10000000149011612
+            - 0.20000000298023224
+            - 0
+          priority: 1
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ""
+        mesh:
+          primitive: ""
+      model: f3c6034f-3ddb-4660-b3ac-5a9721de2e5d
+      name: bomb
+      passMaterialOverrides: ~
+      physicObject:
+        - angularVelocity:
+            - 0
+            - 0
+            - 0
+          behavior: Dynamic
+          collisionEnabled: true
+          collisionMask: 2
+          color:
+            - 0.20000000298023224
+            - 1
+            - 0.7799999713897705
+            - 0.5
+          contactOffset: 0.10000000149011612
+          density: 1
+          dynamicFriction: 0.5
+          geometry: a96cbfaf-0827-4b04-ae68-548c9bffaf87
+          kinematic: false
+          linearVelocity:
+            - 0
+            - 0
+            - 0
+          localPosition:
+            - 0
+            - 0
+            - 0
+          localRotation:
+            - 0
+            - 0
+            - 0
+          localScale:
+            - 30
+            - 30
+            - 30
+          objectMask: 8
+          overrideColor: false
+          restitution: 0.10000000149011612
+          skipRendering: false
+          staticFriction: 0.5
+          updateFromCharacterPosition: true
+          useFootPosition: false
+      position:
+        - 0
+        - 1
+        - 0
+      renderNext: ~
+      rotation:
+        - 0
+        - 0
+        - 0
+      scale:
+        - 0.007499999832361937
+        - 0.007499999832361937
+        - 0.007499999832361937
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: 1a67f813-15b0-4f6a-ac1a-b9fe6a479f63
+- name: brawler/thugs/thug_03
+  renderables:
+    - AABBCenter:
+        - 0
+        - -10000
+        - 0
+      AABBExtent:
+        - 10000
+        - 10000
+        - 10000
+      animation: Idle
+      animationFrame: 0
+      animationLoop: true
+      animationPlay: false
+      animationSequence: ThugIdle
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: true
+      attachedBone: ""
+      attachedTo: ""
+      cameras: ~
+      castShadows: true
+      checkBoundingBox: true
+      controllers:
+        thug:
+          combatEnabled: false
+          combatIdleAnimation: ThugCombatIdle
+          combatIdleTimeFactor: 0.6000000238418579
+          combatMinDistanceToAttack: 1.7999999523162842
+          combatMoveFarAnimation: ThugCombatWalkFar
+          combatMoveFarSpeed: 3
+          combatMoveFwAnimation: ThugCombatMoveFw
+          combatMoveFwTimeFactor: 0.6000000238418579
+          combatMoveNearAnimation: ThugCombatWalkNear
+          combatMoveNearFarAngle: 70
+          combatMoveNearFarTimeFactor: 0.6000000238418579
+          combatMoveNearSpeed: 3
+          combatPunchAnimation: ThugCombatLowKick
+          combatPunchTimeFactor: 0.699999988079071
+          damage: 10
+          deathAnimation: ThugDeath
+          deathSounds:
+            - 12fe8a68-e72f-4990-93b2-b9aa84c122d3
+          deathTimeFactor: 0.6000000238418579
+          followAnimationPlaying: false
+          health: 100
+          idleAnimation: ThugIdle
+          idleTimeFactor: 0.699999988079071
+          lookToSwapVector:
+            - 1
+            - 1
+            - -1
+          lookingTo: Right
+          name: Yanette
+          picture: yanette
+          priority: 1
+          punchSounds:
+            - 9f1b8283-8a30-4732-ba9c-6eb630d464ac
+          sceneController:
+            name: brawler-scene
+            uuid: 61866432-4bf4-423f-a567-5186f93821c6
+          score: 1000
+          walkSpeed: 2
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ""
+        mesh:
+          primitive: ""
+      model: 8826c636-9ff2-456a-a905-90a8a8ad7d9e
+      name: thugs/thug_03
+      passMaterialOverrides: ~
+      physicObject:
+        - angularVelocity:
+            - 0
+            - 0
+            - 0
+          behavior: Character
+          collisionEnabled: true
+          collisionMask: 4
+          color:
+            - 0.20000000298023224
+            - 1
+            - 0.7799999713897705
+            - 0.5
+          contactOffset: 0.10000000149011612
+          density: 1
+          dynamicFriction: 0.5
+          geometry: 95eee3bb-5b2f-41d7-b43a-11ab5524cca1
+          halfHeight: 0.44999998807907104
+          kinematic: false
+          linearVelocity:
+            - 0
+            - 0
+            - 0
+          localPosition:
+            - 0
+            - 0.8999999761581421
+            - 0
+          localRotation:
+            - 0
+            - 0
+            - 0
+          localScale:
+            - 1
+            - 1
+            - 1
+          objectMask: 8
+          overrideColor: false
+          radius: 0.20000000298023224
+          restitution: 0.10000000149011612
+          skipRendering: false
+          staticFriction: 0.5
+          updateFromCharacterPosition: true
+          useFootPosition: true
+      position:
+        - -22.94169044494629
+        - 0
+        - 0.4867802858352661
+      renderNext: ~
+      rotation:
+        - 0
+        - -90
+        - 0
+      scale:
+        - 1
+        - 1
+        - 1
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: 3f69a6d0-45cf-4084-8de1-fd9043fbf08d
+- name: web_grab
+  renderables:
+    - AABBCenter:
+        - 0
+        - 0
+        - 0
+      AABBExtent:
+        - 1
+        - 1
+        - 1
+      animation: ""
+      animationFrame: 0
+      animationLoop: false
+      animationPlay: false
+      animationSequence: ""
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: false
+      attachedBone: ""
+      attachedTo: ""
+      cameras: ~
+      castShadows: true
+      checkBoundingBox: true
+      controllers: ~
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ""
+        mesh:
+          primitive: ""
+      model: 82577eba-1fa2-400e-b36f-2f0d01c2f944
+      name: web_grab
+      passMaterialOverrides: ~
+      physicObject: ~
+      position:
+        - 0.03144659101963043
+        - -0.9340933561325073
+        - 0
+      renderNext: ~
+      rotation:
+        - 0
+        - 0
+        - -90
+      scale:
+        - 0.009999999776482582
+        - 0.02199999988079071
+        - 0.009999999776482582
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: 68745486-b1bb-4ccc-a7c7-6c2f758e59e8
+- name: brawler/thugs/thug_06
+  renderables:
+    - AABBCenter:
+        - 0
+        - -1
+        - 0
+      AABBExtent:
+        - 1
+        - 1
+        - 1
+      animation: CombatIdle
+      animationFrame: 0
+      animationLoop: false
+      animationPlay: false
+      animationSequence: ThugCombatIdle
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: true
+      attachedBone: ""
+      attachedTo: ""
+      cameras: ~
+      castShadows: true
+      checkBoundingBox: true
+      controllers:
+        thug:
+          combatEnabled: false
+          combatIdleAnimation: ThugCombatIdle
+          combatIdleTimeFactor: 0.4000000059604645
+          combatMinDistanceToAttack: 1.2999999523162842
+          combatMoveFarAnimation: ThugCombatMoveFar
+          combatMoveFarSpeed: 2
+          combatMoveFwAnimation: ThugCombatMoveFw
+          combatMoveFwTimeFactor: 0.5
+          combatMoveNearAnimation: ThugCombatMoveNear
+          combatMoveNearFarAngle: 70
+          combatMoveNearFarTimeFactor: 0.5
+          combatMoveNearSpeed: 2
+          combatPunchAnimation: ThugCombatPunch
+          combatPunchTimeFactor: 0.699999988079071
+          damage: 10
+          deathAnimation: ThugCombatDeath
+          deathSounds:
+            - 12fe8a68-e72f-4990-93b2-b9aa84c122d3
+          deathTimeFactor: 0.4000000059604645
+          followAnimationPlaying: false
+          health: 100
+          idleAnimation: ThugIdle
+          idleTimeFactor: 0.30000001192092896
+          lookToSwapVector:
+            - 1
+            - 1
+            - -1
+          lookingTo: Right
+          name: markanthoni
+          picture: markanthoni
+          priority: 1
+          punchSounds:
+            - 9f1b8283-8a30-4732-ba9c-6eb630d464ac
+          sceneController:
+            name: brawler-scene
+            uuid: 61866432-4bf4-423f-a567-5186f93821c6
+          score: 1000
+          walkSpeed: 2
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ""
+        mesh:
+          primitive: ""
+      model: 89fc0a16-8db5-4bb5-9878-f91fdd603b60
+      name: thugs/thug_06
+      passMaterialOverrides: ~
+      physicObject:
+        - angularVelocity:
+            - 0
+            - 0
+            - 0
+          behavior: Character
+          collisionEnabled: true
+          collisionMask: 4
+          color:
+            - 0.20000000298023224
+            - 1
+            - 0.7799999713897705
+            - 0.5
+          contactOffset: 0.10000000149011612
+          density: 1
+          dynamicFriction: 0.5
+          geometry: 95eee3bb-5b2f-41d7-b43a-11ab5524cca1
+          halfHeight: 0.42500001192092896
+          kinematic: false
+          linearVelocity:
+            - 0
+            - 0
+            - 0
+          localPosition:
+            - 0
+            - 0.8999999761581421
+            - 0
+          localRotation:
+            - 0
+            - 0
+            - 0
+          localScale:
+            - 1
+            - 1
+            - 1
+          objectMask: 8
+          overrideColor: false
+          radius: 0.30000001192092896
+          restitution: 0.10000000149011612
+          skipRendering: false
+          staticFriction: 0.5
+          updateFromCharacterPosition: true
+          useFootPosition: true
+      position:
+        - -22.03798484802246
+        - 0
+        - -1.6752134561538696
+      renderNext: ~
+      rotation:
+        - 0
+        - -90
+        - 0
+      scale:
+        - 1
+        - 1
+        - 1
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: 69e470e1-c8da-4e16-94a7-c6e1d38749d7
+- name: brawler/hero/venom
+  renderables:
+    - AABBCenter:
+        - 0
+        - 1
+        - 0
+      AABBExtent:
+        - 1.5
+        - 1.5
+        - 1.5
+      animation: Idle_C
+      animationFrame: 0
+      animationLoop: true
+      animationPlay: true
+      animationSequence: Idle_C
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: false
+      attachedBone: ""
+      attachedTo: ""
+      cameras: ~
+      castShadows: true
+      checkBoundingBox: true
+      controllers:
+        venom:
+          blockedWallMovementMask: 0
+          canAttachToWall: false
+          damage: 10
+          deathTimeFactor: 0.5
+          farLeftAttackOffset:
+            - -1.100000023841858
+            - 0
+            - 0.30000001192092896
+          farRightAttackOffset:
+            - 0.8999999761581421
+            - 0
+            - 0.30000001192092896
+          fixedDownDisplacement: -0.10000000149011612
+          followAnimationPlaying: false
+          health: 100
+          jumpDashTime: 0.2750000059604645
+          jumpHeight: 3.5
+          jumpSpeed: 30
+          jumpTime: 375
+          lookToSwapVector:
+            - 1
+            - 1
+            - 1
+          lookToThreshold: 0.029999999329447746
+          lookingTo: Right
+          name: venom
+          nearLeftAttackOffset:
+            - -1.100000023841858
+            - 0
+            - -0.30000001192092896
+          nearRightAttackOffset:
+            - 0.8999999761581421
+            - 0
+            - -0.30000001192092896
+          picture: ""
+          priority: 1
+          punchDeathSound:
+            - 12fe8a68-e72f-4990-93b2-b9aa84c122d3
+          punchSounds:
+            - f3dd181d-91f1-4bcc-bdcc-265633df81ad
+            - 4d16ff82-ec94-480c-850c-788d97715d1b
+          runSpeed: 10
+          runThreshold: 0.4000000059604645
+          runningJumpAttackTime: 275
+          runningJumpTime: 0.07500000298023224
+          sceneController:
+            name: brawler-scene
+            uuid: 61866432-4bf4-423f-a567-5186f93821c6
+          swingSpeed: 10
+          swingThreshold: 0.800000011920929
+          swingTime: 0.800000011920929
+          swingWebMaxScale:
+            - 1
+            - 1
+            - 1
+          swingWebMaxTime:
+            - 1
+            - 1
+            - 1
+          throwWebAngle: 45
+          throwWebMaxScale:
+            - 0.09000000357627869
+            - 6
+            - 0.09000000357627869
+          throwWebMinScale:
+            - 0.10000000149011612
+            - 0.009999999776482582
+            - 0.10000000149011612
+          throwWebSound:
+            - 3f5af0a1-f2a6-44b5-a36a-b5731a98000f
+          throwWebTime: 0.44999998807907104
+          walkSpeed: 3
+          walkThreshold: 0.05000000074505806
+          wallMoveMaxTimeFactor: 1.2999999523162842
+          wallMoveMinTimeFactor: 0.10000000149011612
+          wallMoveSpeed: 5
+          wallMoveThreshold: 0.20000000298023224
+          webBone: hand_r_74
+          webMold: cf14bc66-6f66-4d70-922f-39a37928c75a
+          webScaleAdj: 0.25
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ""
+        mesh: ~
+      model: 459def7e-f4a1-4b6d-8402-25bad250d502
+      name: venom
+      passMaterialOverrides: ~
+      physicObject:
+        - angularVelocity:
+            - 0
+            - 0
+            - 0
+          behavior: Character
+          collisionEnabled: true
+          collisionMask: 15
+          color:
+            - 0.8964706659317017
+            - 1
+            - 0.19999998807907104
+            - 0
+          contactOffset: 0.1
+          density: 1
+          dynamicFriction: 0.5
+          geometry: 95eee3bb-5b2f-41d7-b43a-11ab5524cca1
+          halfHeight: 0.5
+          kinematic: false
+          linearVelocity:
+            - 0
+            - 0
+            - 0
+          localPosition:
+            - 0
+            - 1
+            - 0
+          localRotation:
+            - 0
+            - 0
+            - 0
+          localScale:
+            - 1
+            - 1
+            - 1
+          objectMask: 4
+          overrideColor: true
+          radius: 0.5
+          restitution: 0.10000000149011612
+          skipRendering: false
+          staticFriction: 0.5
+          updateFromCharacterPosition: true
+          useFootPosition: true
+      position:
+        - 0
+        - -0.012309551239013672
+        - 0
+      rasterizerState:
+        CullMode: FRONT
+      renderNext: ~
+      rotation:
+        - 0
+        - -89.99999237060547
+        - 0
+      scale:
+        - 1
+        - 1
+        - 1
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: 8133d3c7-52c8-4e37-8e89-840c9ebfa125
+- name: brawler/bosses/green_goblin/bomb/explosion
+  renderables:
+    - AABBCenter:
+        - 0
+        - 0
+        - 0
+      AABBExtent:
+        - 1
+        - 1
+        - 1
+      animation: ""
+      animationFrame: 0
+      animationLoop: false
+      animationPlay: false
+      animationSequence: ""
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: false
+      attachedBone: ""
+      attachedTo: ""
+      cameras: ~
+      castShadows: false
+      checkBoundingBox: true
+      controllers:
+        animated-decal:
+          deleteAtFinish: true
+          firstFrame: 0
+          frameIndex: 0
+          priority: 1
+          timeBetweenFrames: 2
+          totalFrames: 46
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: 85770a3c-045d-4cf0-be2d-bfaf06467072
+        mesh:
+          primitive: 7dec1229-075f-4599-95e1-9ccfad0d48b1
+      model: ""
+      name: explosion
+      passMaterialOverrides: ~
+      physicObject: ~
+      position:
+        - 0
+        - 0
+        - 0
+      renderNext: ~
+      rotation:
+        - 0
+        - 0
+        - 0
+      scale:
+        - 1
+        - 1
+        - 1
+      shadowed: false
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  sounds:
+    - autoPlay: true
+      destroyOnCompletion: true
+      hidden: false
+      instanceFlags: 0
+      loop: false
+      name: explosionsfx
+      position:
+        - 0
+        - 0
+        - 0
+      rotation:
+        - 0
+        - 0
+        - 0
+      sound: 6d666900-02fd-4629-bffd-9043fd434a53
+      uuid: ""
+      volume: 1
+  triggers:
+    - behavior: Trigger
+      bindings: ~
+      collisionMask: 4
+      color:
+        - 0.20000000298023224
+        - 1
+        - 0.7799999713897705
+        - 0.5
+      controllers:
+        delayed-deletion:
+          timeToDelete: 0.356
+      countEnter: -1
+      countLeave: -1
+      geometry: a96cbfaf-0827-4b04-ae68-548c9bffaf87
+      hidden: false
+      name: explosion_trigger
+      objectMask: 8
+      onEnter: require("bomb-explosion")(greengoblin.uuid, 20)
+      onLeave: ""
+      overrideColor: false
+      position:
+        - 0
+        - 0
+        - 0
+      rotation:
+        - 0
+        - 0
+        - 0
+      scale:
+        - 1
+        - 1
+        - 1
+      skipRendering: false
+      trigger: true
+      uuid: ""
+  uuid: 83ea6541-6c05-4f45-bd67-f8fcd2a40ac7
+- name: brawler/thugs/thug_02
+  renderables:
+    - AABBCenter:
+        - 0
+        - -1
+        - 0
+      AABBExtent:
+        - 1
+        - 1
+        - 1
+      animation: Dancing
+      animationFrame: 0
+      animationLoop: true
+      animationPlay: false
+      animationSequence: ThugIdle
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: true
+      attachedBone: ""
+      attachedTo: ""
+      cameras: ~
+      castShadows: true
+      checkBoundingBox: true
+      controllers:
+        thug:
+          combatEnabled: false
+          combatIdleAnimation: ThugCombatIdle
+          combatIdleTimeFactor: 0.30000001192092896
+          combatMinDistanceToAttack: 1.5
+          combatMoveFarAnimation: ThugCombatMoveFar
+          combatMoveFarSpeed: 3
+          combatMoveFwAnimation: ThugCombatMoveFw
+          combatMoveFwTimeFactor: 0.5
+          combatMoveNearAnimation: ThugCombatMoveNear
+          combatMoveNearFarAngle: 70
+          combatMoveNearFarTimeFactor: 1
+          combatMoveNearSpeed: 3
+          combatPunchAnimation: ThugCombatKick
+          combatPunchTimeFactor: 1.5
+          damage: 10
+          deathAnimation: ThugDeath
+          deathSounds:
+            - 12fe8a68-e72f-4990-93b2-b9aa84c122d3
+          deathTimeFactor: 1
+          followAnimationPlaying: false
+          health: 100
+          idleAnimation: ThugIdle
+          idleTimeFactor: 0.5
+          lookToSwapVector:
+            - 1
+            - 1
+            - -1
+          lookingTo: Left
+          name: Fransheska
+          picture: fransheska
+          priority: 1
+          punchSounds:
+            - 9f1b8283-8a30-4732-ba9c-6eb630d464ac
+          sceneController:
+            name: brawler-scene
+            uuid: 61866432-4bf4-423f-a567-5186f93821c6
+          score: 1000
+          walkSpeed: 1.5
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ""
+        mesh:
+          primitive: ""
+      model: 261007fd-8538-4d03-a101-89e8f59f5b71
+      name: thugs/thug_02
+      passMaterialOverrides: ~
+      physicObject:
+        - angularVelocity:
+            - 0
+            - 0
+            - 0
+          behavior: Character
+          collisionEnabled: true
+          collisionMask: 4
+          color:
+            - 0.154750794172287
+            - 0.06141870096325874
+            - 0.6960784196853638
+            - 0.5
+          contactOffset: 0.10000000149011612
+          density: 1
+          dynamicFriction: 0.5
+          geometry: 95eee3bb-5b2f-41d7-b43a-11ab5524cca1
+          halfHeight: 0.4000000059604645
+          kinematic: false
+          linearVelocity:
+            - 0
+            - 0
+            - 0
+          localPosition:
+            - 0
+            - 0.800000011920929
+            - 0
+          localRotation:
+            - 0
+            - 0
+            - 0
+          localScale:
+            - 1
+            - 1
+            - 1
+          objectMask: 8
+          overrideColor: false
+          radius: 0.30000001192092896
+          restitution: 0.10000000149011612
+          skipRendering: false
+          staticFriction: 0.5
+          updateFromCharacterPosition: true
+          useFootPosition: true
+      position:
+        - -21.643173217773438
+        - -0.04131990671157837
+        - 1.4029357433319092
+      renderNext: ~
+      rotation:
+        - 0
+        - 90
+        - 0
+      scale:
+        - -1
+        - 1
+        - 1
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: 893c8d21-98c4-47d4-aa9a-d594097cc75e
+- name: floor
+  renderables:
+    - animation: ""
+      animationFrame: 0
+      animationLoop: false
+      animationPlay: false
+      animationSequence: ""
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: false
+      cameras: ~
+      castShadows: false
+      checkBoundingBox: true
+      controllers: ~
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ecd1688c-73d6-49d0-870f-ca916a417c49
+        mesh:
+          primitive: d41e5c29-49bb-4f2c-aa2b-da781fbac512
+      model: ""
+      name: floor
+      passMaterialOverrides: ~
+      physicObject:
+        - angularVelocity:
+            - 0
+            - 0
+            - 0
+          behavior: Static
+          collisionMask: 0
+          color:
+            - 0.20000000298023224
+            - 1
+            - 0.7799999713897705
+            - 0.5
+          contactOffset: 0.10000000149011612
+          density: 1
+          dynamicFriction: 0.5
+          geometry: 330c6bfd-2c71-4c6b-be42-b797d07ab5ba
+          linearVelocity:
+            - 0
+            - 0
+            - 0
+          localPosition:
+            - 0
+            - 0
+            - 0
+          localRotation:
+            - 0
+            - 0
+            - 0
+          localScale:
+            - 1
+            - 1
+            - 1
+          objectMask: 0
+          overrideColor: false
+          restitution: 0.10000000149011612
+          skipRendering: false
+          staticFriction: 0.5
+          updateFromCharacterPosition: true
+          useFootPosition: false
+      position:
+        - 0
+        - -1
+        - 0
+      renderNext: ~
+      rotation:
+        - 0
+        - 0
+        - 0
+      scale:
+        - 20
+        - 1
+        - 20
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: b99f31a5-36e8-4cbd-9fcc-508886cc501a
+- name: web
+  renderables:
+    - animation: ""
+      animationFrame: 0
+      animationLoop: false
+      animationPlay: false
+      animationSequence: ""
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: false
+      cameras: ~
+      castShadows: true
+      checkBoundingBox: true
+      controllers: ~
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ""
+        mesh:
+          primitive: ""
+      model: 82577eba-1fa2-400e-b36f-2f0d01c2f944
+      name: web
+      passMaterialOverrides: ~
+      physicObject: ~
+      position:
+        - 0
+        - 0
+        - 0
+      renderNext: ~
+      rotation:
+        - 0
+        - 0
+        - 0
+      scale:
+        - 0.0500000037252903
+        - 0.10000000149011612
+        - 0.0500000037252903
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: cf14bc66-6f66-4d70-922f-39a37928c75a
+- name: brawler/thugs/thug_04
+  renderables:
+    - AABBCenter:
+        - 0
+        - 0
+        - 0
+      AABBExtent:
+        - 1
+        - 1
+        - 1
+      animation: Idle
+      animationFrame: 0
+      animationLoop: false
+      animationPlay: false
+      animationSequence: ThugIdle
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: true
+      attachedBone: ""
+      attachedTo: ""
+      cameras: ~
+      castShadows: true
+      checkBoundingBox: true
+      controllers:
+        thug:
+          combatEnabled: false
+          combatIdleAnimation: ThugCombatIdle
+          combatIdleTimeFactor: 1
+          combatMinDistanceToAttack: 1.5
+          combatMoveFarAnimation: ThugCombatWalkFar
+          combatMoveFarSpeed: 2
+          combatMoveFwAnimation: ThugCombatWalk
+          combatMoveFwTimeFactor: 0.6000000238418579
+          combatMoveNearAnimation: ThugCombatWalkNear
+          combatMoveNearFarAngle: 70
+          combatMoveNearFarTimeFactor: 1
+          combatMoveNearSpeed: 2
+          combatPunchAnimation: ThugCombatPunch
+          combatPunchTimeFactor: 0.5
+          damage: 10
+          deathAnimation: ThugDeath
+          deathSounds:
+            - 12fe8a68-e72f-4990-93b2-b9aa84c122d3
+          deathTimeFactor: 0.5
+          followAnimationPlaying: false
+          health: 100
+          idleAnimation: ThugIdle
+          idleTimeFactor: 0.4000000059604645
+          lookToSwapVector:
+            - 1
+            - 1
+            - -1
+          lookingTo: Right
+          name: deimon
+          picture: deimon
+          priority: 1
+          punchSounds:
+            - 9f1b8283-8a30-4732-ba9c-6eb630d464ac
+          sceneController:
+            name: brawler-scene
+            uuid: 61866432-4bf4-423f-a567-5186f93821c6
+          score: 1000
+          walkSpeed: 2
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ""
+        mesh:
+          primitive: ""
+      model: 6d6715cc-5ec5-4646-8151-17a9c48d7820
+      name: thugs/thug_04
+      passMaterialOverrides: ~
+      physicObject:
+        - angularVelocity:
+            - 0
+            - 0
+            - 0
+          behavior: Character
+          collisionEnabled: true
+          collisionMask: 4
+          color:
+            - 0.20000000298023224
+            - 1
+            - 0.7799999713897705
+            - 0.5
+          contactOffset: 0.10000000149011612
+          density: 1
+          dynamicFriction: 0.5
+          geometry: 95eee3bb-5b2f-41d7-b43a-11ab5524cca1
+          halfHeight: 0.44999998807907104
+          kinematic: false
+          linearVelocity:
+            - 0
+            - 0
+            - 0
+          localPosition:
+            - 0
+            - 0.8999999761581421
+            - 0
+          localRotation:
+            - 0
+            - 0
+            - 0
+          localScale:
+            - 1
+            - 1
+            - 1
+          objectMask: 8
+          overrideColor: false
+          radius: 0.30000001192092896
+          restitution: 0.10000000149011612
+          skipRendering: false
+          staticFriction: 0.5
+          updateFromCharacterPosition: true
+          useFootPosition: true
+      position:
+        - 2.4753849506378174
+        - 0
+        - -4.382608413696289
+      renderNext: ~
+      rotation:
+        - 0
+        - -90
+        - 0
+      scale:
+        - 1
+        - 1
+        - 1
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: d27ef110-0fd8-48e0-bc9b-6984059c3360
+- name: brawler/thugs/thug_01
+  renderables:
+    - AABBCenter:
+        - 0
+        - 0
+        - 90
+      AABBExtent:
+        - 100
+        - 100
+        - 80
+      animation: Idle
+      animationFrame: 0
+      animationLoop: true
+      animationPlay: false
+      animationSequence: ThugIdle
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: true
+      attachedBone: ""
+      attachedTo: ""
+      cameras: ~
+      castShadows: true
+      checkBoundingBox: true
+      controllers:
+        thug:
+          combatEnabled: false
+          combatIdleAnimation: ThugCombatIdle
+          combatIdleTimeFactor: 0.6000000238418579
+          combatMinDistanceToAttack: 1.5
+          combatMoveFarAnimation: ThugCombatMoveFar
+          combatMoveFarSpeed: 4
+          combatMoveFwAnimation: ThugCombatMoveFw
+          combatMoveFwTimeFactor: 1
+          combatMoveNearAnimation: ThugCombatMoveNear
+          combatMoveNearFarAngle: 70
+          combatMoveNearFarTimeFactor: 1.5
+          combatMoveNearSpeed: 4
+          combatPunchAnimation: ThugCombatPunch
+          combatPunchTimeFactor: 1
+          damage: 10
+          deathAnimation: ThugDeath
+          deathSounds: ~
+          deathTimeFactor: 1
+          followAnimationPlaying: false
+          health: 100
+          idleAnimation: ThugIdle
+          idleTimeFactor: 1
+          lookToSwapVector:
+            - 1
+            - 1
+            - -1
+          lookingTo: Right
+          name: Bayron
+          picture: bayron
+          priority: 1
+          punchSounds:
+            - 9f1b8283-8a30-4732-ba9c-6eb630d464ac
+          sceneController:
+            name: brawler-scene
+            uuid: 61866432-4bf4-423f-a567-5186f93821c6
+          score: 1000
+          venom: a972cbe5-d6b4-41a3-b26e-45e1e9666cdc
+          walkSpeed: 1.5
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ""
+        mesh: ~
+      model: a123949a-9322-4fd2-be3b-3304697776ea
+      name: thugs/thug_01
+      passMaterialOverrides: ~
+      physicObject:
+        - angularVelocity:
+            - 0
+            - 0
+            - 0
+          behavior: Character
+          collisionEnabled: true
+          collisionMask: 12
+          color:
+            - 0.20000000298023224
+            - 1
+            - 0.7799999713897705
+            - 0.5
+          contactOffset: 0.10000000149011612
+          density: 1
+          dynamicFriction: 0.5
+          geometry: 95eee3bb-5b2f-41d7-b43a-11ab5524cca1
+          halfHeight: 0.44999998807907104
+          kinematic: false
+          linearVelocity:
+            - 0
+            - 0
+            - 0
+          localPosition:
+            - 0
+            - 0.8500000238418579
+            - 0
+          localRotation:
+            - 0
+            - 0
+            - 0
+          localScale:
+            - 1
+            - 1
+            - 1
+          objectMask: 8
+          overrideColor: false
+          radius: 0.30000001192092896
+          restitution: 0.10000000149011612
+          skipRendering: false
+          staticFriction: 0.5
+          updateFromCharacterPosition: true
+          useFootPosition: true
+      position:
+        - 3.2750000953674316
+        - 0
+        - 0
+      renderNext: ~
+      rotation:
+        - 0
+        - 90
+        - 0
+      scale:
+        - 1
+        - 1
+        - -1
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: eb716100-359f-48dd-9c91-04588294a614
+- name: brawler/thugs/thug_05
+  renderables:
+    - AABBCenter:
+        - 0
+        - -1.100000023841858
+        - 0
+      AABBExtent:
+        - 1
+        - 1.100000023841858
+        - 1
+      animation: Idle
+      animationFrame: 0
+      animationLoop: false
+      animationPlay: false
+      animationSequence: ThugIdle
+      animationTime: 0
+      animationTimeFactor: 1
+      animationUseTransformation: true
+      attachedBone: ""
+      attachedTo: ""
+      cameras: ~
+      castShadows: true
+      checkBoundingBox: true
+      controllers:
+        thug:
+          combatEnabled: false
+          combatIdleAnimation: ThugCombatIdle
+          combatIdleTimeFactor: 0.5
+          combatMinDistanceToAttack: 1.600000023841858
+          combatMoveFarAnimation: ThugWalkFar
+          combatMoveFarSpeed: 2
+          combatMoveFwAnimation: ThugWalk
+          combatMoveFwTimeFactor: 0.6000000238418579
+          combatMoveNearAnimation: ThugWalkNear
+          combatMoveNearFarAngle: 70
+          combatMoveNearFarTimeFactor: 0.6000000238418579
+          combatMoveNearSpeed: 2
+          combatPunchAnimation: ThugPunch
+          combatPunchTimeFactor: 0.6000000238418579
+          damage: 10
+          deathAnimation: ThugDeath
+          deathSounds:
+            - 12fe8a68-e72f-4990-93b2-b9aa84c122d3
+          deathTimeFactor: 1
+          followAnimationPlaying: false
+          health: 100
+          idleAnimation: ThugIdle
+          idleTimeFactor: 0.44999998807907104
+          lookToSwapVector:
+            - 1
+            - 1
+            - -1
+          lookingTo: Left
+          name: Maikol
+          picture: maikol
+          priority: 1
+          punchSounds:
+            - 9f1b8283-8a30-4732-ba9c-6eb630d464ac
+          sceneController:
+            name: brawler-scene
+            uuid: 61866432-4bf4-423f-a567-5186f93821c6
+          score: 1000
+          walkSpeed: 2
+      depthStencil:
+        BackFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        DepthEnable: true
+        DepthFunc: LESS
+        DepthWriteMask: ALL
+        FrontFace:
+          StencilDepthFailOp: KEEP
+          StencilFailOp: KEEP
+          StencilFunc: ALWAYS
+          StencilPassOp: KEEP
+        StencilEnable: false
+        StencilReadMask: 255
+        StencilWriteMask: 255
+      hidden: false
+      ibl: false
+      meshMaterial:
+        material: ""
+        mesh:
+          primitive: ""
+      model: 163c304b-c67d-458d-88a9-6436fe72bf33
+      name: thugs/thug_05
+      passMaterialOverrides: ~
+      physicObject:
+        - angularVelocity:
+            - 0
+            - 0
+            - 0
+          behavior: Character
+          collisionEnabled: true
+          collisionMask: 4
+          color:
+            - 0.20000000298023224
+            - 1
+            - 0.7799999713897705
+            - 0.5
+          contactOffset: 0.10000000149011612
+          density: 1
+          dynamicFriction: 0.5
+          geometry: 95eee3bb-5b2f-41d7-b43a-11ab5524cca1
+          halfHeight: 0.5
+          kinematic: false
+          linearVelocity:
+            - 0
+            - 0
+            - 0
+          localPosition:
+            - 0
+            - 1
+            - 0
+          localRotation:
+            - 0
+            - 0
+            - 0
+          localScale:
+            - 1
+            - 1
+            - 1
+          objectMask: 8
+          overrideColor: false
+          radius: 0.30000001192092896
+          restitution: 0.10000000149011612
+          skipRendering: false
+          staticFriction: 0.5
+          updateFromCharacterPosition: true
+          useFootPosition: true
+      position:
+        - -3.065056324005127
+        - -0.029999999329447746
+        - 0
+      renderNext: ~
+      rotation:
+        - 0
+        - 90
+        - 0
+      scale:
+        - 1
+        - 1
+        - 1
+      shadowed: true
+      skipMeshes: ~
+      topology: TRIANGLELIST
+      uniqueMaterialInstance: false
+      uuid: ""
+      visible: true
+  uuid: f9a20c6e-f8ff-4f77-8458-1ed60daf6d2a

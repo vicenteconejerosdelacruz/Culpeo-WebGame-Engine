@@ -15,31 +15,27 @@ namespace DeviceUtils
 	using UniformBufferBufferReader = std::function<void(MaterialVariablesTypes, nlohmann::json& value)>;
 
 	struct UniformBuffer {
-		UniformBuffer(size_t size, std::string name) : alignedBufferSize((size + 255) & ~255), name(name) { mappedUniformBuffer.resize(alignedBufferSize); }
+		UniformBuffer(size_t size, std::string name);
 		~UniformBuffer() { Destroy(); }
 		
 		template<typename T> size_t push(T& data, unsigned int index, size_t offset = 0ULL) {
-			memcpy(mappedUniformBuffer.data() + alignedBufferSize * index + offset, &data, sizeof(T));
+			push(&data, alignedBufferSize * index + offset, sizeof(T));
 			return offset + sizeof(T);
 		}
-		
+		void push(void* data, size_t offset, size_t size);
 		void Destroy();
 
 		std::string name;
 		unsigned int alignedBufferSize;
-		std::vector<std::byte> mappedUniformBuffer;
 		wgpu::Buffer uniformBuffer;
+		std::vector<std::byte> mappedBuffer;
 		// wgpu::BindGroupLayout bindGroupLayout;
 		// std::vector<wgpu::BindGroup> bindGroup;
 	};
 
 	std::unique_ptr<UniformBuffer>& GetUniformBuffer(JUUID uuid);
-	DEF_TEMPLATE_ID(UniformBuffer, GetUniformBuffer);
 
-	UniformBufferID CreateUniformBuffer(size_t bufferSize, std::string ubName = "");
+	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, std::string ubName = "");
 	void DestroyUniformBuffer(UniformBufferID uuid);
-	void DestroyUniformBuffer();
+	void DestroyUniformBuffers();
 };
-
-using namespace DeviceUtils;
-DEF_TEMPLATE_ID_HASH(UniformBuffer);

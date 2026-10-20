@@ -182,6 +182,34 @@ static inline std::unordered_map<std::string, wgpu::AddressMode> StringToWGPU_AD
 	{ "ADDRESS_MODE_CLAMP", wgpu::AddressMode::ClampToEdge },
 };
 
+// ==========================================
+// 2.1 SAMPLER FILTER MODE
+// ==========================================
+
+static inline std::unordered_map<wgpu::FilterMode, std::string> WGPU_FILTER_MODEToString = {
+	{ wgpu::FilterMode::Nearest, "NEAREST" },
+	{ wgpu::FilterMode::Linear, "LINEAR" },
+};
+
+static inline std::unordered_map<std::string, wgpu::FilterMode> StringToWGPU_FILTER_MODE = {
+
+    { "NEAREST", wgpu::FilterMode::Nearest },
+    { "LINEAR", wgpu::FilterMode::Linear },
+};
+
+// ==========================================
+// 2.2 SAMPLER FILTER MODE
+// ==========================================
+
+static inline std::unordered_map<wgpu::MipmapFilterMode, std::string> WGPU_MIPMAP_FILTER_MODEToString = {
+	{ wgpu::MipmapFilterMode::Nearest, "NEAREST" },
+	{ wgpu::MipmapFilterMode::Linear, "LINEAR" },
+};
+
+static inline std::unordered_map<std::string, wgpu::MipmapFilterMode> StringToWGPU_MIPMAP_FILTER_MODE = {
+    { "NEAREST", wgpu::MipmapFilterMode::Nearest },
+    { "LINEAR", wgpu::MipmapFilterMode::Linear },
+};
 
 // ==========================================
 // 3. COMPARISON FUNCTION

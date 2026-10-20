@@ -136,8 +136,6 @@ namespace Templates
 	};
 
 	TEMPDECL_REFTRACKER(Texture);
-	DEF_TEMPLATE_ID(TextureJson, GetTextureTemplate);
-	DEF_TEMPLATE_ID(TextureInstance, GetTextureInstance);
 
 #if defined(_EDITOR)
 	// struct TexturePreview
@@ -154,10 +152,6 @@ namespace Templates
 	// };
 #endif
 };
-
-using namespace Templates;
-DEF_TEMPLATE_ID_HASH(TextureJson);
-DEF_TEMPLATE_ID_HASH(TextureInstance);
 
 inline auto ToTextureJson(std::vector<JObject*>& json)
 {

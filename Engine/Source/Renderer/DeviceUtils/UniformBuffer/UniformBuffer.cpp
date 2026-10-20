@@ -1,7 +1,6 @@
-#include <map>
-// #include <mutex>
 #include "UniformBuffer.h"
 #include <Renderer.h>
+#include <Scene.h>
 
 extern std::unique_ptr<JRenderer> renderer;
 
@@ -14,10 +13,8 @@ namespace DeviceUtils
 		return uniformBuffers.at(uuid);
 	}
 	
-	// static std::mutex uniformBufferMutex;
-	UniformBufferID CreateUniformBuffer(size_t bufferSize, std::string ubName)
+	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, std::string ubName)
 	{
-		// std::lock_guard<std::mutex> lock(uniformBufferMutex);
 		UniformBufferID uniformBufferID = getUUID();
 		std::unique_ptr<UniformBuffer> ubData = std::make_unique<UniformBuffer>(bufferSize, ubName);
 
@@ -60,7 +57,7 @@ namespace DeviceUtils
 		assert(!uniformBuffers.contains(uniformBufferID()));
 		uniformBuffers.insert_or_assign(uniformBufferID(), std::move(ubData));
 
-		renderer->executionCallback.push_back([uniformBufferID]
+		GetSceneUnit(id)->PushToPreRender([uniformBufferID]
 			{
 				//create the gpu buffer
 				wgpu::BufferDescriptor desc = {};
@@ -76,16 +73,27 @@ namespace DeviceUtils
 		return uniformBufferID;
 	}
 
-	void DestroyConstantsBuffer(UniformBufferID uuid)
+	void DestroyUniformBuffer(UniformBufferID uuid)
 	{
 		// std::lock_guard<std::mutex> lock(uniformBufferMutex);
 		uniformBuffers.erase(uuid());
 	}
 
-	void DestroyConstantsBuffer()
+	void DestroyUniformBuffers()
 	{
 		// std::lock_guard<std::mutex> lock(uniformBufferMutex);
 		uniformBuffers.clear();
+	}
+
+	UniformBuffer::UniformBuffer(size_t size, std::string name) : alignedBufferSize((size + 255) & ~255), name(name)
+	{
+		mappedBuffer.reserve(alignedBufferSize * JRenderer::numFrames);
+	}
+
+	void UniformBuffer::push(void* data, size_t offset, size_t size)
+	{
+		memcpy(mappedBuffer.data()+offset, data, size);
+		renderer->GetDevice().GetQueue().WriteBuffer(uniformBuffer,offset, &data, size);
 	}
 
 	void UniformBuffer::Destroy()

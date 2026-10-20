@@ -226,7 +226,7 @@ namespace Templates
 		renderPassTemplatesInstances[renderPassTemplate].erase(renderPassInstance);
 	}
 
-	void RenderPassInstance::Pass(SceneUnitId unit, std::function<void(SceneUnitId)> renderCallback, bool clearRTV, XMVECTORF32 clearColor)
+	void RenderPassInstance::Pass(SceneUnitId unit, std::function<void(SceneUnitId, wgpu::RenderPassEncoder&)> renderCallback, bool clearRTV, XMVECTORF32 clearColor)
 	{
 		if (overridePass) return overridePass->Pass(unit);
 
@@ -250,69 +250,68 @@ namespace Templates
 		bool shadowed, std::vector<PassMaterialOverride> passMaterialOverride, JUUID bindingUUID
 	)
 	{
-		// using namespace RenderPass;
+		using namespace RenderPass;
 
-		// VertexClass vertexClass = mesh->vertexClass;
-		// std::string vertexType = VertexClassToString.at(vertexClass);
-		// bool hasIbl = camera.uuid().empty() ? false : camera->HasIBL();
+		VertexClass vertexClass = mesh->vertexClass;
+		std::string vertexType = VertexClassToString.at(vertexClass);
+		bool hasIbl = !!camera && camera->HasIBL();
 
-		// auto noOverride = [id, &material, vertexClass, vertexType, shadowed, hasIbl, bindingUUID]()
-		// 	{
-		// 		MaterialInstanceID instanceUUID = material() + "-" + vertexType;
-		// 		CreateMaterialInstance(instanceUUID(), [id, &instanceUUID, &material, vertexClass, shadowed, hasIbl, bindingUUID]()
-		// 			{
-		// 				return std::make_unique<MaterialInstance>(id, instanceUUID(), material(), vertexClass, shadowed, hasIbl, TextureShaderUsageMap(), bindingUUID);
-		// 			}
-		// 		);
-		// 		return instanceUUID();
-		// 	};
+		auto noOverride = [id, &material, vertexClass, vertexType, shadowed, hasIbl, bindingUUID]()
+			{
+				MaterialInstanceID instanceUUID = material() + "-" + vertexType;
+				CreateMaterialInstance(instanceUUID(), [id, &instanceUUID, &material, vertexClass, shadowed, hasIbl, bindingUUID]()
+					{
+						return std::make_unique<MaterialInstance>(id, instanceUUID(), material(), vertexClass, shadowed, hasIbl, TextureShaderUsageMap(), bindingUUID);
+					}
+				);
+				return instanceUUID();
+			};
 
-		// auto shadowMapOverride = [id, &material, vertexClass, vertexType]()
-		// 	{
-		// 		JUUID smMatUUID = GetMaterialUUIDByName(shadowMapMaterialName);
-		// 		MaterialInstanceID instanceUUID = smMatUUID + "-" + vertexType;
-		// 		TextureShaderUsageMap overrideTextures;
-		// 		if (material->textures_contains(TextureShaderUsage_Base))
-		// 		{
-		// 			overrideTextures.insert_or_assign(TextureShaderUsage_Base, material->textures().at(TextureShaderUsage_Base));
-		// 		}
-		// 		CreateMaterialInstance(instanceUUID(), [id, &instanceUUID, smMatUUID, vertexClass, overrideTextures]()
-		// 			{
-		// 				return std::make_unique<MaterialInstance>(id, instanceUUID(), smMatUUID, vertexClass, false, false, overrideTextures);
-		// 			}
-		// 		);
-		// 		return instanceUUID();
-		// 	};
+		auto shadowMapOverride = [id, &material, vertexClass, vertexType]()
+			{
+				JUUID smMatUUID = GetMaterialUUIDByName(shadowMapMaterialName);
+				MaterialInstanceID instanceUUID = smMatUUID + "-" + vertexType;
+				TextureShaderUsageMap overrideTextures;
+				if (material->textures_contains(TextureShaderUsage_Base))
+				{
+					overrideTextures.insert_or_assign(TextureShaderUsage_Base, material->textures().at(TextureShaderUsage_Base));
+				}
+				CreateMaterialInstance(instanceUUID(), [id, &instanceUUID, smMatUUID, vertexClass, overrideTextures]()
+					{
+						return std::make_unique<MaterialInstance>(id, instanceUUID(), smMatUUID, vertexClass, false, false, overrideTextures);
+					}
+				);
+				return instanceUUID();
+			};
 
-		// auto pickingOverride = [id, this, &passMaterialOverride, vertexClass, vertexType]
-		// 	{
-		// 		JUUID pickMaterialUUID = GetMaterialUUIDByName(pickingMaterialName);
-		// 		for (auto& pmo : passMaterialOverride)
-		// 		{
-		// 			if (pmo.renderPass == renderPassTemplate->uuid())
-		// 			{
-		// 				pickMaterialUUID = pmo.material;
-		// 				break;
-		// 			}
-		// 		}
-		// 		MaterialInstanceID instanceUUID = pickMaterialUUID + "-" + vertexType;
-		// 		CreateMaterialInstance(instanceUUID(), [id, &instanceUUID, pickMaterialUUID, vertexClass]()
-		// 			{
-		// 				return std::make_unique<MaterialInstance>(id, instanceUUID(), pickMaterialUUID, vertexClass, false, false);
-		// 			}
-		// 		);
-		// 		return instanceUUID();
-		// 	};
+		auto pickingOverride = [id, this, &passMaterialOverride, vertexClass, vertexType]
+			{
+				JUUID pickMaterialUUID = GetMaterialUUIDByName(pickingMaterialName);
+				for (auto& pmo : passMaterialOverride)
+				{
+					if (pmo.renderPass == renderPassTemplate->uuid())
+					{
+						pickMaterialUUID = pmo.material;
+						break;
+					}
+				}
+				MaterialInstanceID instanceUUID = pickMaterialUUID + "-" + vertexType;
+				CreateMaterialInstance(instanceUUID(), [id, &instanceUUID, pickMaterialUUID, vertexClass]()
+					{
+						return std::make_unique<MaterialInstance>(id, instanceUUID(), pickMaterialUUID, vertexClass, false, false);
+					}
+				);
+				return instanceUUID();
+			};
 
-		// const std::map<RenderPassMaterialOverride, std::function<JUUID()>> overrideMaterial =
-		// {
-		// 	{ RenderPassMaterialOverride_None, noOverride },
-		// 	{ RenderPassMaterialOverride_ShadowMap, shadowMapOverride },
-		// 	{ RenderPassMaterialOverride_Picking, pickingOverride },
-		// };
+		const std::map<RenderPassMaterialOverride, std::function<JUUID()>> overrideMaterial =
+		{
+			{ RenderPassMaterialOverride_None, noOverride },
+			{ RenderPassMaterialOverride_ShadowMap, shadowMapOverride },
+			{ RenderPassMaterialOverride_Picking, pickingOverride },
+		};
 
-		// return overrideMaterial.at(materialOverride)();
-		return "";
+		return overrideMaterial.at(materialOverride)();
 	}
 
 	void RenderPassInstance::InitRenderPass()
