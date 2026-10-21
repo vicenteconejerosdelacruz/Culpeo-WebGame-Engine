@@ -121,6 +121,7 @@ namespace Templates
 		TextureInstance(SceneUnitId id, JUUID uuid, unsigned int startFrame);
 		~TextureInstance() {}
 		// void CreateTextureResource(CComPtr<ID3D12GraphicsCommandList2>& commandList, std::string& path, DXGI_FORMAT format, TextureType type, unsigned int numFrames, unsigned int nMipMaps, unsigned int startFrame = 0U);
+		void CreateTextureResource(SceneUnitId id, std::string& path, wgpu::TextureFormat format, TextureType type, unsigned int numFrames, unsigned int nMipMaps, unsigned int startFrame = 0U);
 		void ReleaseResources();
 		void RebuildResource();
 

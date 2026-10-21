@@ -169,7 +169,7 @@ namespace Templates
 		// std::map<unsigned int, ::CD3DX12_GPU_DESCRIPTOR_HANDLE> uav;
 
 		void CreateMaterialShaderDefines();
-		void CreateShaderInstances();
+		void CreateShaderInstances(SceneUnitId id);
 		void Destroy();
 		// bool ShaderInstanceHasRegister(std::function<int(ShaderInstanceID)> getRegister);
 		void LoadVariablesMapping();

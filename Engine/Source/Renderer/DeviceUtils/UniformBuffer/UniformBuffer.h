@@ -29,8 +29,6 @@ namespace DeviceUtils
 		unsigned int alignedBufferSize;
 		wgpu::Buffer uniformBuffer;
 		std::vector<std::byte> mappedBuffer;
-		// wgpu::BindGroupLayout bindGroupLayout;
-		// std::vector<wgpu::BindGroup> bindGroup;
 	};
 
 	std::unique_ptr<UniformBuffer>& GetUniformBuffer(JUUID uuid);

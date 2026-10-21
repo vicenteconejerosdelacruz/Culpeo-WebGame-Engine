@@ -212,6 +212,7 @@ namespace Scene::Level
 // 		}
 // #endif
 
+		MapControllers(id);
 		BindSceneObjects(id);
 // #if defined(_EDITOR)
 // 		if (!scene->IsIsolated())
@@ -229,7 +230,7 @@ namespace Scene::Level
 // 			pendingPhysicsCreation.insert(id);
 // 		}
 		//leave this to last
-		MapControllers(id);
+		//MapControllers(id);
 // #if defined(_EDITOR)
 // 		if (!scene->IsIsolated())
 // 		{

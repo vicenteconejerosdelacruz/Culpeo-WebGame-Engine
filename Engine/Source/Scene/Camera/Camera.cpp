@@ -396,8 +396,7 @@ namespace Scene
 
 		unsigned int projW = static_cast<unsigned int>(projectionWidth());
 		unsigned int projH = static_cast<unsigned int>(projectionHeight());
-		return JUUID("");
-		//return CreateRenderPassInstance(uuid, pass, passIndex, projW, projH);
+		return CreateRenderPassInstance(uuid(), pass, passIndex, projW, projH);
 	}
 
 /*
@@ -545,13 +544,11 @@ namespace Scene
 		if (renderables.contains(renderable)) return;
 		renderables.insert(renderable);
 
-		/*
 		renderable->CreateMaterialsInstances(uuid());
 		renderable->CreateUniformBuffersInstances(uuid());
-		*/
-		// renderable->CreateRootSignatures(SUuuid());
-		// renderable->CreatePipelineStates(SUuuid());
-		// renderable->CreateRenderMethods(SUuuid());
+		renderable->CreateBindGroups(uuid());
+		// renderable->CreatePipelineStates(uuid());
+		// renderable->CreateRenderMethods(uuid());
 	}
 
 /*

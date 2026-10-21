@@ -9,6 +9,7 @@
 // #include <Application.h>
 
 // extern std::unique_ptr<JRenderer> renderer;
+extern std::atomic<bool> g_EngineReady;
 #if defined(_EDITOR)
 namespace Editor
 {
@@ -62,7 +63,14 @@ namespace Scene
 
 		std::thread levelThread([](std::string filename, nlohmann::json data, std::function<void(SceneUnitId)> levelLoaded, std::function<void(std::string, unsigned int, unsigned int)> progress)
 		{
-	 		SceneUnitId id = nostd::threadIdHash();
+			std::cout << "loading level " << filename << std::endl;
+
+			// Bucle de espera robusto y compatible con WebAssembly pthreads
+            while (!g_EngineReady.load(std::memory_order_acquire)) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            }
+			SceneUnitId id = nostd::threadIdHash();
+			std::cout << "engine ready on id " << id << std::endl;
 
 		// 		levelThreadsStack.insert_or_assign(id, std::make_unique<std::atomic_uint>(1U));
 			auto& scene = CreateScene(id, filename, JRenderer::numFrames);
@@ -384,64 +392,65 @@ namespace Scene
 // 		return scenesUnits.at(std::get<0>(suuuid))->GetSceneObjectTypes().contains(std::get<1>(suuuid));
 // 	}
 
-// 	void MoveSceneObjectUnit(JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
-// 	{
-// 		auto mover = [](auto mvfn, auto uuid, auto fromId, auto toId)
-// 			{
-// 				auto* so = GetSceneObjectPointer(fromId, uuid);
-// 				so->unit = toId;
-// 				auto& obj = mvfn(fromId).at(uuid);
-// 				mvfn(toId).insert_or_assign(uuid, std::move(obj));
-// 				mvfn(fromId).erase(uuid);
-// 				so->BindToScene();
-// 			};
-// 		std::map<SceneObjectType, std::function<void(JUUID, SceneUnitId, SceneUnitId)>> moveObject =
-// 		{
-// 			{ SO_Renderables, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
-// 			{
-// 				mover(GetRenderablesSceneObjects,uuid,fromId,toId);
-// 			}
-// 			},
-// 			{ SO_Cameras, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
-// 			{
-// 				mover(GetCamerasSceneObjects,uuid,fromId,toId);
-// 			}
-// 			},
-// 			{ SO_Lights, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
-// 			{
-// 				mover(GetLightsSceneObjects,uuid,fromId,toId);
-// 			}
-// 			},
-// 			{ SO_SoundEffects, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
-// 			{
-// 				mover(GetSoundFXsSceneObjects,uuid,fromId,toId);
-// 			}
-// 			},
-// 			{ SO_PhysicScenes, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
-// 			{
-// 				mover(GetPhysicScenesSceneObjects,uuid,fromId,toId);
-// 			}
-// 			},
-// 			{ SO_Triggers, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
-// 			{
-// 				mover(GetTriggersSceneObjects,uuid,fromId,toId);
-// 			}
-// 			},
-// 			{ SO_Boundaries, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
-// 			{
-// 				mover(GetBoundarysSceneObjects,uuid,fromId,toId);
-// 			}
-// 			},
-// 			{ SO_SceneControllers, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
-// 			{
-// 				mover(GetSceneControllersSceneObjects,uuid,fromId,toId);
-// 			}
-// 			},
-// 		};
-
-// 		SceneObjectType type = GetSceneObjectType(fromId, uuid);
-// 		moveObject.at(type)(uuid, fromId, toId);
-// 	}
+	/*
+ 	void MoveSceneObjectUnit(JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
+ 	{
+ 		auto mover = [](auto mvfn, auto uuid, auto fromId, auto toId)
+ 			{
+ 				auto* so = GetSceneObjectPointer(fromId, uuid);
+ 				so->unit = toId;
+ 				auto& obj = mvfn(fromId).at(uuid);
+ 				mvfn(toId).insert_or_assign(uuid, std::move(obj));
+ 				mvfn(fromId).erase(uuid);
+ 				so->BindToScene();
+ 			};
+ 		std::map<SceneObjectType, std::function<void(JUUID, SceneUnitId, SceneUnitId)>> moveObject =
+ 		{
+ 			{ SO_Renderables, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
+ 			{
+ 				mover(GetRenderablesSceneObjects,uuid,fromId,toId);
+ 			}
+ 			},
+ 			{ SO_Cameras, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
+ 			{
+ 				mover(GetCamerasSceneObjects,uuid,fromId,toId);
+ 			}
+ 			},
+ 			{ SO_Lights, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
+ 			{
+ 				mover(GetLightsSceneObjects,uuid,fromId,toId);
+ 			}
+ 			},
+ 			{ SO_SoundEffects, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
+ 			{
+ 				mover(GetSoundFXsSceneObjects,uuid,fromId,toId);
+ 			}
+ 			},
+ 			{ SO_PhysicScenes, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
+ 			{
+ 				mover(GetPhysicScenesSceneObjects,uuid,fromId,toId);
+ 			}
+ 			},
+ 			{ SO_Triggers, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
+ 			{
+ 				mover(GetTriggersSceneObjects,uuid,fromId,toId);
+ 			}
+ 			},
+ 			{ SO_Boundaries, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
+ 			{
+ 				mover(GetBoundarysSceneObjects,uuid,fromId,toId);
+ 			}
+ 			},
+ 			{ SO_SceneControllers, [&](JUUID uuid, SceneUnitId fromId, SceneUnitId toId)
+ 			{
+ 				mover(GetSceneControllersSceneObjects,uuid,fromId,toId);
+ 			}
+ 			},
+ 		};
+ 		SceneObjectType type = GetSceneObjectType(fromId, uuid);
+ 		moveObject.at(type)(uuid, fromId, toId);
+ 	}
+	*/
 
 	void ResetRenderableScenes()
 	{
@@ -481,210 +490,213 @@ namespace Scene
 			GetController(uuid)->BindToScene();			
 		});
 
-// 		std::unordered_map<SceneObjectType, std::function<void(SceneUnitId, JUUID)>> typeBinder =
-// 		{
-// 			{
-// 				SO_Renderables, [](SceneUnitId id, JUUID uuid)
-// 				{
-// 					auto& so = GetRenderableSceneObject(id, uuid);
-// 					so->BindToScene();
-// 				}
-// 			},
-// 			{
-// 				SO_Cameras, [](SceneUnitId id, JUUID uuid)
-// 				{
-// 					auto& so = GetCameraSceneObject(id, uuid);
-// 					so->BindToScene();
-// 				}
-// 			},
-// 			{
-// 				SO_Lights, [](SceneUnitId id, JUUID uuid)
-// 				{
-// 					auto& so = GetLightSceneObject(id, uuid);
-// 					so->BindToScene();
-// 				}
-// 			},
-// 			{
-// 				SO_SoundEffects, [](SceneUnitId id, JUUID uuid)
-// 				{
-// 					auto& so = GetSoundFXSceneObject(id, uuid);
-// 					so->BindToScene();
-// 				}
-// 			},
-// 			{
-// 				SO_PhysicScenes, [](SceneUnitId id, JUUID uuid)
-// 				{
-// 					auto& so = GetPhysicSceneSceneObject(id, uuid);
-// 					so->BindToScene();
-// 				}
-// 			},
-// 			{
-// 				SO_Triggers, [](SceneUnitId id, JUUID uuid)
-// 				{
-// 					auto& so = GetTriggerSceneObject(id, uuid);
-// 					so->BindToScene();
-// 				}
-// 			},
-// 			{
-// 				SO_Boundaries, [](SceneUnitId id, JUUID uuid)
-// 				{
-// 					auto& so = GetBoundarySceneObject(id, uuid);
-// 					so->BindToScene();
-// 				}
-// 			},
-// 			{
-// 				SO_SceneControllers, [](SceneUnitId id, JUUID uuid)
-// 				{
-// 					auto& so = GetSceneControllerSceneObject(id, uuid);
-// 					so->BindToScene();
-// 				}
-// 			}
-// 		};
-
-// 		std::unordered_map<SceneObjectType, std::set<JUUID>> bindingMap;
-// 		std::set<JUUID> uuids = GetUnboundedSceneObjects(id);
-// 		for (auto& uuid : uuids)
-// 		{
-// 			if (SceneObjectExists(id, uuid))
-// 				bindingMap[GetSceneObjectType(id, uuid)].insert(uuid);
-// 		}
-
-// 		std::vector<SceneObjectType> bindingOrder = { SO_Cameras, SO_Lights, SO_SceneControllers, SO_PhysicScenes, SO_Triggers, SO_Boundaries, SO_Renderables, SO_SoundEffects };
-
-// 		for (auto type : bindingOrder)
-// 		{
-// 			if (!bindingMap.contains(type))
-// 				continue;
-// 			for (auto& uuid : bindingMap.at(type))
-// 			{
-// 				typeBinder.at(type)(id, uuid);
-// 			}
-// 		}
-
-// 		GetUnboundedSceneObjects(id).clear();
+		/*
+ 		std::unordered_map<SceneObjectType, std::function<void(SceneUnitId, JUUID)>> typeBinder =
+ 		{
+ 			{
+ 				SO_Renderables, [](SceneUnitId id, JUUID uuid)
+ 				{
+ 					auto& so = GetRenderableSceneObject(id, uuid);
+ 					so->BindToScene();
+ 				}
+ 			},
+ 			{
+ 				SO_Cameras, [](SceneUnitId id, JUUID uuid)
+ 				{
+ 					auto& so = GetCameraSceneObject(id, uuid);
+ 					so->BindToScene();
+ 				}
+ 			},
+ 			{
+ 				SO_Lights, [](SceneUnitId id, JUUID uuid)
+ 				{
+ 					auto& so = GetLightSceneObject(id, uuid);
+ 					so->BindToScene();
+ 				}
+ 			},
+ 			{
+ 				SO_SoundEffects, [](SceneUnitId id, JUUID uuid)
+ 				{
+ 					auto& so = GetSoundFXSceneObject(id, uuid);
+ 					so->BindToScene();
+ 				}
+ 			},
+ 			{
+ 				SO_PhysicScenes, [](SceneUnitId id, JUUID uuid)
+ 				{
+ 					auto& so = GetPhysicSceneSceneObject(id, uuid);
+ 					so->BindToScene();
+ 				}
+ 			},
+ 			{
+ 				SO_Triggers, [](SceneUnitId id, JUUID uuid)
+ 				{
+ 					auto& so = GetTriggerSceneObject(id, uuid);
+ 					so->BindToScene();
+ 				}
+ 			},
+ 			{
+ 				SO_Boundaries, [](SceneUnitId id, JUUID uuid)
+ 				{
+ 					auto& so = GetBoundarySceneObject(id, uuid);
+ 					so->BindToScene();
+ 				}
+ 			},
+ 			{
+ 				SO_SceneControllers, [](SceneUnitId id, JUUID uuid)
+ 				{
+ 					auto& so = GetSceneControllerSceneObject(id, uuid);
+ 					so->BindToScene();
+ 				}
+ 			}
+ 		};
+ 		std::unordered_map<SceneObjectType, std::set<JUUID>> bindingMap;
+ 		std::set<JUUID> uuids = GetUnboundedSceneObjects(id);
+ 		for (auto& uuid : uuids)
+ 		{
+ 			if (SceneObjectExists(id, uuid))
+ 				bindingMap[GetSceneObjectType(id, uuid)].insert(uuid);
+ 		}
+ 		std::vector<SceneObjectType> bindingOrder = { SO_Cameras, SO_Lights, SO_SceneControllers, SO_PhysicScenes, SO_Triggers, SO_Boundaries, SO_Renderables, SO_SoundEffects };
+ 		for (auto type : bindingOrder)
+ 		{
+ 			if (!bindingMap.contains(type))
+ 				continue;
+ 			for (auto& uuid : bindingMap.at(type))
+ 			{
+ 				typeBinder.at(type)(id, uuid);
+ 			}
+ 		}
+ 		GetUnboundedSceneObjects(id).clear();
+		*/
 	}
 
-// #if defined(_EDITOR)
-// 	JUUID CloneSceneObject(SceneUnitId id, JUUID sceneObject, nlohmann::json parameters)
-// 	{
-// 		auto& scene = GetSceneUnit(id);
-// 		LoadingProcessor loading = CreateLoadingProcessor();
+#if defined(_EDITOR)
+	/*
+	JUUID CloneSceneObject(SceneUnitId id, JUUID sceneObject, nlohmann::json parameters)
+	{
+		auto& scene = GetSceneUnit(id);
+		LoadingProcessor loading = CreateLoadingProcessor();
 
-// 		SceneObject* sceneObjectO = GetSceneObjectPointer(id, sceneObject);
-// 		SceneObjectType type = sceneObjectO->JType();
-// 		nlohmann::json data;
-// 		sceneObjectO->WriteJson(data);
+		SceneObject* sceneObjectO = GetSceneObjectPointer(id, sceneObject);
+		SceneObjectType type = sceneObjectO->JType();
+		nlohmann::json data;
+		sceneObjectO->WriteJson(data);
 
-// 		JUUID uuid = getUUID();
-// 		std::string name = data.at("name");
-// 		name += "_clone";
-// 		data.at("name") = name;
-// 		data.at("uuid") = uuid;
+		JUUID uuid = getUUID();
+		std::string name = data.at("name");
+		name += "_clone";
+		data.at("name") = name;
+		data.at("uuid") = uuid;
 
-// 		scene->AddSceneObjectToUnboundPool(uuid);
+		scene->AddSceneObjectToUnboundPool(uuid);
 
-// 		data.merge_patch(parameters);
+		data.merge_patch(parameters);
 
-// 		auto createAvatars = [&]
-// 			{
-// 				std::set<SceneObjectType> physicAbleTypes = { SO_Renderables, SO_Triggers, SO_Boundaries };
-// 				if (!physicAbleTypes.contains(type))
-// 					return;
+		auto createAvatars = [&]
+			{
+				std::set<SceneObjectType> physicAbleTypes = { SO_Renderables, SO_Triggers, SO_Boundaries };
+				if (!physicAbleTypes.contains(type))
+					return;
 
-// 				std::string level = Editor::GetLevelString(id);
-// 				nlohmann::json level_data = nlohmann::json::parse(level);
-// 				nlohmann::json jdata;
-// 				if (level_data.contains(SceneObjectTypeJsonContainer.at(SO_Cameras)))
-// 				{
-// 					jdata[SceneObjectTypeJsonContainer.at(SO_Cameras)] = level_data[SceneObjectTypeJsonContainer.at(SO_Cameras)];
-// 				}
-// 				jdata[SceneObjectTypeJsonContainer.at(type)] = nlohmann::json::array();
-// 				jdata[SceneObjectTypeJsonContainer.at(type)].push_back(data);
-// 				AttachPhysicsAvatars(id, jdata);
+				std::string level = Editor::GetLevelString(id);
+				nlohmann::json level_data = nlohmann::json::parse(level);
+				nlohmann::json jdata;
+				if (level_data.contains(SceneObjectTypeJsonContainer.at(SO_Cameras)))
+				{
+					jdata[SceneObjectTypeJsonContainer.at(SO_Cameras)] = level_data[SceneObjectTypeJsonContainer.at(SO_Cameras)];
+				}
+				jdata[SceneObjectTypeJsonContainer.at(type)] = nlohmann::json::array();
+				jdata[SceneObjectTypeJsonContainer.at(type)].push_back(data);
+				AttachPhysicsAvatars(id, jdata);
 
-// 				for (unsigned int i = 0; i < jdata.at(SceneObjectTypeJsonContainer.at(SO_Renderables)).size(); i++)
-// 				{
-// 					nlohmann::json& obj = jdata.at(SceneObjectTypeJsonContainer.at(SO_Renderables)).at(i);
-// 					if (obj.at("uuid") == uuid)
-// 						continue;
+				for (unsigned int i = 0; i < jdata.at(SceneObjectTypeJsonContainer.at(SO_Renderables)).size(); i++)
+				{
+					nlohmann::json& obj = jdata.at(SceneObjectTypeJsonContainer.at(SO_Renderables)).at(i);
+					if (obj.at("uuid") == uuid)
+						continue;
 
-// 					CreateRenderable(id, obj);
-// 					JUUID avatarUUID = obj.at("uuid");
-// 					RenderableID ren = MAKESUUUID(id, avatarUUID);
-// 					ren->BindToScene();
-// 					ren->RenderReady(true);
-// 				}
-// 			};
+					CreateRenderable(id, obj);
+					JUUID avatarUUID = obj.at("uuid");
+					RenderableID ren = MAKESUUUID(id, avatarUUID);
+					ren->BindToScene();
+					ren->RenderReady(true);
+				}
+			};
 
-// 		switch (type)
-// 		{
-// 		case SO_Cameras:
-// 		{
-// 			CreateCamera(id, data);
-// 		}
-// 		break;
-// 		case SO_Lights:
-// 		{
-// 			CreateLight(id, data);
-// 		}
-// 		break;
-// 		case SO_Renderables:
-// 		{
-// 			CreateRenderable(id, data);
-// 		}
-// 		break;
-// 		case SO_SoundEffects:
-// 		{
-// 			CreateSoundFX(id, data);
-// 		}
-// 		break;
-// 		case SO_PhysicScenes:
-// 		{
-// 			CreatePhysicScene(id, data);
-// 		}
-// 		break;
-// 		case SO_Triggers:
-// 		{
-// 			CreateTrigger(id, data);
-// 		}
-// 		break;
-// 		case SO_Boundaries:
-// 		{
-// 			CreateBoundary(id, data);
-// 		}
-// 		break;
-// 		case SO_SceneControllers:
-// 		{
-// 			CreateSceneController(id, data);
-// 		}
-// 		break;
-// 		}
-// 		createAvatars();
+		switch (type)
+		{
+		case SO_Cameras:
+		{
+			CreateCamera(id, data);
+		}
+		break;
+		case SO_Lights:
+		{
+			CreateLight(id, data);
+		}
+		break;
+		case SO_Renderables:
+		{
+			CreateRenderable(id, data);
+		}
+		break;
+		case SO_SoundEffects:
+		{
+			CreateSoundFX(id, data);
+		}
+		break;
+		case SO_PhysicScenes:
+		{
+			CreatePhysicScene(id, data);
+		}
+		break;
+		case SO_Triggers:
+		{
+			CreateTrigger(id, data);
+		}
+		break;
+		case SO_Boundaries:
+		{
+			CreateBoundary(id, data);
+		}
+		break;
+		case SO_SceneControllers:
+		{
+			CreateSceneController(id, data);
+		}
+		break;
+		}
+		createAvatars();
 
-// 		if (type == SO_Renderables)
-// 		{
-// 			RenderableID ren = MAKESUUUID(id, uuid);
-// 			ren->RenderReady(true);
-// 		}
+		if (type == SO_Renderables)
+		{
+			RenderableID ren = MAKESUUUID(id, uuid);
+			ren->RenderReady(true);
+		}
 
-// 		return uuid;
-// 	}
-// #endif
+		return uuid;
+	}
+	*/
+#endif
 
-// 	void BindToScene(SceneUnitId id, JUUID uuidA, JUUID uuidB)
-// 	{
-// 		scenesUnits.at(id)->Bind(uuidA, uuidB);
-// 	}
+	void BindToScene(SceneUnitId id, JUUID uuidA, JUUID uuidB)
+	{
+		std::cout << "sceneUnitExists(" << id << ")? " << scenesUnits.contains(id) << std::endl;
+		std::cout << "uuidA " << uuidA << std::endl;
+		std::cout << "uuidB " << uuidB << std::endl;
+		scenesUnits.at(id)->Bind(uuidA, uuidB);
+	}
 
-// 	void UnbindFromScene(SceneUnitId unit, JUUID uuidA)
-// 	{
-// 		scenesUnits.at(unit)->Unbind(uuidA);
-// 	}
+	void UnbindFromScene(SceneUnitId unit, JUUID uuidA)
+	{
+		scenesUnits.at(unit)->Unbind(uuidA);
+	}
 
-// 	void UnbindFromScene(SceneUnitId unit, JUUID uuidA, JUUID uuidB)
-// 	{
-// 		scenesUnits.at(unit)->Unbind(uuidA, uuidB);
-// 	}
+	void UnbindFromScene(SceneUnitId unit, JUUID uuidA, JUUID uuidB)
+	{
+		scenesUnits.at(unit)->Unbind(uuidA, uuidB);
+	}
 
 // 	void SceneObjectsStep(DX::StepTimer& timer)
 // 	{

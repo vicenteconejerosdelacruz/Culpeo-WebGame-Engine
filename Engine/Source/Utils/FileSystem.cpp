@@ -46,8 +46,8 @@ EM_JS(int, js_download_asset_to_buffer, (const char* url, uint8_t** outData, int
     return 0;
 });
 
-AssetStream::AssetStream(const std::string& virtualPath, const std::string& url) {
-    std::string downloadUrl = url.empty() ? virtualPath : url;
+AssetStream::AssetStream(const std::string& virtualPath) {
+    std::string downloadUrl = virtualPath;
 
     uint8_t* bufferPtr = nullptr;
     int bufferSize = 0;

@@ -109,16 +109,16 @@ namespace Scene
 
 		// void Initialize() override;
 		// virtual void SetInitialConditions();
-		// virtual void BindToScene();
-		// virtual void Bind(JUUID uuid);
+		void BindToScene() override;
+		void Bind(JUUID uuid) override;
 		void BindToCamera(JUUID camId) override;
-		// void BindCameras();
-		// void BindCamera(JUUID cuuid);
-		// void BindShadowMapCameras();
-		// virtual void UnbindFromScene();
-		// virtual void Unbind(JUUID uuid);
-		// void UnbindCameras();
-		// void UnbindCamera(JUUID cuuid);
+		void BindCameras();
+		void BindCamera(JUUID cuuid);
+		void BindShadowMapCameras();
+		void UnbindFromScene() override;
+		void Unbind(JUUID uuid) override;
+		void UnbindCameras();
+		void UnbindCamera(JUUID cuuid);
 
 		//Render Passes
 		std::vector<RenderPassInstanceID> GetCameraRenderPasses(CameraID cam);
@@ -137,16 +137,16 @@ namespace Scene
 		void DestroyUniformBuffersInstances(CameraID cam);
 		void DestroyRenderPassUniformBuffersInstances(RenderPassInstanceID pass);
 		//Root Signatures
-		// void CreateRootSignatures(CameraID cam);
-		// void CreateRenderPassRootSignatures(RenderPassInstanceID rp);
-		// void DestroyRootSignatures(CameraID cam);
-		// void DestroyRenderPassRootSignatures(RenderPassInstanceID rp);
-		//Pipeline States
+		void CreateBindGroups(CameraID cam);
+		void CreateRenderPassBindGroups(RenderPassInstanceID rp);
+		void DestroyBindGroups(CameraID cam);
+		void DestroyRenderPassBindGroups(RenderPassInstanceID rp);
+		// //Pipeline States
 		// void CreatePipelineStates(CameraID cam);
 		// void CreateRenderPassPipelineStates(RenderPassInstanceID rp);
 		// void DestroyPipelineStates(CameraID cam);
 		// void DestroyRenderPassPipelineStates(RenderPassInstanceID rp);
-		//Render Methods
+		// //Render Methods
 		// void CreateRenderMethods(CameraID cam);
 		// std::vector<std::vector<DescriptorTableSetter>> CreateRenderPassRenderMethods(CameraID cam, RenderPassInstanceID rp);
 #if defined(_EDITOR)
@@ -232,7 +232,7 @@ namespace Scene
 		// SequencePlayer sequencePlayer;
 		// Animation::BonesTransformations sequenceBoneTransformations;
 		//Cameras
-		// std::set<CameraID> bindedCameras;
+		std::set<CameraID> bindedCameras;
 
 		BoundingBox boundingBox;
 		//RenderableBoundingBoxID boundingBoxCompute; //used for animables

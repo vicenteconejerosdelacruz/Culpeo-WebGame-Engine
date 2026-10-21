@@ -1,6 +1,6 @@
 //#include "pch.h"
 #include "Shader.h"
-// #include <ShaderCompiler.h>
+#include <ShaderCompiler.h>
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 // #include <CompilerQueue.h>
 #if defined(_EDITOR)
@@ -86,179 +86,186 @@ namespace Templates {
 	TEMPDEF_REFTRACKER(Shader);
 
 #if defined(_DEVELOPMENT)
-	// void ShaderJsonStep()
-	// {
-	// 	std::set<ShaderJsonID> shaders;
-	// 	std::transform(Shadertemplates.begin(), Shadertemplates.end(), std::inserter(shaders, shaders.begin()), [](auto& temps)
-	// 		{
-	// 			return temps.first;
-	// 		}
-	// 	);
+	/*
+	 void ShaderJsonStep()
+	 {
+	 	std::set<ShaderJsonID> shaders;
+	 	std::transform(Shadertemplates.begin(), Shadertemplates.end(), std::inserter(shaders, shaders.begin()), [](auto& temps)
+	 		{
+	 			return temps.first;
+	 		}
+	 	);
 
-	// 	std::set<ShaderJsonID> rebuildShaders;
-	// 	std::copy_if(shaders.begin(), shaders.end(), std::inserter(rebuildShaders, rebuildShaders.begin()), [](auto shader)
-	// 		{
-	// 			return shader->dirty(ShaderJson::Update_path);
-	// 		}
-	// 	);
+	 	std::set<ShaderJsonID> rebuildShaders;
+	 	std::copy_if(shaders.begin(), shaders.end(), std::inserter(rebuildShaders, rebuildShaders.begin()), [](auto shader)
+	 		{
+	 			return shader->dirty(ShaderJson::Update_path);
+	 		}
+	 	);
 
-	// 	if (rebuildShaders.size() > 0ULL)
-	// 	{
-	// 		//JObject::RunChangesCallback(rebuildShaders, [](auto shader)
-	// 		//	{
-	// 		//		shader->clean(ShaderJson::Update_path);
-	// 		//	}
-	// 		//);
-	// 	}
-	// }
+	 	if (rebuildShaders.size() > 0ULL)
+	 	{
+	 		//JObject::RunChangesCallback(rebuildShaders, [](auto shader)
+	 		//	{
+	 		//		shader->clean(ShaderJson::Update_path);
+	 		//	}
+	 		//);
+	 	}
+	 }
+	*/
+	/*
+	 bool CheckChangesCompilation(JUUID uuid)
+	 {
+	 	using namespace Shader;
+	 	using namespace ShaderCompiler;
+	 	using namespace Templates::Shader;
 
-	// bool CheckChangesCompilation(JUUID uuid)
-	// {
-	// 	using namespace Shader;
-	// 	using namespace ShaderCompiler;
-	// 	using namespace Templates::Shader;
+	 	std::set<Source> sources = GetSourcesFromShaderUUID(uuid);
+	 	for (auto src : sources)
+	 	{
+	 		ShaderInstance dummy("", src.shaderTemplate(), src);
+	 		ShaderIncludesDependencies deps;
+	 		if (!Compile(dummy, src, deps))
+	 			return false;
+	 	}
+	 	return true;
+	 }
+	*/
+	/*
+	 void PropagateChangeToShader(std::string shaderFile)
+	 {
+	 	using namespace Shader;
+	 	auto range = fileNameToShaderTemplate.equal_range(shaderFile);
+	 	for (auto& it = range.first; it != range.second; it++)
+	 	{
+	 		if (!CheckChangesCompilation(it->second)) continue;
+	 		auto& shader = GetShaderTemplate(it->second);
+	 		shader->flag(ShaderJson::Update_path);
+	 	}
+	 }
+	*/
+	/*
+	 void PropagateChangeToShaderFromDependency(std::string dependency)
+	 {
+	 	using namespace Shader;
+	 	std::set<std::string> shadersUUIDs;
+	 	for (auto& [src, deps] : dependencies)
+	 	{
+	 		//if the file is not in the dependency skip
+	 		if (!deps.contains(dependency) || !CheckChangesCompilation(src.shaderTemplate())) continue;
+	 		src.shaderTemplate->flag(ShaderJson::Update_path);
+	 	}
+	 }
+	*/
+	/*
+	 static CompilerQueue changesQueue;
+	 void MonitorShaderChanges(std::string folder)
+	 {
+	 	std::thread monitor([folder]()
+	 		{
+	 			HANDLE file = CreateFileA(folder.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, nullptr);
 
-	// 	std::set<Source> sources = GetSourcesFromShaderUUID(uuid);
-	// 	for (auto src : sources)
-	// 	{
-	// 		ShaderInstance dummy("", src.shaderTemplate(), src);
-	// 		ShaderIncludesDependencies deps;
-	// 		if (!Compile(dummy, src, deps))
-	// 			return false;
-	// 	}
-	// 	return true;
-	// }
+	 			if (file == INVALID_HANDLE_VALUE || file == NULL) {
+	 				OutputDebugStringA("ERROR: Invalid HANDLE value.\n");
+	 				ExitProcess(GetLastError());
+	 			}
 
-	// void PropagateChangeToShader(std::string shaderFile)
-	// {
-	// 	using namespace Shader;
-	// 	auto range = fileNameToShaderTemplate.equal_range(shaderFile);
-	// 	for (auto& it = range.first; it != range.second; it++)
-	// 	{
-	// 		if (!CheckChangesCompilation(it->second)) continue;
-	// 		auto& shader = GetShaderTemplate(it->second);
-	// 		shader->flag(ShaderJson::Update_path);
-	// 	}
-	// }
+	 			OVERLAPPED overlapped;
+	 			overlapped.hEvent = CreateEvent(NULL, FALSE, 0, NULL);
 
-	// void PropagateChangeToShaderFromDependency(std::string dependency)
-	// {
-	// 	using namespace Shader;
-	// 	std::set<std::string> shadersUUIDs;
-	// 	for (auto& [src, deps] : dependencies)
-	// 	{
-	// 		//if the file is not in the dependency skip
-	// 		if (!deps.contains(dependency) || !CheckChangesCompilation(src.shaderTemplate())) continue;
-	// 		src.shaderTemplate->flag(ShaderJson::Update_path);
-	// 	}
-	// }
+	 			uint8_t change_buf[1024];
+	 			BOOL success = ReadDirectoryChangesW(
+	 				file, change_buf, 1024, TRUE,
+	 				FILE_NOTIFY_CHANGE_LAST_WRITE,
+	 				NULL, &overlapped, NULL);
 
-	// static CompilerQueue changesQueue;
-	// void MonitorShaderChanges(std::string folder)
-	// {
-	// 	std::thread monitor([folder]()
-	// 		{
-	// 			HANDLE file = CreateFileA(folder.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, nullptr);
+	 			while (true) {
+	 				DWORD result = WaitForSingleObject(overlapped.hEvent, 0);
 
-	// 			if (file == INVALID_HANDLE_VALUE || file == NULL) {
-	// 				OutputDebugStringA("ERROR: Invalid HANDLE value.\n");
-	// 				ExitProcess(GetLastError());
-	// 			}
+	 				if (result == WAIT_OBJECT_0) {
+	 					DWORD bytes_transferred;
+	 					GetOverlappedResult(file, &overlapped, &bytes_transferred, FALSE);
 
-	// 			OVERLAPPED overlapped;
-	// 			overlapped.hEvent = CreateEvent(NULL, FALSE, 0, NULL);
+	 					FILE_NOTIFY_INFORMATION* event = (FILE_NOTIFY_INFORMATION*)change_buf;
 
-	// 			uint8_t change_buf[1024];
-	// 			BOOL success = ReadDirectoryChangesW(
-	// 				file, change_buf, 1024, TRUE,
-	// 				FILE_NOTIFY_CHANGE_LAST_WRITE,
-	// 				NULL, &overlapped, NULL);
+	 					for (;;) {
+	 						DWORD name_len = event->FileNameLength / sizeof(wchar_t);
 
-	// 			while (true) {
-	// 				DWORD result = WaitForSingleObject(overlapped.hEvent, 0);
+	 						switch (event->Action) {
+	 						case FILE_ACTION_MODIFIED: {
+	 							std::string shaderFile = nostd::WStringToString(std::wstring(event->FileName, event->FileNameLength / sizeof(event->FileName[0])));
+	 							changesQueue.push(shaderFile);
+	 						} break;
+	 						default: {
+	 							printf("Unknown action!\n");
+	 						} break;
+	 						}
 
-	// 				if (result == WAIT_OBJECT_0) {
-	// 					DWORD bytes_transferred;
-	// 					GetOverlappedResult(file, &overlapped, &bytes_transferred, FALSE);
+	 						// Are there more events to handle?
+	 						if (event->NextEntryOffset) {
+	 							*((uint8_t**)&event) += event->NextEntryOffset;
+	 						}
+	 						else {
+	 							break;
+	 						}
+	 					}
+	 				}
+	 				// Queue the next event
+	 				BOOL success = ReadDirectoryChangesW(
+	 					file, change_buf, 1024, TRUE,
+	 					FILE_NOTIFY_CHANGE_LAST_WRITE,
+	 					NULL, &overlapped, NULL);
+	 			}
+	 		}
+	 	);
 
-	// 					FILE_NOTIFY_INFORMATION* event = (FILE_NOTIFY_INFORMATION*)change_buf;
+	 	std::thread changesPropagator([]()
+	 		{
+	 			using namespace std::chrono_literals;
+	 			while (TRUE)
+	 			{
+	 				while (changesQueue.size() > 0)
+	 				{
 
-	// 					for (;;) {
-	// 						DWORD name_len = event->FileNameLength / sizeof(wchar_t);
+	 					std::filesystem::path filePath(changesQueue.front());
+	 					std::string fileExtension = filePath.extension().string();
 
-	// 						switch (event->Action) {
-	// 						case FILE_ACTION_MODIFIED: {
-	// 							std::string shaderFile = nostd::WStringToString(std::wstring(event->FileName, event->FileNameLength / sizeof(event->FileName[0])));
-	// 							changesQueue.push(shaderFile);
-	// 						} break;
-	// 						default: {
-	// 							printf("Unknown action!\n");
-	// 						} break;
-	// 						}
+	 					std::string output = "Modified: " + filePath.string() + "\n";
+	 					OutputDebugStringA(output.c_str());
 
-	// 						// Are there more events to handle?
-	// 						if (event->NextEntryOffset) {
-	// 							*((uint8_t**)&event) += event->NextEntryOffset;
-	// 						}
-	// 						else {
-	// 							break;
-	// 						}
-	// 					}
-	// 				}
-	// 				// Queue the next event
-	// 				BOOL success = ReadDirectoryChangesW(
-	// 					file, change_buf, 1024, TRUE,
-	// 					FILE_NOTIFY_CHANGE_LAST_WRITE,
-	// 					NULL, &overlapped, NULL);
-	// 			}
-	// 		}
-	// 	);
+	 					if (fileExtension == ".hlsl") {
+	 						PropagateChangeToShader(filePath.string());
+	 					}
+	 					else if (fileExtension == ".h") {
+	 						PropagateChangeToShaderFromDependency(filePath.string());
+	 					}
 
-	// 	std::thread changesPropagator([]()
-	// 		{
-	// 			using namespace std::chrono_literals;
-	// 			while (TRUE)
-	// 			{
-	// 				while (changesQueue.size() > 0)
-	// 				{
-
-	// 					std::filesystem::path filePath(changesQueue.front());
-	// 					std::string fileExtension = filePath.extension().string();
-
-	// 					std::string output = "Modified: " + filePath.string() + "\n";
-	// 					OutputDebugStringA(output.c_str());
-
-	// 					if (fileExtension == ".hlsl") {
-	// 						PropagateChangeToShader(filePath.string());
-	// 					}
-	// 					else if (fileExtension == ".h") {
-	// 						PropagateChangeToShaderFromDependency(filePath.string());
-	// 					}
-
-	// 					changesQueue.pop();
-	// 				}
-	// 				std::this_thread::sleep_for(200ms);
-	// 			}
-	// 		}
-	// 	);
-	// 	monitor.detach();
-	// 	changesPropagator.detach();
-	// }
+	 					changesQueue.pop();
+	 				}
+	 				std::this_thread::sleep_for(200ms);
+	 			}
+	 		}
+	 	);
+	 	monitor.detach();
+	 	changesPropagator.detach();
+	}
+	*/
 #endif
 
 	ShaderInstance::ShaderInstance(
+		SceneUnitId id,
 		JUUID instance_uuid,
 		JUUID uuid, Source params,
 		JUUID bindingUUID
 	)
 	{
-		//using namespace ShaderCompiler;
+		using namespace ShaderCompiler;
 		using namespace Templates::Shader;
 
 		instanceUUID = instance_uuid;
 		shaderUUID = uuid;
 
-		//Compile(*this, params, dependencies);
+		Compile(id, instanceUUID, params, dependencies);
 	}
 
 	// void ShaderInstance::CreateVSSemantics(const ComPtr<ID3D12ShaderReflection>& reflection, const D3D12_SHADER_DESC& desc)

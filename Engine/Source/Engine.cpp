@@ -14,6 +14,8 @@
 #include <Renderer.h>
 #include <Templates.h>
 
+std::atomic<bool> g_EngineReady{false};
+
 namespace Scene
 {
   extern void SceneRender();
@@ -29,9 +31,6 @@ wgpu::RenderPipeline pipeline;
 
 bool InitInstance()
 {
-  CreateSystemTemplates(); 
-  CreateTemplates();
-
   renderer = std::make_unique<JRenderer>();
   renderer->Initialize(); 
 
@@ -72,6 +71,11 @@ void CreateRenderPipeline() {
 void Render() {
   using namespace Scene;
 
+  if (!g_EngineReady.load(std::memory_order_acquire)) {
+        // Opcional: Renderizar un frame vacío, color plano o pantalla de carga
+        return; 
+    }
+    
   // 1. Polling de eventos de GLFW (resize, teclado, mouse)
   glfwPollEvents();
 
@@ -122,6 +126,8 @@ void Render() {
 }
 
 int main() {
+  CreateSystemTemplates(); 
+  CreateTemplates();
   InitInstance();
   BootGame();
   CreateRenderPipeline();

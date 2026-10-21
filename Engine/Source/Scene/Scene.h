@@ -130,9 +130,9 @@ std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName =
 // #if defined(_EDITOR)
 // 	JUUID CloneSceneObject(SceneUnitId id, JUUID, nlohmann::json parameters = {});
 // #endif
-// 	void BindToScene(SceneUnitId id, JUUID uuidA, JUUID uuidB);
-// 	void UnbindFromScene(SceneUnitId id, JUUID uuidA);
-// 	void UnbindFromScene(SceneUnitId id, JUUID uuidA, JUUID uuidB);
+	void BindToScene(SceneUnitId id, JUUID uuidA, JUUID uuidB);
+	void UnbindFromScene(SceneUnitId id, JUUID uuidA);
+	void UnbindFromScene(SceneUnitId id, JUUID uuidA, JUUID uuidB);
 // 	void SceneObjectsStep(DX::StepTimer& timer);
 // 	void FetchPhysicsScenesResults(DX::StepTimer& timer);
 // 	void SimulatePhysicScenes(DX::StepTimer& timer);

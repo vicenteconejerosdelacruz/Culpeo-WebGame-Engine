@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <set>
 // #include <DeviceUtils/CommandsProcessor/CommandsProcessor.h>
-// #include <Binder.h>
+#include <Binder.h>
 // #include <v8.h>
 // #include <nov8.h>
 
@@ -36,15 +36,15 @@ namespace Scene
 // 		void DestroySceneObjects();
 // 		std::unordered_map<JUUID, SceneObjectType>& GetSceneObjectTypes();
 // 		std::unordered_map<SceneObjectType, std::set<JUUID>>& GetSceneObjects();
-// 		std::set<JUUID>& GetUnboundedSceneObjects();
+		std::set<JUUID>& GetUnboundedSceneObjects();
 
 // 		//Scene
-// 		void Bind(JUUID uuidA, JUUID uuidB);
-// 		void Unbind(JUUID uuid);
-// 		void Unbind(JUUID uuidA, JUUID uuidB);
-// 		bool IsBound(JUUID uuid);
-// 		void AddSceneObjectToUnboundPool(JUUID uuid);
-// 		void RemoveSceneObjectFromUnboundPool(JUUID uuid);
+		void Bind(JUUID uuidA, JUUID uuidB);
+		void Unbind(JUUID uuid);
+		void Unbind(JUUID uuidA, JUUID uuidB);
+		bool IsBound(JUUID uuid);
+		void AddSceneObjectToUnboundPool(JUUID uuid);
+		void RemoveSceneObjectFromUnboundPool(JUUID uuid);
 
 // 		//Frame2Frame
 // 		void InitFrame2FrameProcessor(CComPtr<ID3D12Device2> d3dDevice, size_t capacity, size_t id);
@@ -109,8 +109,8 @@ namespace Scene
 // #endif
 
 		//Scene
-		// Binder binder;
-		// std::set<JUUID> unboundedSceneObjects;
+		Binder binder;
+		std::set<JUUID> unboundedSceneObjects;
 		// std::unordered_map<SceneObjectType, std::set<JUUID>> sceneObjects;
 		// std::unordered_map<JUUID, SceneObjectType> sceneObjectsTypes;
 

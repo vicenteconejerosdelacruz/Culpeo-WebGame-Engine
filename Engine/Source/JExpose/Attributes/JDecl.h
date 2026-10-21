@@ -323,6 +323,13 @@
 	void ATT##_erase(std::string key)\
 	{\
 		(*this)[#ATT].erase(key);\
+	}\
+	JUUID ATT##_get(std::string key)\
+	{\
+		if(!contains(#ATT)) return "";\
+		nlohmann::json& j = (*this)[#ATT];\
+		if(!j.contains(key)) return "";\
+		return j.at(key);\
 	}
 
 #define JEXPOSE_VECTOR_OBJECT(TYPE, ATT,INITIAL,JEDVALUETYPE,UPDATEMASK,REQUIREDTOCREATE)\

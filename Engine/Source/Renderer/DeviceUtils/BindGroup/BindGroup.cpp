@@ -1,15 +1,61 @@
-#include "pch.h"
-#include "RootSignature.h"
+#include "BindGroup.h"
 #include <Renderer.h>
-#include <DirectXHelper.h>
-#include <winrt/base.h>
-#include <atlbase.h>
-#include <NoStd.h>
+#include <Scene.h>
 
 extern std::unique_ptr<JRenderer> renderer;
 
 namespace DeviceUtils
 {
+	static std::map<JUUID, std::unique_ptr<BindGroup>> bindGroups;
+
+	std::unique_ptr<BindGroup>& GetBindGroup(JUUID uuid)
+	{
+		return bindGroups.at(uuid);
+	}
+	
+	BindGroupID CreateBindGroup(SceneUnitId id, std::string bgName)
+	{
+		BindGroupID bindGroupID = getUUID();
+		std::unique_ptr<BindGroup> bgData = std::make_unique<BindGroup>(bgName);
+
+		assert(!bindGroups.contains(bindGroupID()));
+		bindGroups.insert_or_assign(bindGroupID(), std::move(bgData));
+
+		GetSceneUnit(id)->PushToPreRender([bindGroupID]
+			{
+				// //create the gpu buffer
+				// wgpu::BufferDescriptor desc = {};
+				// desc.nextInChain = nullptr;
+				// desc.size = uniformBufferID->alignedBufferSize * JRenderer::numFrames;
+				// desc.label = uniformBufferID->name.c_str();
+				// desc.usage = wgpu::BufferUsage::Uniform | wgpu::BufferUsage::CopyDst;
+				// desc.mappedAtCreation = false;
+				// uniformBufferID->uniformBuffer = renderer->GetDevice().CreateBuffer(&desc);
+			}
+		);
+
+		return bindGroupID;
+	}
+
+	void DestroyBindGroup(UniformBufferID uuid)
+	{
+		bindGroups.erase(uuid());
+	}
+
+	void DestroyBindGroups()
+	{
+		bindGroups.clear();
+	}
+
+	BindGroup::BindGroup(std::string name) : name(name)
+	{
+	}
+
+	void BindGroup::Destroy()
+	{
+	}
+
+	/*
 	CComPtr<ID3D12RootSignature> CreateRootSignature(
 		std::string name,
 		ShaderConstantsBufferParametersMap& cbufferVSParamsDef,
@@ -58,17 +104,20 @@ namespace DeviceUtils
 
 		return rootSignature;
 	}
-
+	*/
+	/*
 	CComPtr<ID3D12RootSignature> CreateComputeShaderRootSignature(std::string name)
 	{
 		return CComPtr<ID3D12RootSignature>();
 	}
-
+	*/
+	/*
 	const ShaderConstantsBufferParameter& FindRegisterByName(ShaderConstantsBufferParametersMap& paramsVS, ShaderConstantsBufferParametersMap& paramsPS, std::string name) {
 		if (paramsVS.find(name) != paramsVS.end()) return paramsVS.at(name);
 		return paramsPS.at(name);
 	}
-
+	*/
+	/*
 	std::map<INT, CD3DX12_DESCRIPTOR_RANGE> GetRootSignatureRanges(
 		ShaderConstantsBufferParametersMap& cbufferVSParamsDef,
 		ShaderConstantsBufferParametersMap& cbufferPSParamsDef,
@@ -114,7 +163,8 @@ namespace DeviceUtils
 
 		return ranges;
 	}
-
+	*/
+	/*
 	std::vector<D3D12_STATIC_SAMPLER_DESC> GetRootSignatureSamplerDesc(ShaderSamplerParametersMap& samplersDef, std::vector<MaterialSamplerDesc>& matSamplers)
 	{
 		std::vector<D3D12_STATIC_SAMPLER_DESC> samplers;
@@ -132,4 +182,5 @@ namespace DeviceUtils
 
 		return samplers;
 	}
+	*/
 };

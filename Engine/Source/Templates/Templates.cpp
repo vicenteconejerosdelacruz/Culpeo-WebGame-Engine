@@ -5,6 +5,8 @@
 #include <Mesh/Mesh.h>
 #include <Utils/FileSystem.h>
 
+extern std::atomic<bool> g_EngineReady;
+
 namespace Templates {
 
     const std::string systemShadersYaml = R"(
@@ -70,7 +72,7 @@ namespace Templates {
   type: PIXEL_SHADER
   uuid: 719c0122-1e9f-46e3-90aa-8f1e5e81c098
 - name: Grid_vs
-  path: Grid.hlsl
+  path: Grid.wgsl
   systemCreated: true
   type: VERTEX_SHADER
   uuid: 5af4ba59-a09c-41ef-bc1f-13a51fc68439
@@ -82,7 +84,7 @@ namespace Templates {
     - value: 1024.0
       variable: specularExponent
       variableType: FLOAT
-  path: Grid.hlsl
+  path: Grid.wgsl
   systemCreated: true
   type: PIXEL_SHADER
   uuid: 5929c8f6-e9b7-4680-8447-a430b5accdbf
@@ -1146,6 +1148,8 @@ namespace Templates {
   {
       // Lanzamos un hilo en segundo plano usando std::thread (se convierte en un Web Worker)
       std::thread([]() {
+        try {
+          // std::cout << "[Templates] Iniciando carga de templates..." << std::endl;
           LoadTemplates(defaultTemplatesFolder, Shader::templateName, CreateShader);
           LoadTemplates(defaultTemplatesFolder, Material::templateName, CreateMaterial);
           // LoadTemplates(defaultTemplatesFolder, Model3D::templateName, CreateModel3D);
@@ -1156,8 +1160,13 @@ namespace Templates {
           LoadTemplates(defaultTemplatesFolder, HtmlUI::templateName, CreateHtmlUI);
           LoadTemplates(defaultTemplatesFolder, Mold::templateName, CreateMold);
           
-          // Opcional: un log o bandera cuando termine todo
-          // printf("[Templates] ¡Todas las plantillas cargadas con éxito!\n");
+          g_EngineReady.store(true, std::memory_order_release);
+          std::cout << "[Templates] carga completa..." << std::endl;
+        } catch (const std::exception& e) {
+          std::cerr << "[CRITICAL] Excepción en hilo de templates: " << e.what() << std::endl;
+        } catch (...) {
+          std::cerr << "[CRITICAL] Excepción desconocida en hilo de templates." << std::endl;
+        }
       }).detach(); // .detach() permite que el hilo corra libremente en background
   }
 
@@ -1187,7 +1196,7 @@ namespace Templates {
 		const std::string finalFilename = folder + fileName;
 		std::filesystem::path path(finalFilename);
 		std::string pathStr = path.generic_string();
-    AssetStream assetStream(pathStr, pathStr);
+    AssetStream assetStream(pathStr);
 
     auto& file = assetStream.get();
 		YAML::Node templates_yaml = YAML::Load(file);

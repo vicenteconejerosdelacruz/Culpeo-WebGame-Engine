@@ -1,4 +1,4 @@
-#include <SceneUnit.h>
+#include "SceneUnit.h"
 #include <Renderer.h>
 #include <Scene.h>
 // #include <Renderable/Renderable.h>
@@ -33,7 +33,7 @@ namespace Scene
 // 		beingDestroyed = false;
 // 		deleteCallback = nullptr;
 		isolated = false;
-// 		binder.unit = unit;
+		binder.unit = unit;
 // #if defined(_EDITOR)
 // 		canBuildAssetsTree = std::make_unique<std::atomic_uint>(0U);
 // #else
@@ -136,36 +136,37 @@ namespace Scene
 // 		computeProcessor = std::make_unique<CommandsProcessor>(d3dDevice, capacity, id);
 // 	}
 
-// 	void SceneUnit::Bind(JUUID uuidA, JUUID uuidB)
-// 	{
-// 		binder.insert(uuidA, uuidB);
-// 	}
+	void SceneUnit::Bind(JUUID uuidA, JUUID uuidB)
+	{
+		binder.insert(uuidA, uuidB);
+	}
 
-// 	void SceneUnit::Unbind(JUUID uuid)
-// 	{
-// 		binder.erase(uuid);
-// 	}
+	void SceneUnit::Unbind(JUUID uuid)
+	{
+		binder.erase(uuid);
+	}
 
-// 	void SceneUnit::Unbind(JUUID uuidA, JUUID uuidB)
-// 	{
-// 		binder.erase(uuidA, uuidB);
-// 	}
+	void SceneUnit::Unbind(JUUID uuidA, JUUID uuidB)
+	{
+		binder.erase(uuidA, uuidB);
+	}
 
-// 	bool SceneUnit::IsBound(JUUID uuid)
-// 	{
-// 		return sceneObjectsTypes.contains(uuid) && !unboundedSceneObjects.contains(uuid);
-// 	}
+	bool SceneUnit::IsBound(JUUID uuid)
+	{
+		//return sceneObjectsTypes.contains(uuid) && !unboundedSceneObjects.contains(uuid);
+		return !unboundedSceneObjects.contains(uuid);
+	}
 
-// 	void SceneUnit::AddSceneObjectToUnboundPool(JUUID uuid)
-// 	{
-// 		unboundedSceneObjects.insert(uuid);
-// 	}
+	void SceneUnit::AddSceneObjectToUnboundPool(JUUID uuid)
+	{
+		unboundedSceneObjects.insert(uuid);
+	}
 
-// 	void SceneUnit::RemoveSceneObjectFromUnboundPool(JUUID uuid)
-// 	{
-// 		if (unboundedSceneObjects.contains(uuid))
-// 			unboundedSceneObjects.insert(uuid);
-// 	}
+	void SceneUnit::RemoveSceneObjectFromUnboundPool(JUUID uuid)
+	{
+		if (unboundedSceneObjects.contains(uuid))
+			unboundedSceneObjects.insert(uuid);
+	}
 
 // 	//F2F
 // 	CComPtr<ID3D12GraphicsCommandList2>& SceneUnit::GetCommandList()

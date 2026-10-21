@@ -11,7 +11,7 @@ extern "C" {
 
 class AssetStream {
 public:
-    explicit AssetStream(const std::string& virtualPath, const std::string& url = "");
+    explicit AssetStream(const std::string& virtualPath);
     ~AssetStream() = default;
 
     AssetStream(const AssetStream&) = delete;

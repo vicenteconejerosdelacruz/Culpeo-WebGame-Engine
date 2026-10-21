@@ -13,11 +13,13 @@ if(CULPEO_CONFIG STREQUAL "Editor_Debug" OR CULPEO_CONFIG STREQUAL "Debug")
     set(LIB_SUBDIR_PHYSX "Release")
     set(SDK_BUILD_DIR_STANDARD "${CMAKE_SOURCE_DIR}/build_Debug")
     set(SDK_BUILD_DIR_PHYSX    "${CMAKE_SOURCE_DIR}/build_Release")
+    set(SDK_BUILD_DIR_YAMLCPP  "${CMAKE_SOURCE_DIR}/build_Release")
 else()
     set(LIB_SUBDIR_STANDARD "Release")
     set(LIB_SUBDIR_PHYSX "Release")
     set(SDK_BUILD_DIR_STANDARD "${CMAKE_SOURCE_DIR}/build_Release")
     set(SDK_BUILD_DIR_PHYSX    "${CMAKE_SOURCE_DIR}/build_Release")
+    set(SDK_BUILD_DIR_YAMLCPP  "${CMAKE_SOURCE_DIR}/build_Release")
 endif()
 
 # 1. Define el ejecutable de tu motor
@@ -51,6 +53,8 @@ add_executable(CulpeoEngine
     "Source/Primitives/UtahTeapot.cpp"
     "Source/Renderer/DeviceUtils/WebGpuDevice/Builder.h"
     "Source/Renderer/DeviceUtils/WebGpuDevice/Builder.cpp"
+    "Source/Renderer/DeviceUtils/BindGroup/BindGroup.h"
+    "Source/Renderer/DeviceUtils/BindGroup/BindGroup.cpp"
     "Source/Renderer/DeviceUtils/IndexBuffer/IndexBuffer.h"
     "Source/Renderer/DeviceUtils/IndexBuffer/IndexBuffer.cpp"
     "Source/Renderer/DeviceUtils/RenderPass/RenderToTexturePass.h"
@@ -65,6 +69,10 @@ add_executable(CulpeoEngine
     "Source/Renderer/Renderer.cpp"
     "Source/Renderer/VertexFormats.h"
     "Source/Renderer/VertexFormats.cpp"
+    "Source/Shaders/Compiler/ShaderCompiler.h"
+    "Source/Shaders/Compiler/ShaderCompiler.cpp"
+    "Source/Scene/Binder.h"
+    "Source/Scene/Binder.cpp"
     "Source/Scene/Level.h"
     "Source/Scene/Level.cpp"
     "Source/Scene/Scene.h"
@@ -143,6 +151,7 @@ target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/JExpose
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/JExpose/Primitives
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shaders/Compiler
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Renderable
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Camera
@@ -150,6 +159,7 @@ target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Primitives
     ${CMAKE_SOURCE_DIR}/SDKs/assimp/include
     ${CMAKE_SOURCE_DIR}/SDKs/yaml-cpp/include
+    ${CMAKE_SOURCE_DIR}/SDKs/tinyddsloader/include
     ${SDK_BUILD_DIR_STANDARD}/SDKs/assimp/include
     ${CMAKE_SOURCE_DIR}/SDKs/DirectXMath/Inc
 )
@@ -177,11 +187,13 @@ target_precompile_headers(CulpeoEngine PRIVATE
 # Determinar el nombre del archivo de assimp y yaml-cpp según si es Debug o Release
 if(LIB_SUBDIR_STANDARD STREQUAL "Debug")
     set(ASSIMP_LIB_NAME "libassimpd.a")
-    set(YAMLCPP_LIB_NAME "libyaml-cppd.a")
+#    set(YAMLCPP_LIB_NAME "libyaml-cppd.a")
 else()
     set(ASSIMP_LIB_NAME "libassimp.a")
-    set(YAMLCPP_LIB_NAME "libyaml-cpp.a")
+#    set(YAMLCPP_LIB_NAME "libyaml-cpp.a")
 endif()
+#yaml en release, es lentisimo en debug
+set(YAMLCPP_LIB_NAME "libyaml-cpp.a")
 
 # Definir la subcarpeta de PhysX según sea release o debug interno
 if(LIB_SUBDIR_PHYSX STREQUAL "Debug")
@@ -199,7 +211,8 @@ if(EMSCRIPTEN)
 
         # Assimp, yaml-cpp y json (Usan el directorio estándar según Debug/Release)
         "${SDK_BUILD_DIR_STANDARD}/lib/${LIB_SUBDIR_STANDARD}/${ASSIMP_LIB_NAME}"
-        "${SDK_BUILD_DIR_STANDARD}/lib/${LIB_SUBDIR_STANDARD}/${YAMLCPP_LIB_NAME}"
+        #"${SDK_BUILD_DIR_STANDARD}/lib/${LIB_SUBDIR_STANDARD}/${YAMLCPP_LIB_NAME}"
+        "${SDK_BUILD_DIR_YAMLCPP}/lib/Release/${YAMLCPP_LIB_NAME}"
         nlohmann_json::nlohmann_json
 
         # PhysX (Con rutas profundas UNKNOWN, subcarpeta dinámica y sufijo _static)

@@ -130,9 +130,11 @@ namespace Templates
 
 		//the bytecode(vector of bytes)
 		ShaderByteCode byteCode;
+		wgpu::ShaderModule shaderModule;
 
 		ShaderInstance(JUUID uuid) { assert(!!!"do not use"); }
 		explicit ShaderInstance(
+			SceneUnitId id,
 			JUUID instance_uuid,
 			JUUID uuid, Source params,
 			JUUID objectUUID = ""

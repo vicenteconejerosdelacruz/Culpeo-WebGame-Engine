@@ -1,7 +1,7 @@
 #include "Material.h"
 #include <Renderer.h>
 #include "Variables.h"
-// #include <ShaderCompiler.h>
+#include <ShaderCompiler.h>
 // #if defined(_EDITOR)
 // #include <Builder/ReleaseBuilder.h>
 // #endif
@@ -259,6 +259,7 @@ namespace Templates
 		auto matTextures = material->textures();
 		std::transform(matTextures.begin(), matTextures.end(), std::inserter(textures, textures.end()), [&](auto& pair)
 			{
+				std::cout << "creating texture instance " << pair.second << std::endl;
 				CreateTextureInstance(pair.second, [&]
 					{
 						return std::make_unique<TextureInstance>(id, pair.second);
@@ -269,6 +270,7 @@ namespace Templates
 		);
 		std::transform(overrideTextures.begin(), overrideTextures.end(), std::inserter(textures, textures.end()), [&](auto& pair)
 			{
+				std::cout << "creating ov-texture instance " << pair.second << std::endl;
 				CreateTextureInstance(pair.second, [&]
 					{
 						return std::make_unique<TextureInstance>(id, pair.second);
@@ -286,7 +288,7 @@ namespace Templates
 		shadowed = isShadowed;
 		ibl = hasIBL;
 		CreateMaterialShaderDefines();
-		CreateShaderInstances();
+		CreateShaderInstances(id);
 		LoadVariablesMapping();
 	}
 
@@ -337,26 +339,24 @@ namespace Templates
 		}
 	}
 
-	void MaterialInstance::CreateShaderInstances()
+	void MaterialInstance::CreateShaderInstances(SceneUnitId id)
 	{
-		/*
 		using namespace ShaderCompiler;
 		Source compVS = { .shaderType = VERTEX_SHADER, .shaderTarget = shaderTarget.at(VERTEX_SHADER),.shaderTemplate = vertexShaderUUID, .defines = defines };
 		Source compPS = { .shaderType = PIXEL_SHADER, .shaderTarget = shaderTarget.at(PIXEL_SHADER), .shaderTemplate = pixelShaderUUID, .defines = defines };
 		vertexShaderInstanceID = vertexShaderUUID() + std::to_string(std::hash<Source>()(compVS));
 		pixelShaderInstanceID = pixelShaderUUID() + std::to_string(std::hash<Source>()(compPS));
 
-		CreateShaderInstance(vertexShaderInstanceID(), [this, compVS]
+		CreateShaderInstance(vertexShaderInstanceID(), [this, compVS, id]
 			{
-				return std::make_unique<ShaderInstance>(vertexShaderInstanceID(), compVS.shaderTemplate(), compVS, instanceUUID());
+				return std::make_unique<ShaderInstance>(id, vertexShaderInstanceID(), compVS.shaderTemplate(), compVS, instanceUUID());
 			}
 		);
-		CreateShaderInstance(pixelShaderInstanceID(), [this, compPS]
+		CreateShaderInstance(pixelShaderInstanceID(), [this, compPS, id]
 			{
-				return std::make_unique<ShaderInstance>(pixelShaderInstanceID(), compPS.shaderTemplate(), compPS, instanceUUID());
+				return std::make_unique<ShaderInstance>(id, pixelShaderInstanceID(), compPS.shaderTemplate(), compPS, instanceUUID());
 			}
 		);
-		*/
 	}
 
 	void MaterialInstance::Destroy()
@@ -547,8 +547,8 @@ namespace Templates
 		if (!textures.at(usage).empty())
 			DeleteTextureInstance(textures.at(usage));
 		textures.at(usage) = texture();
-		CreateMaterialShaderDefines();
-		CreateShaderInstances();
+		// CreateMaterialShaderDefines();
+		// CreateShaderInstances();
 	}
 
 	void DestroyMaterialInstance(JUUID materialInstance)

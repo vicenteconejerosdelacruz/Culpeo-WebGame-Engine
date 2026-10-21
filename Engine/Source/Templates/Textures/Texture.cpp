@@ -630,11 +630,13 @@ namespace Templates
 		// 	tex->JUpdate(update);
 		// }
 #endif
-		// std::string pathS = path.string();
+		std::string pathS = path.string();
+		std::cout << "creating texture " << pathS << std::endl;
 		// auto loading = CreateLoadingProcessor();
 		// auto& cmd = loading.cmd;
 		// auto& commandList = cmd.GetCommandList();
 		// CreateTextureResource(commandList, pathS, tex->format(), tex->type(), tex->numFrames(), tex->mipLevels(), startFrame);
+		CreateTextureResource(id, pathS, tex->format(), tex->type(), tex->numFrames(), tex->mipLevels(), startFrame);
 		// cmd.RunPreDeletion([&]
 		// 	{
 		// 		upload = nullptr;
@@ -642,6 +644,10 @@ namespace Templates
 		// );
 	}
 
+	void TextureInstance::CreateTextureResource(SceneUnitId id, std::string& path, wgpu::TextureFormat format, TextureType type, unsigned int numFrames, unsigned int nMipMaps, unsigned int startFrame)
+	{
+		std::cout << path << std::endl;
+	}
 	/*
 	void TextureInstance::CreateTextureResource(CComPtr<ID3D12GraphicsCommandList2>& commandList, std::string& path, DXGI_FORMAT format, TextureType type, unsigned int numFrames, unsigned int nMipMaps, unsigned int firstArraySlice)
 	{

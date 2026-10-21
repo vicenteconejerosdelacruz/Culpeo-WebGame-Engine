@@ -1,6 +1,6 @@
 #include "Renderable.h"
 #include <SceneObject.h>
-// #include <Scene.h>
+#include <Scene.h>
 #include <Renderer.h>
 // #include <DeviceUtils/RootSignature/RootSignature.h>
 // #include <DeviceUtils/PipelineState/PipelineState.h>
@@ -183,7 +183,6 @@ namespace Scene
 	}
 	*/
 
-	/*
 	void Renderable::BindToScene()
 	{
 #include <TrackUUID/JInsert.h>
@@ -192,8 +191,8 @@ namespace Scene
 
 		BindCameras();
 		BindShadowMapCameras();
-		lifecycleState->store(true);
-		lifecycleState->notify_all();
+		// lifecycleState->store(true);
+		// lifecycleState->notify_all();
 	}
 
 	void Renderable::Bind(JUUID uuid)
@@ -201,6 +200,7 @@ namespace Scene
 		if (uuid.empty())
 			return;
 
+		/*
 		switch (GetSceneObjectType(unit, uuid))
 		{
 		case SO_Cameras:
@@ -209,8 +209,8 @@ namespace Scene
 		}
 		break;
 		}
+		*/
 	}
-	*/
 
 	void Renderable::BindToCamera(JUUID camId)
 	{
@@ -218,31 +218,29 @@ namespace Scene
 		cam->BindRenderable(uuid());
 	}
 
-	/*
 	void Renderable::BindCameras()
 	{
 		auto cams = cameras();
-		for (auto& uuid : cams)
+		for (auto& suuid : cams)
 		{
-			if (bindedCameras.contains(MAKESUUUID(unit, uuid)))
+			SceneObjectID cam(unit,suuid);
+			JUUID uuid = cam->controllers_get("camera");
+			if (uuid.empty() || bindedCameras.contains(uuid))
 				continue;
 			BindCamera(uuid);
 		}
 	}
-*/
 
-/*
 	void Renderable::BindCamera(JUUID cuuid)
 	{
 		Scene::BindToScene(unit, uuid(), cuuid);
 	}
-*/
 
-/*
 	void Renderable::BindShadowMapCameras()
 	{
 		if (!castShadows()) return;
 
+		/*
 		auto lights = GetShadowMapLights(unit);
 		for (auto uuid : lights)
 		{
@@ -252,13 +250,12 @@ namespace Scene
 				BindCamera(cam.uuid());
 			}
 		}
+		*/
 	}
-*/
 
-/*
 	void Renderable::UnbindFromScene()
 	{
-		using namespace ComputeShader;
+		// using namespace ComputeShader;
 
 #include <TrackUUID/JErase.h>
 #include "RenderableAtt.h"
@@ -266,53 +263,50 @@ namespace Scene
 
 		UnbindCameras();
 		Scene::UnbindFromScene(unit, uuid());
-		//if (!boundingBoxCompute.empty())
-		//{
-		//	DeleteRenderableBoundingBox(boundingBoxCompute());
-		//	boundingBoxCompute.clear();
-		//}
-		if (animationPlayers.contains(MAKESUUUID(unit, uuid())))
-		{
-			animationPlayers.erase(MAKESUUUID(unit, uuid()));
-		}
+		// //if (!boundingBoxCompute.empty())
+		// //{
+		// //	DeleteRenderableBoundingBox(boundingBoxCompute());
+		// //	boundingBoxCompute.clear();
+		// //}
+		// if (animationPlayers.contains(MAKESUUUID(unit, uuid())))
+		// {
+		// 	animationPlayers.erase(MAKESUUUID(unit, uuid()));
+		// }
 	}
-*/
-/*
+
 	void Renderable::Unbind(JUUID uuid)
 	{
-		bindedCameras.erase(MAKESUUUID(unit, uuid));
+		bindedCameras.erase(uuid);
 	}
-*/
-/*
+
 	void Renderable::UnbindCameras()
 	{
 		auto cams = cameras();
 		for (auto& uuid : cams)
 		{
-			if (!bindedCameras.contains(MAKESUUUID(unit, uuid)))
+			if (!bindedCameras.contains(uuid))
 				continue;
 			UnbindCamera(uuid);
 		}
 
-		if (castShadows())
-		{
-			auto smlights = GetShadowMapLights(unit);
-			for (auto& uuid : smlights)
-			{
-				LightID l = MAKESUUUID(unit, uuid);
-				l->UnbindRenderableFromShadowMapCamera(SUuuid());
-			}
-		}
+		// if (castShadows())
+		// {
+		// 	auto smlights = GetShadowMapLights(unit);
+		// 	for (auto& uuid : smlights)
+		// 	{
+		// 		LightID l = MAKESUUUID(unit, uuid);
+		// 		l->UnbindRenderableFromShadowMapCamera(SUuuid());
+		// 	}
+		// }
 	}
-*/
-/*
+
 	void Renderable::UnbindCamera(JUUID cuuid)
 	{
-		CameraID cam = MAKESUUUID(unit, cuuid);
-		cam->UnbindRenderable(SUuuid());
+		CameraID cam(cuuid);
+		cam->UnbindRenderable(uuid());
 		Scene::UnbindFromScene(unit, uuid(), cuuid);
 	}
-*/
+
 /*
 #if defined(_EDITOR)
 	void Renderable::DropJsonMoldAttributes(nlohmann::json& j)
@@ -733,23 +727,23 @@ namespace Scene
 		}
 		uniformBuffers.erase(pass);
 	}
-/*
-	void Renderable::CreateRootSignatures(CameraID cam)
+
+	void Renderable::CreateBindGroups(CameraID cam)
 	{
 		for (auto& rp : GetCameraRenderPasses(cam))
 		{
-			if (rootSignatures.contains(rp)) rootSignatures.erase(rp);
-			CreateRenderPassRootSignatures(rp);
+			//if (rootSignatures.contains(rp)) rootSignatures.erase(rp);
+			//CreateRenderPassRootSignatures(rp);
 		}
 	}
-*/
-/*
-	void Renderable::CreateRenderPassRootSignatures(RenderPassInstanceID rp)
+
+	void Renderable::CreateRenderPassBindGroups(RenderPassInstanceID rp)
 	{
 		for (unsigned int i = 0; i < meshes.size(); i++)
 		{
 			auto& mi = materials[rp].at(i);
-
+			
+			/*
 			auto& vsCBparams = mi->vertexShaderInstanceID->constantsBuffersParameters;
 			auto& psCBparams = mi->pixelShaderInstanceID->constantsBuffersParameters;
 			auto& uavParams = mi->pixelShaderInstanceID->uavParameters;
@@ -762,26 +756,30 @@ namespace Scene
 			rootSignatures[rp].push_back(
 				CreateRootSignature(rsName, vsCBparams, psCBparams, uavParams, psSRVCSparams, psSRVTexparams, psSamplersParams, samplers)
 			);
+			*/
 		}
 	}
-*/
-/*
-	void Renderable::DestroyRootSignatures(CameraID cam)
+
+	void Renderable::DestroyBindGroups(CameraID cam)
 	{
+		/*
 		if (cam.empty()) return;
 		for (auto& rp : GetCameraRenderPasses(cam))
 		{
 			DestroyRenderPassRootSignatures(rp);
 		}
+		*/
 	}
-*/
-/*
-	void Renderable::DestroyRenderPassRootSignatures(RenderPassInstanceID rp)
+
+
+	void Renderable::DestroyRenderPassBindGroups(RenderPassInstanceID rp)
 	{
+		/*
 		if (rootSignatures.contains(rp))
 			rootSignatures.erase(rp);
+		*/
 	}
-*/
+
 /*
 	void Renderable::CreatePipelineStates(CameraID cam)
 	{
