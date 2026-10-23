@@ -24,6 +24,7 @@ namespace Templates
 };
 
 using namespace Templates;
+using namespace DeviceUtils;
 
 inline MaterialInitialValuePair ToMaterialInitialValuePair(nlohmann::json j)
 {
@@ -51,6 +52,18 @@ inline nlohmann::json FromTextureShaderUsagePair(TextureShaderUsagePair m)
 	j[TextureShaderUsageToString.at(m.first)] = m.second;
 	return j;
 }
+
+struct MaterialAttributes
+{
+	XMFLOAT3 baseColor;
+    float alphaCut;
+    XMFLOAT3 colorKey;
+    float specularExponent;
+    float metallicFactor;
+    float roughnessFactor;
+    unsigned int frameIndex;
+    float luminanceCutOff;
+};
 
 namespace Templates
 {
@@ -177,6 +190,7 @@ namespace Templates
 		// void SetSRVRootDescriptorTable(CComPtr<ID3D12GraphicsCommandList2>& commandList, unsigned int& slot);
 		void UpdateTexture(TextureShaderUsage usage, TextureJsonID texture);
 		const MaterialVariablesMapping& GetVariablesMapping() const { return variablesMapping; }
+		UniformBufferID CreateUniformBuffers(SceneUnitId id, std::string ubName);
 	};
 
 	void DestroyMaterialInstance(JUUID materialInstance);

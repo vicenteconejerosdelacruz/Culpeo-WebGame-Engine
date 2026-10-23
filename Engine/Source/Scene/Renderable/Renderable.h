@@ -13,13 +13,15 @@
 // #include <Sequence/AnimationSequences.h>
 // #include <Sequence/SequencePlayer.h>
 #include <DeviceUtils/UniformBuffer/UniformBuffer.h>
+#include <DeviceUtils/BindGroup/BindGroup.h>
 //#include <Renderable/RenderableBoundingBox.h>
 // #include <PhysicObject.h>
 // #include <NoV8.h>
 
 using RenderableMeshes = std::vector<MeshInstanceID>;
 using RenderableMaterials = std::unordered_map<RenderPassInstanceID, std::vector<MaterialInstanceID>>; //RenderPassInstanceID -> MaterialInstanceID
-using RenderableUniformBuffer = std::unordered_map<RenderPassInstanceID, std::vector<std::vector<UniformBufferID>>>; //RenderPassUUID -> vector:vector:UniformBufferID
+using RenderableUniformBuffer = std::unordered_map<RenderPassInstanceID, std::vector<std::map<std::string, UniformBufferID>>>; //RenderPassUUID -> vector[meshIdx]:map<cbName,UniformBufferID>
+using RenderableBindGroup =  std::unordered_map<RenderPassInstanceID, std::vector<BindGroupID>>; //RenderPassUUID -> vector:BindGroupID
 // using RenderableRootSignatures = std::unordered_map<RenderPassInstanceID, std::vector<CComPtr<ID3D12RootSignature>>>; //RenderPassUUID -> vector:RootSignature
 // using RenderablePipelineStates = std::unordered_map<RenderPassInstanceID, std::vector<CComPtr<ID3D12PipelineState>>>; //RenderPassUUID -> vector:PipelineState
 // using DescriptorTableSetter = std::function<void(CComPtr<ID3D12GraphicsCommandList2>& commandList, unsigned int backBufferIndex, unsigned int& slot)>;
@@ -211,12 +213,13 @@ namespace Scene
 		//Meshes
 		RenderableMeshes meshes;
 		RenderableMaterials materials;
+		UniformBufferID worldUniformBuffer;
 		RenderableUniformBuffer uniformBuffers;
 		// std::unique_ptr<std::atomic_bool> constantsBuffersLock[JRenderer::numFrames];
-		// std::unordered_map<std::string, std::vector<ConstantsBufferWritter>> constantsWriter;
+		std::unordered_map<std::string, std::vector<UniformBufferBufferWritter>> uniformsWriter;
 		// std::unordered_map<std::string, std::vector<ConstantsBufferReader>> constantsReader;
 		// DescriptorTableRender descriptorsRenders;
-		// RenderableRootSignatures rootSignatures;
+		RenderableBindGroup bindGroups;
 		// RenderablePipelineStates pipelineStates;
 		//Animations
 		// float lastAnimationTime;

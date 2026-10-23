@@ -82,7 +82,7 @@ struct std::hash<Source>
 };
 
 //define the byte code
-typedef std::vector<unsigned char> ShaderByteCode;
+typedef std::string ShaderByteCode;
 
 //define the Constants Buffer binding
 struct ShaderConstantsBufferParameter {

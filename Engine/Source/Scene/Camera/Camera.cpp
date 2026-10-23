@@ -7,6 +7,7 @@
 #include <Renderer.h>
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 // #include <NoMath.h>
+#include <SimpleMath.h>
 #if defined(_EDITOR)
 // #include <Builder/ReleaseBuilder.h>
 #endif
@@ -546,7 +547,7 @@ namespace Scene
 
 		renderable->CreateMaterialsInstances(uuid());
 		renderable->CreateUniformBuffersInstances(uuid());
-		renderable->CreateBindGroups(uuid());
+		// renderable->CreateBindGroups(uuid());
 		// renderable->CreatePipelineStates(uuid());
 		// renderable->CreateRenderMethods(uuid());
 	}
@@ -861,7 +862,7 @@ namespace Scene
 
 	void Camera::CreateUniformsBuffer()
 	{
-		cameraUb = DeviceUtils::CreateUniformBuffer(unit, sizeof(CameraAttributes), name());
+		cameraUb = DeviceUtils::CreateUniformBuffer(unit, sizeof(CameraAttributes), true, 0, name());
 	}
 
 	void Camera::WriteUniformsBuffer(unsigned int frame)
@@ -893,35 +894,29 @@ namespace Scene
 		cameraUb->push(atts, frame);
 	}
 
-/*
 	void Camera::MoveAlongFwAxis(float dz)
 	{
-		XMVECTOR newPos = positionV() + forward() * dz;
-		position(*(XMFLOAT3*)newPos.m128_f32);
-		UpdateLightPosition();
+		XMVECTOR newPos = sceneObject->positionV() + forward() * dz;
+		sceneObject->position(*(XMFLOAT3*)newPos.vector4_f32);
+		// UpdateLightPosition();
 	}
-*/
 
-/*
 	void Camera::MovePerpendicularFwAxis(float dx, float dy)
 	{
-		XMVECTOR newPos = positionV() + up() * dy + right() * dx;
-		position(*(XMFLOAT3*)newPos.m128_f32);
+		XMVECTOR newPos = sceneObject->positionV() + up() * dy + right() * dx;
+		sceneObject->position(*(XMFLOAT3*)newPos.vector4_f32);
 	}
-*/
 
-/*
 	void Camera::Rotate(float dx, float dy)
 	{
 		XMVECTOR upV = { 0.0f,1.0f,0.0f,0.0f }; // we just use the up vector in order to avoid roll rotations
 		XMVECTOR rightV = -right();
 		XMVECTOR rotQYaw = XMQuaternionRotationAxis(upV, XMConvertToRadians(dx));
 		XMVECTOR rotQPitch = XMQuaternionRotationAxis(rightV, XMConvertToRadians(dy));
-		rotationQuaternion = XMQuaternionMultiply(rotationQuaternion, XMQuaternionMultiply(rotQPitch, rotQYaw));
+		sceneObject->rotationQ(XMQuaternionMultiply(sceneObject->rotationQ(), XMQuaternionMultiply(rotQPitch, rotQYaw)));
 
-		UpdateLightRotation();
+		// UpdateLightRotation();
 	}
-*/
 
 /*
 	void Camera::UpdateLightPosition()
@@ -981,41 +976,33 @@ namespace Scene
 	}
 */
 
-/*
 	void Camera::MoveForward(float step)
 	{
-		XMVECTOR newPos = XMVectorAdd(positionV(), forward() * step);
-		position(*(XMFLOAT3*)newPos.m128_f32);
-		UpdateLightPosition();
+		XMVECTOR newPos = XMVectorAdd(sceneObject->positionV(), forward() * step);
+		sceneObject->position(*(XMFLOAT3*)newPos.vector4_f32);
+		// UpdateLightPosition();
 	}
-*/
 
-/*
 	void Camera::MoveBack(float step)
 	{
-		XMVECTOR newPos = XMVectorAdd(positionV(), forward() * -step);
-		position(*(XMFLOAT3*)newPos.m128_f32);
-		UpdateLightPosition();
+		XMVECTOR newPos = XMVectorAdd(sceneObject->positionV(), forward() * -step);
+		sceneObject->position(*(XMFLOAT3*)newPos.vector4_f32);
+		// UpdateLightPosition();
 	}
-*/
 
-/*
 	void Camera::MoveLeft(float step)
 	{
-		XMVECTOR newPos = XMVectorAdd(positionV(), XMVector3Cross(forward(), up()) * -step);
-		position(*(XMFLOAT3*)newPos.m128_f32);
-		UpdateLightPosition();
+		XMVECTOR newPos = XMVectorAdd(sceneObject->positionV(), XMVector3Cross(forward(), up()) * -step);
+		sceneObject->position(*(XMFLOAT3*)newPos.vector4_f32);
+		// UpdateLightPosition();
 	}
-*/
 
-/*
 	void Camera::MoveRight(float step)
 	{
-		XMVECTOR newPos = XMVectorAdd(positionV(), XMVector3Cross(forward(), up()) * step);
-		position(*(XMFLOAT3*)newPos.m128_f32);
-		UpdateLightPosition();
+		XMVECTOR newPos = XMVectorAdd(sceneObject->positionV(), XMVector3Cross(forward(), up()) * step);
+		sceneObject->position(*(XMFLOAT3*)newPos.vector4_f32);
+		// UpdateLightPosition();
 	}
-*/
 
 /*
 	//Lights

@@ -1,47 +1,28 @@
-// ==========================================
-// ESTRUCTURAS DE DATOS Y UNIFORMS
-// ==========================================
-
-struct Camera {
-    viewProjection: mat4x4<f32>,
-    view: mat4x4<f32>,
-    eyePosition: vec4<f32>,
-};
-
-struct Model {
-    world: mat4x4<f32>,
-};
-
-struct Material {
-    baseColor: vec4<f32>,
-    specularExponent: f32,
-};
-
-//// Estructura de luces (Ajustar según tu archivo SceneLighting.h)
-//struct Lights {
-//    // Definición de tus luces
-//};
-//
-//struct ShadowMaps {
-//    // Definición de tus matrices/datos de sombras
-//};
+#include "Utils/Gamma.h"
+#include "UBVars/Camera.h"
+#include "UBVars/Model.h"
+#include "UBVars/Material.h"
+#include "UBVars/Lights.h"
+#include "UBVars/ShadowMaps.h"
 
 // ------------------------------------------
 // GRUPO 0: Frecuencia por FRAME (Globales)
 // ------------------------------------------
 @group(0) @binding(0) var<uniform> camera: Camera;
-//@group(0) @binding(1) var<uniform> lights: Lights;
-
-// (Condicional inyectado por tu preprocesador de C++ si _HAS_SHADOWMAPS_TEXTURES está activo)
-//#if defined(_HAS_SHADOWMAPS_TEXTURES)
-//@group(0) @binding(2) var<uniform> shadowMaps: ShadowMaps;
-//#endif
+@group(0) @binding(1) var<uniform> lights: Lights;
+#ifdef _HAS_SHADOWMAPS_TEXTURES
+@group(0) @binding(2) var<uniform> shadowMaps: ShadowMaps;
+#endif
 
 // ------------------------------------------
-// GRUPO 1: Frecuencia por MATERIAL / OBJETO (Renderable)
+// GRUPO 1: Per Model
 // ------------------------------------------
-@group(1) @binding(0) var<uniform> modelUniform: Model;
-@group(1) @binding(1) var<uniform> materialUniform: Material;
+@group(1) @binding(0) var<uniform> model: Model;
+
+// ------------------------------------------
+// GRUPO 2: Per Material
+// ------------------------------------------
+@group(2) @binding(0) var<uniform> material: Material;
 
 // ------------------------------------------
 // GRUPO 2: Texturas y Samplers (Ej. Shadowmaps)
@@ -76,7 +57,7 @@ struct PixelShaderInput {
 fn main_vs(input: VertexShaderInput) -> PixelShaderInput {
     var output: PixelShaderInput;
 
-    let worldMat = modelUniform.world;
+    let worldMat = model.world;
     let pos4 = vec4<f32>(input.pos, 1.0f);
 
     // Multiplicación de matrices (en WGSL se respeta el orden matemáticamente correcto)
@@ -122,12 +103,6 @@ fn getGridColor(input: PixelShaderInput) -> vec3<f32> {
     return gridColor;
 }
 
-fn toGammaSpace(color: vec3<f32>) -> vec3<f32> {
-    // Equivalente a tu Gamma.h
-    return pow(color, vec3<f32>(1.0f / 2.2f));
-}
-
-
 // ==========================================
 // FRAGMENT SHADER
 // ==========================================
@@ -149,7 +124,7 @@ fn main_ps(input: PixelShaderInput) -> @location(0) vec4<f32> {
     // Llamada a la función de iluminación (equivalente a SceneLighting.h traducido a WGSL)
     /*
     SceneLighting(
-        worldPos, normal, materialUniform.specularExponent,
+        worldPos, normal, material.specularExponent,
         viewDir,
         lights,
         #if defined(_HAS_SHADOWMAPS_TEXTURES)
@@ -162,7 +137,7 @@ fn main_ps(input: PixelShaderInput) -> @location(0) vec4<f32> {
     );
     */
 
-    let baseColor = materialUniform.baseColor.rgb;
+    let baseColor = material.baseColor.rgb;
     var outputColor = baseColor * getGridColor(input) * diffuseFinalLightContribution;
     outputColor += specularFinalLightContribution;
     

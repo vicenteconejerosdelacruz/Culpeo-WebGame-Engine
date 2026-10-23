@@ -11,7 +11,11 @@
 #include <string>
 #include <Templates.h>
 #include <JTemplate.h>
+#include <ShaderCompiler.h>
 
+//<group, binding, buffer size, multi frame, num offsets>
+using ShaderResourceBinding = std::tuple<int,int, size_t, bool, unsigned int, std::string>;
+static inline const ShaderResourceBinding defaultBinding = std::tuple(-1,-1, 0ULL, false, 0U, "");
 namespace Templates
 {
 	inline static const std::string ShadowMapLightsShaderResourceViewName = TextureShaderUsageToString.at(TextureShaderUsage_ShadowMaps);
@@ -92,44 +96,37 @@ namespace Templates
 	{
 		JUUID instanceUUID;
 		JUUID shaderUUID;
-		//Source shaderSource;
+		Source shaderSource;
 
-		// //vertex shader semantics(POSITION,TEXCOORD0, etc)
-		// std::vector<std::string> vsSemantics;
-
-		// //CBV
-		// ShaderConstantsBufferParametersMap constantsBuffersParameters;
-		// ShaderConstantsBufferVariablesMap constantsBuffersVariables;
-		// //UAV
-		// ShaderUAVParametersMap uavParameters;
-		// //SRV CS
-		// ShaderSRVCSParametersMap srvCSParameters;
-		// //SRV Tex
-		// ShaderSRVTexParametersMap srvTexParameters;
-		// //Samplers
-		// ShaderSamplerParametersMap samplersParameters;
-
-		// std::vector<size_t> cbufferSize;
-
-		//Specific registers slots (c1,c2,c3,...) 
-		struct
-		{
-			int camera = -1;
-			int light = -1;
-			int animation = -1;
-			int lightsShadowMap = -1;
-		} CBV;
+		//vertex shader semantics(POSITION,TEXCOORD0, etc)
+		std::vector<std::string> vsSemantics;
 
 		struct
 		{
-			int lightsShadowMap = -1;
-			int iblIrradiance = -1;
-			int iblPrefiteredEnv = -1;
-			int iblBRDFLUT = -1;
-		} SRV;
+			ShaderResourceBinding camera = defaultBinding;
+			ShaderResourceBinding light = defaultBinding;
+			ShaderResourceBinding shadowMaps = defaultBinding;
+			ShaderResourceBinding model = defaultBinding;
+			ShaderResourceBinding material = defaultBinding;
+			ShaderResourceBinding animation = defaultBinding;
+		} UniformBufferBinding;
+
+		struct
+		{
+			ShaderResourceBinding lightsShadowMap = defaultBinding;
+			ShaderResourceBinding iblIrradiance = defaultBinding;
+			ShaderResourceBinding iblPrefiteredEnv = defaultBinding;
+			ShaderResourceBinding iblBRDFLUT = defaultBinding;
+		} TextureBinding;
+
+		struct
+		{
+			ShaderResourceBinding baseTextureSampler = defaultBinding;
+		} SamplerBinding;
 
 		//the bytecode(vector of bytes)
 		ShaderByteCode byteCode;
+		std::vector<ShaderResourceInfo> shaderInfo;
 		wgpu::ShaderModule shaderModule;
 
 		ShaderInstance(JUUID uuid) { assert(!!!"do not use"); }
@@ -140,10 +137,10 @@ namespace Templates
 			JUUID objectUUID = ""
 		);
 		~ShaderInstance() {}
-
-		// void CreateVSSemantics(const ComPtr<ID3D12ShaderReflection>& reflection, const D3D12_SHADER_DESC& desc);
-		// void CreateResourcesBinding(const ComPtr<ID3D12ShaderReflection>& reflection, const D3D12_SHADER_DESC& desc);
-		// void CreateConstantsBuffersVariables(const ComPtr<ID3D12ShaderReflection>& reflection, const D3D12_SHADER_DESC& desc);
-		// void CreateByteCode(const ComPtr<IDxcResult>& result);
+		
+		void CreateVSSemantics();
+		void CreateResourcesBinding();
+		void CreateShaderModule(SceneUnitId id);
+		std::unordered_map<std::string, ShaderResourceBinding> GetBindingMap();
 	};
 };

@@ -1,13 +1,36 @@
 #pragma once
 
 // #include "CustomIncludeHandler.h"
-#include <Shader/Shader.h>
+// #include <Shader/Shader.h>
 
-namespace Templates
-{
-	struct ShaderInstance;
+// namespace Templates
+// {
+// 	struct ShaderInstance;
+// };
+// using namespace Templates;
+
+struct ShaderResourceInfo {
+	uint32_t group;
+	uint32_t binding;
+	std::string variableName; // Ej: "camera", "modelUniform"
+	std::string typeName;     // Ej: "Camera", "Model", "texture_depth_2d_array"
+
+	void dump()
+	{
+		std::cout << variableName << ":" << typeName << " group(" << group << ") binding(" << binding << ")" << std::endl;
+	}
 };
-using namespace Templates;
+
+struct VertexAttributeInfo {
+    uint32_t location;
+    std::string name;
+
+	void dump()
+	{
+		std::cout << name << " Location:" << location << std::endl;
+	}
+};
+
 
 namespace ShaderCompiler {
 
@@ -33,6 +56,13 @@ namespace ShaderCompiler {
 	};
 
 	// void BuildShaderCompiler();
+	std::vector<ShaderResourceInfo> ParseWGSLBindings(const std::string& preprocessedWGSL);
+	std::string PreprocessWGSL(
+		const std::string& filename, 
+		std::unordered_set<std::string>& definedMacros,
+		const std::function<std::string(const std::string&)>& loadFileCallback,
+		std::unordered_set<std::string>& includedFiles);
+	std::vector<VertexAttributeInfo> ParseVertexInputAttributes(const std::string& preprocessedWGSL);
 	bool Compile(SceneUnitId id, ShaderInstanceID shaderInstance, Source params, ShaderIncludesDependencies& dependencies);
 	// void DestroyShaderCompiler();
 

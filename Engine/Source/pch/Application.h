@@ -6,6 +6,9 @@
 #include <map>
 #include <unordered_map>
 #include <set>
+#include <unordered_set>
+#include <regex>
+#include <tuple>
 #include <utility>
 #include <WinTypes.h>
 

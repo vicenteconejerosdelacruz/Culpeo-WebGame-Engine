@@ -113,6 +113,7 @@ namespace Scene
 #include "RenderableAtt.h"
 #include <JEnd.h>
 
+		worldUniformBuffer = CreateUniformBuffer(unit, sizeof(XMMATRIX), true, 0, "world");
 		CreateMeshInstances();
     }
 
@@ -502,54 +503,28 @@ namespace Scene
 		// 	return;
 		// }
 
-		// for (unsigned int i = 0; i < meshes.size(); i++)
-		// {
-		// 	uniformBuffers[pass].push_back({});
-		// 	// auto& mi = materials[pass].at(i);
-		// 	auto& mesh = meshes.at(i);
-			// for (unsigned int j = 0; j < mi->variablesBufferSize.size(); j++)
-			// {
-			// 	size_t size = mi->variablesBufferSize[j];
-			// 	ConstantsBufferID cbuffer = CreateConstantsBuffer(size, JRenderer::numFrames, name() + "." + std::to_string(j) + "." + mesh->uuid);
-			// 	// for (unsigned int n = 0; n < JRenderer::numFrames; n++)
-			// 	// {
-			// 	// 	WriteMaterialVariablesToConstantsBufferSpace(mi, cbuffer, n);
-			// 	// }
-			// 	uniformBuffers[pass][i].push_back(cbuffer);
-			// }
-		// }
+		auto createUniformstWriter=[](UniformBufferID cbuffer)
+		{
+			return [cbuffer](void* data, unsigned int backbufferIndex, size_t offset)
+			{
+				return cbuffer->push(data, backbufferIndex, offset);
+			};
+		};
 
-		// auto createConstantWriter = [this](UniformBufferID& cbuffer, size_t cbOffset, size_t cbSize)
-		// 	{
-				/*
-				auto* cbuffer_ptr = (*cbuffer).get();
-				unsigned int alignedConstantBufferSize = cbuffer_ptr->alignedConstantBufferSize;
-				byte* mappedConstantBuffer = cbuffer_ptr->mappedConstantBuffer;
+		for (unsigned int i = 0; i < meshes.size(); i++)
+		{
+			uniformBuffers[pass].push_back({});
+			auto& mi = materials[pass].at(i);
+			auto& mesh = meshes.at(i);
 
-				return [this, cbuffer, cbOffset, cbSize, alignedConstantBufferSize, mappedConstantBuffer
-				](void* data, unsigned int backbufferIndex, size_t offset, size_t slot)
-					{
-						std::unique_ptr<std::atomic_bool>& lock = constantsBuffersLock[backbufferIndex];
+			std::string matStr = *MaterialUniformBufferName.begin();
 
-						//if current value is true(work is in progress), wait until the change from true notification happens
-						if (lock->load() == true)
-							lock->wait(true);
+			UniformBufferID matBuffer = mi->CreateUniformBuffers(unit, matStr);
+			if(!matBuffer) continue;
+			uniformBuffers[pass][i][matStr] = matBuffer;
 
-						//store as true(work is in progress) without triggering a notification
-						lock->store(true);
-
-						size_t offsetInMemory = alignedConstantBufferSize * backbufferIndex;
-						offsetInMemory += cbOffset + cbSize * slot + offset;
-						memcpy(mappedConstantBuffer + offsetInMemory, data, cbSize);
-
-						//store a false freeing the work queue and notify other locks with notify_one to process just one
-						lock->store(false);
-						lock->notify_one();
-
-						return cbOffset + cbSize;
-					};
-				*/
-			// };
+			uniformsWriter[matStr].push_back(createUniformstWriter(matBuffer));
+		}
 
 		// auto createConstantReader = [this](UniformBufferID& cbuffer, size_t cbOffset, size_t cbSize)
 		// 	{
@@ -718,13 +693,13 @@ namespace Scene
 	{
 		if (!uniformBuffers.contains(pass)) return;
 
-		for (unsigned int i = 0; i < uniformBuffers.at(pass).size(); i++)
-		{
-			for (unsigned int c = 0; c < uniformBuffers.at(pass).at(i).size(); c++)
-			{
-				DestroyUniformBuffer(uniformBuffers.at(pass).at(i)[c]());
-			}
-		}
+		// for (unsigned int i = 0; i < uniformBuffers.at(pass).size(); i++)
+		// {
+		// 	for (unsigned int c = 0; c < uniformBuffers.at(pass).at(i).size(); c++)
+		// 	{
+		// 		DestroyUniformBuffer(uniformBuffers.at(pass).at(i)[c]());
+		// 	}
+		// }
 		uniformBuffers.erase(pass);
 	}
 
@@ -732,8 +707,8 @@ namespace Scene
 	{
 		for (auto& rp : GetCameraRenderPasses(cam))
 		{
-			//if (rootSignatures.contains(rp)) rootSignatures.erase(rp);
-			//CreateRenderPassRootSignatures(rp);
+			if (bindGroups.contains(rp)) bindGroups.erase(rp);
+			CreateRenderPassBindGroups(rp);
 		}
 	}
 
@@ -743,6 +718,10 @@ namespace Scene
 		{
 			auto& mi = materials[rp].at(i);
 			
+			std::string bgName = "bindGroup:" + sceneObject->name() + ":" + std::to_string(i);
+			bindGroups[rp].push_back(
+				CreateBindGroup(unit,bgName)
+			);
 			/*
 			auto& vsCBparams = mi->vertexShaderInstanceID->constantsBuffersParameters;
 			auto& psCBparams = mi->pixelShaderInstanceID->constantsBuffersParameters;

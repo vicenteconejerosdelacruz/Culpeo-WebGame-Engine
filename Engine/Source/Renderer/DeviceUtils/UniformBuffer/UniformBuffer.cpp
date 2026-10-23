@@ -13,10 +13,10 @@ namespace DeviceUtils
 		return uniformBuffers.at(uuid);
 	}
 	
-	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, std::string ubName)
+	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, bool multiFrame, unsigned int numOffsets, std::string ubName)
 	{
 		UniformBufferID uniformBufferID = getUUID();
-		std::unique_ptr<UniformBuffer> ubData = std::make_unique<UniformBuffer>(bufferSize, ubName);
+		std::unique_ptr<UniformBuffer> ubData = std::make_unique<UniformBuffer>(bufferSize, multiFrame, numOffsets, ubName);
 
 		/*
 		//create the binding layout entry
@@ -62,7 +62,7 @@ namespace DeviceUtils
 				//create the gpu buffer
 				wgpu::BufferDescriptor desc = {};
 				desc.nextInChain = nullptr;
-				desc.size = uniformBufferID->alignedBufferSize * JRenderer::numFrames;
+				desc.size = uniformBufferID->mappedBuffer.size();
 				desc.label = uniformBufferID->name.c_str();
 				desc.usage = wgpu::BufferUsage::Uniform | wgpu::BufferUsage::CopyDst;
 				desc.mappedAtCreation = false;
@@ -85,9 +85,16 @@ namespace DeviceUtils
 		uniformBuffers.clear();
 	}
 
-	UniformBuffer::UniformBuffer(size_t size, std::string name) : alignedBufferSize((size + 255) & ~255), name(name)
+	UniformBuffer::UniformBuffer(size_t bufferSize, bool multiFrame, unsigned int nOffsets, std::string ubName)
 	{
-		mappedBuffer.reserve(alignedBufferSize * JRenderer::numFrames);
+		name = ubName;
+		alignedBufferSize = (bufferSize + 255) & ~255;
+		numFrames = multiFrame?JRenderer::numFrames:0U;
+		numOffsets = nOffsets;
+		size_t size = alignedBufferSize;
+		if(multiFrame) size*=JRenderer::numFrames;
+		if(numOffsets>1) size*=nOffsets;
+		mappedBuffer.resize(size);
 	}
 
 	void UniformBuffer::push(void* data, size_t offset, size_t size)

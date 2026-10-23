@@ -165,15 +165,15 @@ namespace Scene {
 
 		void CreateUniformsBuffer();
 		void WriteUniformsBuffer(unsigned int frame);
-		// void MoveAlongFwAxis(float dz);
-		// void MovePerpendicularFwAxis(float dx, float dy);
-		// void Rotate(float dx, float dy);
+		void MoveAlongFwAxis(float dz);
+		void MovePerpendicularFwAxis(float dx, float dy);
+		void Rotate(float dx, float dy);
 		// void UpdateLightPosition();
 		// void UpdateLightRotation();
-		// void MoveForward(float step);
-		// void MoveBack(float step);
-		// void MoveLeft(float step);
-		// void MoveRight(float step);
+		void MoveForward(float step);
+		void MoveBack(float step);
+		void MoveLeft(float step);
+		void MoveRight(float step);
 
 		// //Lighting
 		// void CreateLightsConstantsBuffer();

@@ -1,11 +1,15 @@
 //#include "pch.h"
 #include "Shader.h"
 #include <ShaderCompiler.h>
+#include <Renderer.h>
+#include <Scene.h>
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 // #include <CompilerQueue.h>
 #if defined(_EDITOR)
 //#include <Builder/ReleaseBuilder.h>
 #endif
+
+extern std::unique_ptr<JRenderer> renderer;
 
 namespace Templates {
 
@@ -265,181 +269,295 @@ namespace Templates {
 		instanceUUID = instance_uuid;
 		shaderUUID = uuid;
 
-		Compile(id, instanceUUID, params, dependencies);
+		// Compile(id, instanceUUID, params, dependencies);
 	}
 
-	// void ShaderInstance::CreateVSSemantics(const ComPtr<ID3D12ShaderReflection>& reflection, const D3D12_SHADER_DESC& desc)
-	// {
-	// 	if (shaderSource.shaderType != VERTEX_SHADER) return;
-	// 	for (unsigned int paramIdx = 0; paramIdx < desc.InputParameters; paramIdx++)
-	// 	{
-	// 		D3D12_SIGNATURE_PARAMETER_DESC signatureDesc{};
-	// 		reflection->GetInputParameterDesc(paramIdx, &signatureDesc);
-	// 		vsSemantics.push_back(signatureDesc.SemanticName);
-	// 	}
-	// }
+	void ShaderInstance::CreateVSSemantics()
+	{
+		using namespace ShaderCompiler;
+		std::vector<VertexAttributeInfo> vertexAttrs = ParseVertexInputAttributes(byteCode);
+		std::transform(vertexAttrs.begin(),vertexAttrs.end(), std::back_inserter(vsSemantics),[](auto& info){ return info.name; });
+	}
 
-	// void ShaderInstance::CreateResourcesBinding(const ComPtr<ID3D12ShaderReflection>& reflection, const D3D12_SHADER_DESC& desc)
-	// {
-	// 	using namespace DeviceUtils;
+	void ShaderInstance:: CreateResourcesBinding()
+	{
+		using namespace ShaderCompiler;
+		using namespace DeviceUtils;
 
-	// 	const std::unordered_map<std::string, int& > registersMap =
-	// 	{
-	// 		{ CameraConstantBufferName, CBV.camera },
-	// 		{ LightConstantBufferName, CBV.light },
-	// 		{ AnimationConstantBufferName, CBV.animation },
-	// 		{ ShadowMapConstantBufferName, CBV.lightsShadowMap },
-	// 		{ ShadowMapLightsShaderResourceViewName, SRV.lightsShadowMap },
-	// 		{ TextureShaderUsageToString.at(TextureShaderUsage_IBLIrradiance), SRV.iblIrradiance },
-	// 		{ TextureShaderUsageToString.at(TextureShaderUsage_IBLPreFilteredEnvironment), SRV.iblPrefiteredEnv },
-	// 		{ TextureShaderUsageToString.at(TextureShaderUsage_IBLBRDFLUT), SRV.iblBRDFLUT },
-	// 	};
+		shaderInfo = ParseWGSLBindings(byteCode);
 
-	// 	auto bindSITCBuffer = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
-	// 		{
-	// 			constantsBuffersParameters.insert_or_assign(resourceName, ShaderConstantsBufferParameter({ .registerId = desc.BindPoint, .numConstantsBuffers = desc.BindCount }));
-	// 		};
-	// 	auto bindSITUAVRWStructured = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
-	// 		{
-	// 			uavParameters.insert_or_assign(resourceName, ShaderUAVParameter({ .registerId = desc.BindPoint, .numUAV = desc.BindCount }));
-	// 		};
-	// 	auto bindSITCSStructured = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
-	// 		{
-	// 			if (shaderSource.shaderType == JShaderType::COMPUTE_SHADER)
-	// 				srvCSParameters.insert_or_assign(resourceName, ShaderSRVParameter({ .registerId = desc.BindPoint, .numSRV = desc.BindCount }));
-	// 		};
-	// 	auto bindSITPSStructured = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
-	// 		{
-	// 			if (shaderSource.shaderType == JShaderType::PIXEL_SHADER)
-	// 				srvTexParameters.insert_or_assign(StringToTextureShaderUsage.at(resourceName), ShaderSRVParameter({ .registerId = desc.BindPoint, .numSRV = desc.BindCount > 0 ? desc.BindCount : desc.NumSamples })); //if N > 0 -> N else -1
-	// 		};
-	// 	auto bindSITByteAddress = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
-	// 		{
-	// 			uavParameters.insert_or_assign(resourceName, ShaderUAVParameter({ .registerId = desc.BindPoint, .numUAV = desc.BindCount }));
-	// 		};
-	// 	auto bindSITUAVRWByteAddress = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
-	// 		{
-	// 			uavParameters.insert_or_assign(resourceName, ShaderUAVParameter({ .registerId = desc.BindPoint, .numUAV = desc.BindCount }));
-	// 		};
-	// 	auto bindSITUAVRWTyped = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
-	// 		{
-	// 			uavParameters.insert_or_assign(resourceName, ShaderUAVParameter({ .registerId = desc.BindPoint, .numUAV = desc.BindCount }));
-	// 		};
-	// 	auto bindSITSampler = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
-	// 		{
-	// 			samplersParameters.insert_or_assign(resourceName, ShaderSamplerParameter({ .registerId = desc.BindPoint, .numSamplers = desc.BindCount }));
-	// 		};
-	// 	auto bindSITTexture = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
-	// 		{
-	// 			srvTexParameters.insert_or_assign(StringToTextureShaderUsage.at(resourceName), ShaderSRVParameter({ .registerId = desc.BindPoint, .numSRV = desc.BindCount > 0 ? desc.BindCount : desc.NumSamples })); //if N > 0 -> N else -1
-	// 		};
+		const std::unordered_map<const std::set<std::string>*, ShaderResourceBinding&> uniformsBindingMap =
+		{
+			{ &CameraUniformBufferName, UniformBufferBinding.camera },
+			{ &LightUniformBufferName, UniformBufferBinding.light },
+			{ &ShadowMapUniformBufferName, UniformBufferBinding.shadowMaps },
+			{ &ModelUniformBufferName, UniformBufferBinding.model },
+			{ &MaterialUniformBufferName, UniformBufferBinding.material },
+			{ &AnimationUniformBufferName, UniformBufferBinding.animation },
+		};
 
-	// 	const std::map<D3D_SHADER_INPUT_TYPE, std::vector<std::function<void(D3D12_SHADER_INPUT_BIND_DESC&, std::string)>>> registerBinding =
-	// 	{
-	// 		{ D3D_SIT_CBUFFER, { bindSITCBuffer } },
-	// 		{ D3D_SIT_UAV_RWSTRUCTURED, { bindSITUAVRWStructured } },
-	// 		{ D3D_SIT_STRUCTURED, { bindSITCSStructured, bindSITPSStructured }},
-	// 		{ D3D_SIT_BYTEADDRESS, { bindSITByteAddress }},
-	// 		{ D3D_SIT_UAV_RWBYTEADDRESS, {bindSITUAVRWByteAddress}},
-	// 		{ D3D_SIT_UAV_RWTYPED, { bindSITUAVRWTyped }},
-	// 		{ D3D_SIT_SAMPLER, { bindSITSampler }},
-	// 		{ D3D_SIT_TEXTURE, { bindSITTexture }},
-	// 	};
+		const std::unordered_map<const std::set<std::string>*, size_t> uniformsSizesMap = {
+			{ &CameraUniformBufferName, sizeof(CameraAttributes) },
+			{ &ModelUniformBufferName, sizeof(XMMATRIX) },
+			{ &MaterialUniformBufferName, sizeof(MaterialAttributes) },
+		};
 
-	// 	for (unsigned int paramIdx = 0; paramIdx < desc.BoundResources; paramIdx++)
-	// 	{
-	// 		D3D12_SHADER_INPUT_BIND_DESC bindDesc{};
-	// 		reflection->GetResourceBindingDesc(paramIdx, &bindDesc);
+		const std::unordered_map<const std::set<std::string>*, bool> uniformsMultiframe = {
+			{ &CameraUniformBufferName, true },
+			{ &LightUniformBufferName, true },
+			{ &ShadowMapUniformBufferName, true },
+			{ &ModelUniformBufferName, false },
+			{ &MaterialUniformBufferName, false },
+			{ &AnimationUniformBufferName, false },
+		};
 
-	// 		std::string resourceName(bindDesc.Name);
+		const std::unordered_map<const std::set<std::string>*, unsigned int> uniformsNumOffsets = {
+			{ &CameraUniformBufferName, 0U },
+			{ &LightUniformBufferName, 0U },
+			{ &ShadowMapUniformBufferName, 0U },
+			{ &ModelUniformBufferName, JRenderer::numFrames },
+			{ &MaterialUniformBufferName, 0U },
+			{ &AnimationUniformBufferName, JRenderer::numFrames },
+		};
 
-	// 		if (registersMap.contains(resourceName)) registersMap.at(resourceName) = bindDesc.BindPoint;
-	// 		auto& binders = registerBinding.at(bindDesc.Type);
-	// 		for (auto& binder : binders)
-	// 		{
-	// 			binder(bindDesc, resourceName);
-	// 		}
-	// 	}
-	// }
+		auto mapResourceInfo=[&](ShaderResourceInfo& info)
+		{
+			auto it = std::find_if(uniformsBindingMap.begin(), uniformsBindingMap.end(),
+				[&info](auto &bindingMap) { return bindingMap.first->contains(info.variableName); }
+			);
+			if(it==uniformsBindingMap.end()) 
+			{
+				std::cout << "skip" << std::endl;
+				return;
+			}
+			size_t size = uniformsSizesMap.contains(it->first)?uniformsSizesMap.at(it->first):0ULL;
+			bool multiFrame = uniformsMultiframe.contains(it->first)?uniformsMultiframe.at(it->first):false;
+			unsigned int numOffsets = uniformsNumOffsets.contains(it->first)?uniformsNumOffsets.at(it->first):0U;
+			it->second = std::make_tuple(info.group, info.binding, size, multiFrame, numOffsets, *it->first->begin());
+			std::cout << info.group << "," << info.binding << "," << size << "," << multiFrame << "," << numOffsets << "," << *it->first->begin() << std::endl;
+		};
 
-	// void ShaderInstance::CreateConstantsBuffersVariables(const ComPtr<ID3D12ShaderReflection>& reflection, const D3D12_SHADER_DESC& desc)
-	// {
-	// 	using namespace Templates;
-	// 	using namespace DeviceUtils;
+		for(auto &info:shaderInfo)
+		{
+			info.dump();
+			mapResourceInfo(info);
+		}
+	}
 
-	// 	const std::set<std::string> paramsToSkip =
-	// 	{
-	// 		CameraConstantBufferName,
-	// 		LightConstantBufferName,
-	// 		AnimationConstantBufferName,
-	// 		ShadowMapConstantBufferName,
-	// 	};
+	void ShaderInstance::CreateShaderModule(SceneUnitId id)
+	{
+		std::cout << "compiling wgsl code:" << instanceUUID << std::endl;
+		std::cout << byteCode << std::endl;
 
-	// 	for (unsigned int paramIdx = 0; paramIdx < desc.ConstantBuffers; paramIdx++)
-	// 	{
-	// 		auto cbReflection = reflection->GetConstantBufferByIndex(paramIdx);
-	// 		D3D12_SHADER_BUFFER_DESC paramDesc{};
-	// 		cbReflection->GetDesc(&paramDesc);
+		GetSceneUnit(id)->PushToPreRender([&] {
 
-	// 		std::string cbufferName(paramDesc.Name);
-	// 		if (HLSLNonConstantsBuffers.contains(cbufferName) || paramsToSkip.contains(cbufferName)) continue;
+			WGPUShaderSourceWGSL wgslDesc{};
+			wgslDesc.chain.sType = static_cast<WGPUSType>(WGPUSType_ShaderSourceWGSL);
+			wgslDesc.chain.next = nullptr;
+			wgslDesc.code = { byteCode.c_str() , WGPU_STRLEN };
 
-	// 		bool skipVar = false;
-	// 		for (unsigned int varIdx = 0; varIdx < paramDesc.Variables; varIdx++)
-	// 		{
-	// 			ID3D12ShaderReflectionVariable* varReflection = cbReflection->GetVariableByIndex(varIdx);
-	// 			D3D12_SHADER_VARIABLE_DESC varDesc;
-	// 			varReflection->GetDesc(&varDesc);
+			wgpu::ShaderModuleDescriptor descriptor{};
+			descriptor.label = instanceUUID.c_str();
+			descriptor.nextInChain = reinterpret_cast<const wgpu::ChainedStruct*>(&wgslDesc);
 
-	// 			if (!(varDesc.uFlags & D3D_SVF_USED)) continue;
+			// 4. Crear el módulo en la GPU
+			shaderModule = renderer->GetDevice().CreateShaderModule(&descriptor);
+			if (!shaderModule) {
+				std::cerr << "[WebGPU] Error al compilar el shader WGSL." << std::endl;
+			} else 
+			{
+				std::cout << "[WebGPU] compilacion completa." << std::endl;
+			}
+		});
+	}
 
-	// 			ID3D12ShaderReflectionType* varType = varReflection->GetType();
-	// 			D3D12_SHADER_TYPE_DESC varTypeDesc;
-	// 			varType->GetDesc(&varTypeDesc);
+	std::unordered_map<std::string, ShaderResourceBinding> ShaderInstance::GetBindingMap()
+	{
+		std::unordered_map<std::string, ShaderResourceBinding> uniformsBindingMap= {
+			{ *CameraUniformBufferName.begin(), UniformBufferBinding.camera },
+			{ *LightUniformBufferName.begin(), UniformBufferBinding.light },
+			{ *ShadowMapUniformBufferName.begin(), UniformBufferBinding.shadowMaps },
+			{ *ModelUniformBufferName.begin(), UniformBufferBinding.model },
+			{ *MaterialUniformBufferName.begin(), UniformBufferBinding.material },
+			{ *AnimationUniformBufferName.begin(), UniformBufferBinding.animation },
+		};
 
-	// 			if (!HLSLVariableClassAllowedTypes.contains(varTypeDesc.Class))
-	// 			{
-	// 				skipVar = true;
-	// 				break;
-	// 			}
+		for(auto it = uniformsBindingMap.begin() ; it != uniformsBindingMap.end(); )
+		{
+			if(std::get<0>(it->second)==-1) it = uniformsBindingMap.erase(it);
+			it++;
+		}
 
-	// 			std::string varName(varDesc.Name);
-	// 			constantsBuffersVariables.insert_or_assign(varName, ShaderConstantsBufferVariable({ .bufferIndex = paramIdx, .size = varDesc.Size, .offset = varDesc.StartOffset }));
+		return uniformsBindingMap;
+	}
 
-	// 			std::string varClass = varTypeDesc.Name;
-	// 			bool useNamePattern = false;
-	// 			for (auto it = HLSLVariablePatternToMaterialVariableTypes.begin(); it != HLSLVariablePatternToMaterialVariableTypes.end(); it++)
-	// 			{
-	// 				std::string tieClass = std::get<0>(it->first);
-	// 				if (varClass != tieClass) continue;
+	/*
+	void ShaderInstance::CreateResourcesBinding(const ComPtr<ID3D12ShaderReflection>& reflection, const D3D12_SHADER_DESC& desc)
+	{
+		using namespace DeviceUtils;
 
-	// 				std::string tiePattern = std::get<1>(it->first);
+		const std::unordered_map<std::string, int& > registersMap =
+		{
+			{ CameraConstantBufferName, CBV.camera },
+			{ LightConstantBufferName, CBV.light },
+			{ AnimationConstantBufferName, CBV.animation },
+			{ ShadowMapConstantBufferName, CBV.lightsShadowMap },
+			{ ShadowMapLightsShaderResourceViewName, SRV.lightsShadowMap },
+			{ TextureShaderUsageToString.at(TextureShaderUsage_IBLIrradiance), SRV.iblIrradiance },
+			{ TextureShaderUsageToString.at(TextureShaderUsage_IBLPreFilteredEnvironment), SRV.iblPrefiteredEnv },
+			{ TextureShaderUsageToString.at(TextureShaderUsage_IBLBRDFLUT), SRV.iblBRDFLUT },
+		};
 
-	// 				std::string lowerVarName = varName;
-	// 				nostd::ToLower(lowerVarName);
+		auto bindSITCBuffer = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
+			{
+				constantsBuffersParameters.insert_or_assign(resourceName, ShaderConstantsBufferParameter({ .registerId = desc.BindPoint, .numConstantsBuffers = desc.BindCount }));
+			};
+		auto bindSITUAVRWStructured = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
+			{
+				uavParameters.insert_or_assign(resourceName, ShaderUAVParameter({ .registerId = desc.BindPoint, .numUAV = desc.BindCount }));
+			};
+		auto bindSITCSStructured = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
+			{
+				if (shaderSource.shaderType == JShaderType::COMPUTE_SHADER)
+					srvCSParameters.insert_or_assign(resourceName, ShaderSRVParameter({ .registerId = desc.BindPoint, .numSRV = desc.BindCount }));
+			};
+		auto bindSITPSStructured = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
+			{
+				if (shaderSource.shaderType == JShaderType::PIXEL_SHADER)
+					srvTexParameters.insert_or_assign(StringToTextureShaderUsage.at(resourceName), ShaderSRVParameter({ .registerId = desc.BindPoint, .numSRV = desc.BindCount > 0 ? desc.BindCount : desc.NumSamples })); //if N > 0 -> N else -1
+			};
+		auto bindSITByteAddress = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
+			{
+				uavParameters.insert_or_assign(resourceName, ShaderUAVParameter({ .registerId = desc.BindPoint, .numUAV = desc.BindCount }));
+			};
+		auto bindSITUAVRWByteAddress = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
+			{
+				uavParameters.insert_or_assign(resourceName, ShaderUAVParameter({ .registerId = desc.BindPoint, .numUAV = desc.BindCount }));
+			};
+		auto bindSITUAVRWTyped = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
+			{
+				uavParameters.insert_or_assign(resourceName, ShaderUAVParameter({ .registerId = desc.BindPoint, .numUAV = desc.BindCount }));
+			};
+		auto bindSITSampler = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
+			{
+				samplersParameters.insert_or_assign(resourceName, ShaderSamplerParameter({ .registerId = desc.BindPoint, .numSamplers = desc.BindCount }));
+			};
+		auto bindSITTexture = [this](D3D12_SHADER_INPUT_BIND_DESC& desc, std::string resourceName)
+			{
+				srvTexParameters.insert_or_assign(StringToTextureShaderUsage.at(resourceName), ShaderSRVParameter({ .registerId = desc.BindPoint, .numSRV = desc.BindCount > 0 ? desc.BindCount : desc.NumSamples })); //if N > 0 -> N else -1
+			};
 
-	// 				if (lowerVarName.find(tiePattern) == std::string::npos) continue;
+		const std::map<D3D_SHADER_INPUT_TYPE, std::vector<std::function<void(D3D12_SHADER_INPUT_BIND_DESC&, std::string)>>> registerBinding =
+		{
+			{ D3D_SIT_CBUFFER, { bindSITCBuffer } },
+			{ D3D_SIT_UAV_RWSTRUCTURED, { bindSITUAVRWStructured } },
+			{ D3D_SIT_STRUCTURED, { bindSITCSStructured, bindSITPSStructured }},
+			{ D3D_SIT_BYTEADDRESS, { bindSITByteAddress }},
+			{ D3D_SIT_UAV_RWBYTEADDRESS, {bindSITUAVRWByteAddress}},
+			{ D3D_SIT_UAV_RWTYPED, { bindSITUAVRWTyped }},
+			{ D3D_SIT_SAMPLER, { bindSITSampler }},
+			{ D3D_SIT_TEXTURE, { bindSITTexture }},
+		};
 
-	// 				useNamePattern = true;
-	// 				break;
-	// 			}
+		for (unsigned int paramIdx = 0; paramIdx < desc.BoundResources; paramIdx++)
+		{
+			D3D12_SHADER_INPUT_BIND_DESC bindDesc{};
+			reflection->GetResourceBindingDesc(paramIdx, &bindDesc);
 
-	// 			if (useNamePattern) continue;
-	// 		}
+			std::string resourceName(bindDesc.Name);
 
-	// 		if (!skipVar)
-	// 		{
-	// 			cbufferSize.push_back(paramDesc.Size);
-	// 		}
-	// 	}
-	// }
+			if (registersMap.contains(resourceName)) registersMap.at(resourceName) = bindDesc.BindPoint;
+			auto& binders = registerBinding.at(bindDesc.Type);
+			for (auto& binder : binders)
+			{
+				binder(bindDesc, resourceName);
+			}
+		}
+	}
+	*/
 
-	// void ShaderInstance::CreateByteCode(const ComPtr<IDxcResult>& result)
-	// {
-	// 	ComPtr<IDxcBlob> code;
-	// 	result->GetResult(&code);
+	/*
+	void ShaderInstance::CreateConstantsBuffersVariables(const ComPtr<ID3D12ShaderReflection>& reflection, const D3D12_SHADER_DESC& desc)
+	{
+		using namespace Templates;
+		using namespace DeviceUtils;
 
-	// 	byteCode.resize(code->GetBufferSize());
-	// 	memcpy_s(byteCode.data(), code->GetBufferSize(), code->GetBufferPointer(), code->GetBufferSize());
-	// }
+		const std::set<std::string> paramsToSkip =
+		{
+			CameraConstantBufferName,
+			LightConstantBufferName,
+			AnimationConstantBufferName,
+			ShadowMapConstantBufferName,
+		};
+
+		for (unsigned int paramIdx = 0; paramIdx < desc.ConstantBuffers; paramIdx++)
+		{
+			auto cbReflection = reflection->GetConstantBufferByIndex(paramIdx);
+			D3D12_SHADER_BUFFER_DESC paramDesc{};
+			cbReflection->GetDesc(&paramDesc);
+
+			std::string cbufferName(paramDesc.Name);
+			if (HLSLNonConstantsBuffers.contains(cbufferName) || paramsToSkip.contains(cbufferName)) continue;
+
+			bool skipVar = false;
+			for (unsigned int varIdx = 0; varIdx < paramDesc.Variables; varIdx++)
+			{
+				ID3D12ShaderReflectionVariable* varReflection = cbReflection->GetVariableByIndex(varIdx);
+				D3D12_SHADER_VARIABLE_DESC varDesc;
+				varReflection->GetDesc(&varDesc);
+
+				if (!(varDesc.uFlags & D3D_SVF_USED)) continue;
+
+				ID3D12ShaderReflectionType* varType = varReflection->GetType();
+				D3D12_SHADER_TYPE_DESC varTypeDesc;
+				varType->GetDesc(&varTypeDesc);
+
+				if (!HLSLVariableClassAllowedTypes.contains(varTypeDesc.Class))
+				{
+					skipVar = true;
+					break;
+				}
+
+				std::string varName(varDesc.Name);
+				constantsBuffersVariables.insert_or_assign(varName, ShaderConstantsBufferVariable({ .bufferIndex = paramIdx, .size = varDesc.Size, .offset = varDesc.StartOffset }));
+
+				std::string varClass = varTypeDesc.Name;
+				bool useNamePattern = false;
+				for (auto it = HLSLVariablePatternToMaterialVariableTypes.begin(); it != HLSLVariablePatternToMaterialVariableTypes.end(); it++)
+				{
+					std::string tieClass = std::get<0>(it->first);
+					if (varClass != tieClass) continue;
+
+					std::string tiePattern = std::get<1>(it->first);
+
+					std::string lowerVarName = varName;
+					nostd::ToLower(lowerVarName);
+
+					if (lowerVarName.find(tiePattern) == std::string::npos) continue;
+
+					useNamePattern = true;
+					break;
+				}
+
+				if (useNamePattern) continue;
+			}
+
+			if (!skipVar)
+			{
+				cbufferSize.push_back(paramDesc.Size);
+			}
+		}
+	}
+	*/
+
+	/*
+	void ShaderInstance::CreateByteCode(const ComPtr<IDxcResult>& result)
+	{
+		ComPtr<IDxcBlob> code;
+		result->GetResult(&code);
+
+		byteCode.resize(code->GetBufferSize());
+		memcpy_s(byteCode.data(), code->GetBufferSize(), code->GetBufferPointer(), code->GetBufferSize());
+	}
+	*/
 }
