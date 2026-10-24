@@ -89,173 +89,6 @@ namespace Templates {
 	TEMPDEF_FULL(Shader);
 	TEMPDEF_REFTRACKER(Shader);
 
-#if defined(_DEVELOPMENT)
-	/*
-	 void ShaderJsonStep()
-	 {
-	 	std::set<ShaderJsonID> shaders;
-	 	std::transform(Shadertemplates.begin(), Shadertemplates.end(), std::inserter(shaders, shaders.begin()), [](auto& temps)
-	 		{
-	 			return temps.first;
-	 		}
-	 	);
-
-	 	std::set<ShaderJsonID> rebuildShaders;
-	 	std::copy_if(shaders.begin(), shaders.end(), std::inserter(rebuildShaders, rebuildShaders.begin()), [](auto shader)
-	 		{
-	 			return shader->dirty(ShaderJson::Update_path);
-	 		}
-	 	);
-
-	 	if (rebuildShaders.size() > 0ULL)
-	 	{
-	 		//JObject::RunChangesCallback(rebuildShaders, [](auto shader)
-	 		//	{
-	 		//		shader->clean(ShaderJson::Update_path);
-	 		//	}
-	 		//);
-	 	}
-	 }
-	*/
-	/*
-	 bool CheckChangesCompilation(JUUID uuid)
-	 {
-	 	using namespace Shader;
-	 	using namespace ShaderCompiler;
-	 	using namespace Templates::Shader;
-
-	 	std::set<Source> sources = GetSourcesFromShaderUUID(uuid);
-	 	for (auto src : sources)
-	 	{
-	 		ShaderInstance dummy("", src.shaderTemplate(), src);
-	 		ShaderIncludesDependencies deps;
-	 		if (!Compile(dummy, src, deps))
-	 			return false;
-	 	}
-	 	return true;
-	 }
-	*/
-	/*
-	 void PropagateChangeToShader(std::string shaderFile)
-	 {
-	 	using namespace Shader;
-	 	auto range = fileNameToShaderTemplate.equal_range(shaderFile);
-	 	for (auto& it = range.first; it != range.second; it++)
-	 	{
-	 		if (!CheckChangesCompilation(it->second)) continue;
-	 		auto& shader = GetShaderTemplate(it->second);
-	 		shader->flag(ShaderJson::Update_path);
-	 	}
-	 }
-	*/
-	/*
-	 void PropagateChangeToShaderFromDependency(std::string dependency)
-	 {
-	 	using namespace Shader;
-	 	std::set<std::string> shadersUUIDs;
-	 	for (auto& [src, deps] : dependencies)
-	 	{
-	 		//if the file is not in the dependency skip
-	 		if (!deps.contains(dependency) || !CheckChangesCompilation(src.shaderTemplate())) continue;
-	 		src.shaderTemplate->flag(ShaderJson::Update_path);
-	 	}
-	 }
-	*/
-	/*
-	 static CompilerQueue changesQueue;
-	 void MonitorShaderChanges(std::string folder)
-	 {
-	 	std::thread monitor([folder]()
-	 		{
-	 			HANDLE file = CreateFileA(folder.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, nullptr);
-
-	 			if (file == INVALID_HANDLE_VALUE || file == NULL) {
-	 				OutputDebugStringA("ERROR: Invalid HANDLE value.\n");
-	 				ExitProcess(GetLastError());
-	 			}
-
-	 			OVERLAPPED overlapped;
-	 			overlapped.hEvent = CreateEvent(NULL, FALSE, 0, NULL);
-
-	 			uint8_t change_buf[1024];
-	 			BOOL success = ReadDirectoryChangesW(
-	 				file, change_buf, 1024, TRUE,
-	 				FILE_NOTIFY_CHANGE_LAST_WRITE,
-	 				NULL, &overlapped, NULL);
-
-	 			while (true) {
-	 				DWORD result = WaitForSingleObject(overlapped.hEvent, 0);
-
-	 				if (result == WAIT_OBJECT_0) {
-	 					DWORD bytes_transferred;
-	 					GetOverlappedResult(file, &overlapped, &bytes_transferred, FALSE);
-
-	 					FILE_NOTIFY_INFORMATION* event = (FILE_NOTIFY_INFORMATION*)change_buf;
-
-	 					for (;;) {
-	 						DWORD name_len = event->FileNameLength / sizeof(wchar_t);
-
-	 						switch (event->Action) {
-	 						case FILE_ACTION_MODIFIED: {
-	 							std::string shaderFile = nostd::WStringToString(std::wstring(event->FileName, event->FileNameLength / sizeof(event->FileName[0])));
-	 							changesQueue.push(shaderFile);
-	 						} break;
-	 						default: {
-	 							printf("Unknown action!\n");
-	 						} break;
-	 						}
-
-	 						// Are there more events to handle?
-	 						if (event->NextEntryOffset) {
-	 							*((uint8_t**)&event) += event->NextEntryOffset;
-	 						}
-	 						else {
-	 							break;
-	 						}
-	 					}
-	 				}
-	 				// Queue the next event
-	 				BOOL success = ReadDirectoryChangesW(
-	 					file, change_buf, 1024, TRUE,
-	 					FILE_NOTIFY_CHANGE_LAST_WRITE,
-	 					NULL, &overlapped, NULL);
-	 			}
-	 		}
-	 	);
-
-	 	std::thread changesPropagator([]()
-	 		{
-	 			using namespace std::chrono_literals;
-	 			while (TRUE)
-	 			{
-	 				while (changesQueue.size() > 0)
-	 				{
-
-	 					std::filesystem::path filePath(changesQueue.front());
-	 					std::string fileExtension = filePath.extension().string();
-
-	 					std::string output = "Modified: " + filePath.string() + "\n";
-	 					OutputDebugStringA(output.c_str());
-
-	 					if (fileExtension == ".hlsl") {
-	 						PropagateChangeToShader(filePath.string());
-	 					}
-	 					else if (fileExtension == ".h") {
-	 						PropagateChangeToShaderFromDependency(filePath.string());
-	 					}
-
-	 					changesQueue.pop();
-	 				}
-	 				std::this_thread::sleep_for(200ms);
-	 			}
-	 		}
-	 	);
-	 	monitor.detach();
-	 	changesPropagator.detach();
-	}
-	*/
-#endif
-
 	ShaderInstance::ShaderInstance(
 		SceneUnitId id,
 		JUUID instance_uuid,
@@ -286,69 +119,52 @@ namespace Templates {
 
 		shaderInfo = ParseWGSLBindings(byteCode);
 
-		const std::unordered_map<const std::set<std::string>*, ShaderResourceBinding&> uniformsBindingMap =
+		const std::unordered_map<std::string, ShaderResourceBinding&> uniformsBindingMap =
 		{
-			{ &CameraUniformBufferName, UniformBufferBinding.camera },
-			{ &LightUniformBufferName, UniformBufferBinding.light },
-			{ &ShadowMapUniformBufferName, UniformBufferBinding.shadowMaps },
-			{ &ModelUniformBufferName, UniformBufferBinding.model },
-			{ &MaterialUniformBufferName, UniformBufferBinding.material },
-			{ &AnimationUniformBufferName, UniformBufferBinding.animation },
+			{ CameraUniformBufferName, UniformBufferBinding.camera },
+			{ LightUniformBufferName, UniformBufferBinding.light },
+			{ ShadowMapUniformBufferName, UniformBufferBinding.shadowMaps },
+			{ ModelUniformBufferName, UniformBufferBinding.model },
+			{ MaterialUniformBufferName, UniformBufferBinding.material },
+			{ AnimationUniformBufferName, UniformBufferBinding.animation },
 		};
 
-		const std::unordered_map<const std::set<std::string>*, size_t> uniformsSizesMap = {
-			{ &CameraUniformBufferName, sizeof(CameraAttributes) },
-			{ &ModelUniformBufferName, sizeof(XMMATRIX) },
-			{ &MaterialUniformBufferName, sizeof(MaterialAttributes) },
+		const std::unordered_map<std::string, size_t> uniformsSizesMap = {
+			{ CameraUniformBufferName, sizeof(CameraAttributes) },
+			{ ModelUniformBufferName, sizeof(XMMATRIX) },
+			{ MaterialUniformBufferName, sizeof(MaterialAttributes) },
 		};
 
-		const std::unordered_map<const std::set<std::string>*, bool> uniformsMultiframe = {
-			{ &CameraUniformBufferName, true },
-			{ &LightUniformBufferName, true },
-			{ &ShadowMapUniformBufferName, true },
-			{ &ModelUniformBufferName, false },
-			{ &MaterialUniformBufferName, false },
-			{ &AnimationUniformBufferName, false },
+		const std::set<std::string> uniformsMultiframe = {
+			CameraUniformBufferName, LightUniformBufferName, ShadowMapUniformBufferName,
 		};
 
-		const std::unordered_map<const std::set<std::string>*, unsigned int> uniformsNumOffsets = {
-			{ &CameraUniformBufferName, 0U },
-			{ &LightUniformBufferName, 0U },
-			{ &ShadowMapUniformBufferName, 0U },
-			{ &ModelUniformBufferName, JRenderer::numFrames },
-			{ &MaterialUniformBufferName, 0U },
-			{ &AnimationUniformBufferName, JRenderer::numFrames },
+		const std::set<std::string> uniformsFrameOffsets = {
+			ModelUniformBufferName, AnimationUniformBufferName,
 		};
 
 		auto mapResourceInfo=[&](ShaderResourceInfo& info)
 		{
 			auto it = std::find_if(uniformsBindingMap.begin(), uniformsBindingMap.end(),
-				[&info](auto &bindingMap) { return bindingMap.first->contains(info.variableName); }
+				[&info](auto &bindingMap) { return bindingMap.first==info.variableName; }
 			);
 			if(it==uniformsBindingMap.end()) 
-			{
-				std::cout << "skip" << std::endl;
 				return;
-			}
+
 			size_t size = uniformsSizesMap.contains(it->first)?uniformsSizesMap.at(it->first):0ULL;
-			bool multiFrame = uniformsMultiframe.contains(it->first)?uniformsMultiframe.at(it->first):false;
-			unsigned int numOffsets = uniformsNumOffsets.contains(it->first)?uniformsNumOffsets.at(it->first):0U;
-			it->second = std::make_tuple(info.group, info.binding, size, multiFrame, numOffsets, *it->first->begin());
-			std::cout << info.group << "," << info.binding << "," << size << "," << multiFrame << "," << numOffsets << "," << *it->first->begin() << std::endl;
+			bool multiFrame = uniformsMultiframe.contains(it->first)?true:false;
+			unsigned int numOffsets = uniformsFrameOffsets.contains(it->first)?JRenderer::numFrames:0U;
+			it->second = std::make_tuple(info.group, info.binding, size, multiFrame, numOffsets, it->first);
 		};
 
 		for(auto &info:shaderInfo)
 		{
-			info.dump();
 			mapResourceInfo(info);
 		}
 	}
 
 	void ShaderInstance::CreateShaderModule(SceneUnitId id)
 	{
-		std::cout << "compiling wgsl code:" << instanceUUID << std::endl;
-		std::cout << byteCode << std::endl;
-
 		GetSceneUnit(id)->PushToPreRender([&] {
 
 			WGPUShaderSourceWGSL wgslDesc{};
@@ -374,12 +190,12 @@ namespace Templates {
 	std::unordered_map<std::string, ShaderResourceBinding> ShaderInstance::GetBindingMap()
 	{
 		std::unordered_map<std::string, ShaderResourceBinding> uniformsBindingMap= {
-			{ *CameraUniformBufferName.begin(), UniformBufferBinding.camera },
-			{ *LightUniformBufferName.begin(), UniformBufferBinding.light },
-			{ *ShadowMapUniformBufferName.begin(), UniformBufferBinding.shadowMaps },
-			{ *ModelUniformBufferName.begin(), UniformBufferBinding.model },
-			{ *MaterialUniformBufferName.begin(), UniformBufferBinding.material },
-			{ *AnimationUniformBufferName.begin(), UniformBufferBinding.animation },
+			{ CameraUniformBufferName, UniformBufferBinding.camera },
+			{ LightUniformBufferName, UniformBufferBinding.light },
+			{ ShadowMapUniformBufferName, UniformBufferBinding.shadowMaps },
+			{ ModelUniformBufferName, UniformBufferBinding.model },
+			{ MaterialUniformBufferName, UniformBufferBinding.material },
+			{ AnimationUniformBufferName, UniformBufferBinding.animation },
 		};
 
 		for(auto it = uniformsBindingMap.begin() ; it != uniformsBindingMap.end(); )

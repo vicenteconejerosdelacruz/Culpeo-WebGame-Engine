@@ -6,12 +6,12 @@ namespace DeviceUtils
 {
 	struct UniformBuffer;
 
-	inline static const std::set<std::string> CameraUniformBufferName = { "camera" };
-	inline static const std::set<std::string> LightUniformBufferName = { "lights" };
-	inline static const std::set<std::string> ShadowMapUniformBufferName = { "shadowMaps" };
-	inline static const std::set<std::string> ModelUniformBufferName = { "model" };
-	inline static const std::set<std::string> MaterialUniformBufferName = { "material" };
-	inline static const std::set<std::string> AnimationUniformBufferName = { "animation" };
+	inline static const std::string CameraUniformBufferName = "camera";
+	inline static const std::string LightUniformBufferName = "lights";
+	inline static const std::string ShadowMapUniformBufferName = "shadowMaps";
+	inline static const std::string ModelUniformBufferName = "model";
+	inline static const std::string MaterialUniformBufferName = "material";
+	inline static const std::string AnimationUniformBufferName = "animation";
 
 	using UniformBufferBufferWritter = std::function<size_t(void* data, unsigned int backbufferIndex, size_t offset)>;
 	using UniformBufferBufferReader = std::function<void(MaterialVariablesTypes, nlohmann::json& value)>;

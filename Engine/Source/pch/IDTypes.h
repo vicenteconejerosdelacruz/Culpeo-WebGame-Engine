@@ -1,7 +1,6 @@
 #include "UUID.h"
 #include "SceneUnitId.h"
 
-DEF_TYPE_ID(DeviceUtils, TUUID, BindGroup, GetBindGroup);
 DEF_TYPE_ID(DeviceUtils, TUUID, IndexBuffer, GetIndexBuffer);
 DEF_TYPE_ID(DeviceUtils, TUUID, UniformBuffer, GetUniformBuffer);
 DEF_TYPE_ID(DeviceUtils, TUUID, VertexBuffer, GetVertexBuffer);

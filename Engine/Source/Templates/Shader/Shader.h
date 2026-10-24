@@ -13,9 +13,6 @@
 #include <JTemplate.h>
 #include <ShaderCompiler.h>
 
-//<group, binding, buffer size, multi frame, num offsets>
-using ShaderResourceBinding = std::tuple<int,int, size_t, bool, unsigned int, std::string>;
-static inline const ShaderResourceBinding defaultBinding = std::tuple(-1,-1, 0ULL, false, 0U, "");
 namespace Templates
 {
 	inline static const std::string ShadowMapLightsShaderResourceViewName = TextureShaderUsageToString.at(TextureShaderUsage_ShadowMaps);

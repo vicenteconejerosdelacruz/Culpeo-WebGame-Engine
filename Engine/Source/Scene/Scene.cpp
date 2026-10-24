@@ -682,9 +682,9 @@ namespace Scene
 
 	void BindToScene(SceneUnitId id, JUUID uuidA, JUUID uuidB)
 	{
-		std::cout << "sceneUnitExists(" << id << ")? " << scenesUnits.contains(id) << std::endl;
-		std::cout << "uuidA " << uuidA << std::endl;
-		std::cout << "uuidB " << uuidB << std::endl;
+		// std::cout << "sceneUnitExists(" << id << ")? " << scenesUnits.contains(id) << std::endl;
+		// std::cout << "uuidA " << uuidA << std::endl;
+		// std::cout << "uuidB " << uuidB << std::endl;
 		scenesUnits.at(id)->Bind(uuidA, uuidB);
 	}
 

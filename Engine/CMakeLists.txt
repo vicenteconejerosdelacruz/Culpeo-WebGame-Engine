@@ -53,8 +53,6 @@ add_executable(CulpeoEngine
     "Source/Primitives/UtahTeapot.cpp"
     "Source/Renderer/DeviceUtils/WebGpuDevice/Builder.h"
     "Source/Renderer/DeviceUtils/WebGpuDevice/Builder.cpp"
-    "Source/Renderer/DeviceUtils/BindGroup/BindGroup.h"
-    "Source/Renderer/DeviceUtils/BindGroup/BindGroup.cpp"
     "Source/Renderer/DeviceUtils/IndexBuffer/IndexBuffer.h"
     "Source/Renderer/DeviceUtils/IndexBuffer/IndexBuffer.cpp"
     "Source/Renderer/DeviceUtils/RenderPass/RenderToTexturePass.h"

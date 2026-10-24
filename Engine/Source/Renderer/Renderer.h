@@ -4,11 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <webgpu/webgpu_cpp.h>
 #include <webgpu/webgpu_glfw.h>
-// #include <dxgi1_6.h>
-#include <RenderPass/RenderPass.h>
-// using namespace Microsoft::WRL;
-// using namespace DirectX;
 
+using namespace Templates;
 struct JRenderer
 {
 	~JRenderer() {}

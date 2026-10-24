@@ -113,7 +113,7 @@ namespace Scene
 #include "RenderableAtt.h"
 #include <JEnd.h>
 
-		worldUniformBuffer = CreateUniformBuffer(unit, sizeof(XMMATRIX), true, 0, "world");
+		worldUb = CreateUniformBuffer(unit, sizeof(XMMATRIX), true, 0, "world");
 		CreateMeshInstances();
     }
 
@@ -479,189 +479,33 @@ namespace Scene
 
 	void Renderable::CreateRenderPassUniformBuffersInstances(RenderPassInstanceID pass)
 	{
-		// //wait until every lock is free
-		// for (unsigned int i = 0; i < JRenderer::numFrames; i++)
+		// auto createUniformstWriter=[](UniformBufferID cbuffer)
 		// {
-		// 	if (constantsBuffersLock[i]->load() == true)
-		// 		constantsBuffersLock[i]->wait(true);
-		// }
-
-		// //mark every lock as being worked
-		// for (unsigned int i = 0; i < JRenderer::numFrames; i++)
-		// {
-		// 	constantsBuffersLock[i]->store(true);
-		// }
-
-		// //if the constants buffer exists wew restore the non-working state and notify each of the locks and return
-		// if (constantsBuffers.contains(pass))
-		// {
-		// 	for (unsigned int i = 0; i < JRenderer::numFrames; i++)
+		// 	return [cbuffer](void* data, unsigned int backbufferIndex, size_t offset)
 		// 	{
-		// 		constantsBuffersLock[i]->store(false);
-		// 		constantsBuffersLock[i]->notify_one();
-		// 	}
-		// 	return;
-		// }
+		// 		return cbuffer->push(data, backbufferIndex, offset);
+		// 	};
+		// };
 
-		auto createUniformstWriter=[](UniformBufferID cbuffer)
-		{
-			return [cbuffer](void* data, unsigned int backbufferIndex, size_t offset)
-			{
-				return cbuffer->push(data, backbufferIndex, offset);
-			};
-		};
+		// inline static const std::string CameraUniformBufferName = "camera";
+		// inline static const std::string LightUniformBufferName = "lights";
+		// inline static const std::string ShadowMapUniformBufferName = "shadowMaps";
+		// inline static const std::string ModelUniformBufferName = "model";
+		// inline static const std::string MaterialUniformBufferName = "material";
+		// inline static const std::string AnimationUniformBufferName = "animation";
 
+		uniformBuffers[pass].push_back({});
 		for (unsigned int i = 0; i < meshes.size(); i++)
 		{
-			uniformBuffers[pass].push_back({});
 			auto& mi = materials[pass].at(i);
 			auto& mesh = meshes.at(i);
 
-			std::string matStr = *MaterialUniformBufferName.begin();
+			std::string matStr = MaterialUniformBufferName;
 
 			UniformBufferID matBuffer = mi->CreateUniformBuffers(unit, matStr);
-			if(!matBuffer) continue;
-			uniformBuffers[pass][i][matStr] = matBuffer;
-
-			uniformsWriter[matStr].push_back(createUniformstWriter(matBuffer));
+			uniformBuffers[pass].push_back(matBuffer);
+			//uniformsWriter[matStr].push_back(createUniformstWriter(matBuffer));
 		}
-
-		// auto createConstantReader = [this](UniformBufferID& cbuffer, size_t cbOffset, size_t cbSize)
-		// 	{
-				/*
-				auto* cbuffer_ptr = (*cbuffer).get();
-				unsigned int alignedConstantBufferSize = cbuffer_ptr->alignedConstantBufferSize;
-				byte* mappedConstantBuffer = cbuffer_ptr->mappedConstantBuffer;
-
-				size_t offsetInMemory = alignedConstantBufferSize;
-				offsetInMemory += cbOffset;
-
-				return[this, cbuffer, cbOffset, cbSize, alignedConstantBufferSize, mappedConstantBuffer, offsetInMemory
-				](MaterialVariablesTypes type, nlohmann::json& value)
-					{
-						switch (type)
-						{
-						case MAT_VAR_BOOLEAN:
-						{
-							bool data;
-							memcpy(&data, mappedConstantBuffer + offsetInMemory, cbSize);
-							value["value"] = data;
-						}
-						break;
-						case MAT_VAR_INTEGER:
-						{
-							int data;
-							memcpy(&data, mappedConstantBuffer + offsetInMemory, cbSize);
-							value["value"] = data;
-						}
-						break;
-						case MAT_VAR_UNSIGNED_INTEGER:
-						{
-							unsigned int data;
-							memcpy(&data, mappedConstantBuffer + offsetInMemory, cbSize);
-							value["value"] = data;
-						}
-						break;
-						case MAT_VAR_RGB:
-						{
-							XMFLOAT3 data;
-							memcpy(&data, mappedConstantBuffer + offsetInMemory, cbSize);
-							value["value"] = { data.x, data.y, data.z };
-						}
-						break;
-						case MAT_VAR_RGBA:
-						{
-							XMFLOAT4 data;
-							memcpy(&data, mappedConstantBuffer + offsetInMemory, cbSize);
-							value["value"] = { data.x, data.y, data.z, data.w };
-						}
-						break;
-						case MAT_VAR_FLOAT:
-						{
-							float data;
-							memcpy(&data, mappedConstantBuffer + offsetInMemory, cbSize);
-							value["value"] = data;
-						}
-						break;
-						case MAT_VAR_FLOAT2:
-						{
-							XMFLOAT2 data;
-							memcpy(&data, mappedConstantBuffer + offsetInMemory, cbSize);
-							value["value"] = { data.x, data.y };
-						}
-						break;
-						case MAT_VAR_FLOAT3:
-						{
-							XMFLOAT3 data;
-							memcpy(&data, mappedConstantBuffer + offsetInMemory, cbSize);
-							value["value"] = { data.x, data.y, data.z };
-						}
-						break;
-						case MAT_VAR_FLOAT4:
-						{
-							XMFLOAT4 data;
-							memcpy(&data, mappedConstantBuffer + offsetInMemory, cbSize);
-							value["value"] = { data.x, data.y, data.z, data.w };
-						}
-						break;
-						case MAT_VAR_MATRIX4X4:
-						{
-							XMFLOAT4X4 data;
-							memcpy(&data, mappedConstantBuffer + offsetInMemory, cbSize);
-							value["value"] = {
-								data._11, data._12, data._13, data._14,
-								data._21, data._22, data._23, data._24,
-								data._31, data._32, data._33, data._34,
-								data._41, data._42, data._43, data._44,
-							};
-						}
-						break;
-						}
-					};
-				*/
-			// };
-
-		// if (uniformBuffers.contains(pass))
-		// {
-		// 	auto& ubufferPass = uniformBuffers.at(pass);
-			/*
-			auto& meshMaterials = materials.at(pass);
-			for (unsigned int mesh = 0; mesh < meshMaterials.size(); mesh++)
-			{
-				auto& vsVars = meshMaterials.at(mesh)->vertexShaderInstanceID->constantsBuffersVariables;
-				auto& psVars = meshMaterials.at(mesh)->pixelShaderInstanceID->constantsBuffersVariables;
-				auto& cbuffers = cbufferPass.at(mesh);
-				std::vector<std::string> vsConstants = nostd::GetKeysFromMap(vsVars);
-				std::vector<std::string> psConstants = nostd::GetKeysFromMap(psVars);
-
-				for (auto& constantName : vsConstants)
-				{
-					auto& vsVar = vsVars.at(constantName);
-					if (cbuffers.size() <= vsVar.bufferIndex)
-						continue;
-
-					constantsWriter[constantName].push_back(createConstantWriter(cbuffers[vsVar.bufferIndex], vsVar.offset, vsVar.size));
-					constantsReader[constantName].push_back(createConstantReader(cbuffers[vsVar.bufferIndex], vsVar.offset, vsVar.size));
-				}
-				for (auto& constantName : psConstants)
-				{
-					auto& psVar = psVars.at(constantName);
-					if (cbuffers.size() <= psVar.bufferIndex)
-						continue;
-
-					constantsWriter[constantName].push_back(createConstantWriter(cbuffers[psVar.bufferIndex], psVar.offset, psVar.size));
-					constantsReader[constantName].push_back(createConstantReader(cbuffers[psVar.bufferIndex], psVar.offset, psVar.size));
-				}
-			}
-			*/
-		// }
-
-		//same here but now the constant buffer has already been created
-		// for (unsigned int i = 0; i < JRenderer::numFrames; i++)
-		// {
-		// 	constantsBuffersLock[i]->store(false);
-		// 	constantsBuffersLock[i]->notify_one();
-		// }
 	}
 
 	void Renderable::DestroyUniformBuffersInstances(CameraID cam)
@@ -714,29 +558,100 @@ namespace Scene
 
 	void Renderable::CreateRenderPassBindGroups(RenderPassInstanceID rp)
 	{
-		for (unsigned int i = 0; i < meshes.size(); i++)
-		{
-			auto& mi = materials[rp].at(i);
-			
-			std::string bgName = "bindGroup:" + sceneObject->name() + ":" + std::to_string(i);
-			bindGroups[rp].push_back(
-				CreateBindGroup(unit,bgName)
-			);
-			/*
-			auto& vsCBparams = mi->vertexShaderInstanceID->constantsBuffersParameters;
-			auto& psCBparams = mi->pixelShaderInstanceID->constantsBuffersParameters;
-			auto& uavParams = mi->pixelShaderInstanceID->uavParameters;
-			auto& psSRVCSparams = mi->pixelShaderInstanceID->srvCSParameters;
-			auto& psSRVTexparams = mi->pixelShaderInstanceID->srvTexParameters;
-			auto& psSamplersParams = mi->pixelShaderInstanceID->samplersParameters;
-			auto& samplers = mi->samplers;
+		RenderableID r = uuid();
 
-			std::string rsName = "rootSignature:" + name() + ":" + std::to_string(i);
-			rootSignatures[rp].push_back(
-				CreateRootSignature(rsName, vsCBparams, psCBparams, uavParams, psSRVCSparams, psSRVTexparams, psSamplersParams, samplers)
-			);
-			*/
-		}
+		GetSceneUnit(unit)->PushToPreRender([r,rp]{
+
+			std::unordered_map<std::string, std::function<UniformBufferID(RenderPassInstanceID rp, unsigned int meshId)>> getUniformBuffer = {
+				{ CameraUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) {
+					if(!rp->camera && rp->renderPassTemplate->type() == RenderPassType_SwapChainPass && rp->renderPassTemplate->renderCallbackOverride() != RenderPassRenderCallbackOverride_Resolve)
+						return CameraID(*(GetSwapChainCameras(r->unit).begin()))->cameraUb;
+					return rp->camera->cameraUb;
+				} },
+				{ LightUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
+				{ ShadowMapUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
+				{ ModelUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->worldUb; } },
+				{ MaterialUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->uniformBuffers[rp][meshId]; } },
+				{ AnimationUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
+			};
+
+			for (unsigned int i = 0; i < r->meshes.size(); i++)
+			{
+				r->bindGroupsLayout[rp].push_back({});
+				r->bindGroups[rp].push_back({});
+
+				auto& mi = r->materials[rp].at(i);
+				auto& meshLayout = r->bindGroupsLayout[rp].back();
+				auto& meshBindGroups = r->bindGroups[rp].back();
+				auto bindings = mi->GetShaderBindings();
+				
+				auto maxGroups = std::get<0>(std::max_element(bindings.begin(),bindings.end(),[](auto a, auto b){
+					return std::get<0>(a.second) < std::get<0>(b.second);
+				})->second);
+				
+				for(unsigned int group=0; group <= maxGroups; group++)
+				{
+					std::unordered_map<std::string, ShaderResourceBinding> samegroup;
+					std::copy_if(bindings.begin(), bindings.end(), std::inserter(samegroup,samegroup.begin()), [i](auto binding){ return std::get<0>(binding.second)==i;});
+					std::vector<ShaderResourceBinding> sorted;
+					std::transform(samegroup.begin(), samegroup.end(), std::back_inserter(sorted), [](auto g){ return g.second; });
+					std::sort(sorted.begin(), sorted.end(), [](auto a, auto b){ return std::get<1>(a) < std::get<1>(b);});
+					
+					std::vector<wgpu::BindGroupLayoutEntry> layoutEntries;
+					unsigned int numFrames = 1U;
+					for(auto b:sorted)
+					{
+						auto [group, binding, buffer_size, multi_frame, num_offsets, name] = b;
+						wgpu::BindGroupLayoutEntry entry;
+
+						entry.binding = binding;
+						entry.visibility = wgpu::ShaderStage::Vertex | wgpu::ShaderStage::Fragment;
+						entry.buffer.type = wgpu::BufferBindingType::Uniform;
+						entry.buffer.minBindingSize = buffer_size;
+						entry.buffer.hasDynamicOffset = (num_offsets>0);
+
+						layoutEntries.push_back(entry);
+
+						if(multi_frame)
+							numFrames=JRenderer::numFrames;
+					}
+
+					wgpu::BindGroupLayoutDescriptor layoutDesc = {};
+					layoutDesc.entryCount = layoutEntries.size();
+					layoutDesc.entries = layoutEntries.data();
+
+					wgpu::BindGroupLayout layout = renderer->GetDevice().CreateBindGroupLayout(&layoutDesc);
+					meshLayout.push_back(layout);
+
+					std::vector<wgpu::BindGroup> bindGroups;
+					for(unsigned int i=0;i<numFrames;i++)
+					{
+						std::vector<wgpu::BindGroupEntry> bgEntries;
+						for(auto b:sorted)
+						{
+							wgpu::BindGroupEntry entry;
+							auto [group, binding, buffer_size, multi_frame, num_offsets, name] = b;
+
+							entry.binding = binding;
+							entry.buffer = getUniformBuffer.at(name)(rp, i)->uniformBuffer;
+							entry.offset = i * ((buffer_size + 255) & ~255); 
+							entry.size = buffer_size;
+
+							bgEntries.push_back(entry);
+						}
+
+						wgpu::BindGroupDescriptor bgDesc = {};
+						bgDesc.entryCount = bgEntries.size();
+						bgDesc.entries = bgEntries.data();
+						bgDesc.layout = layout;
+
+						wgpu::BindGroup bindGroup = renderer->GetDevice().CreateBindGroup(&bgDesc);
+						bindGroups.push_back(bindGroup);
+					}
+					meshBindGroups.push_back(bindGroups);
+				}
+			}
+		});
 	}
 
 	void Renderable::DestroyBindGroups(CameraID cam)
@@ -759,85 +674,7 @@ namespace Scene
 		*/
 	}
 
-/*
-	void Renderable::CreatePipelineStates(CameraID cam)
-	{
-		for (auto& rp : GetCameraRenderPasses(cam))
-		{
-			if (pipelineStates.contains(rp)) pipelineStates.erase(rp);
-			CreateRenderPassPipelineStates(rp);
-		}
-	}
-*/
-/*
-	void Renderable::CreateRenderPassPipelineStates(RenderPassInstanceID rp)
-	{
-		auto setPipelineStateAt = [this](RenderPassInstanceID rp, unsigned int i)
-			{
-				auto rtFormats = rp->GetRenderTargetsFormats();
-				auto depthFormat = rp->GetDepthStencilFormat();
-				auto& mesh = meshes.at(i);
-				auto& mi = materials[rp].at(i);
-				auto& vsLayout = vertexInputLayoutsMap[mesh->vertexClass];
-				auto& rootSignature = rootSignatures[rp].at(i);
-				auto& vsByteCode = mi->vertexShaderInstanceID->byteCode;
-				auto& psByteCode = mi->pixelShaderInstanceID->byteCode;
-
-				auto& material = mi->materialUUID;
-				BlendDesc blendDesc = material->blendState();
-				RasterizerDesc rasterizerDesc = material->rasterizerState();
-				DepthStencilDesc depthStencilDesc = material->overrideDepthStencil() ? material->depthStencil() : depthStencil();
-				if (depthFormat == DXGI_FORMAT_UNKNOWN)
-				{
-					depthStencilDesc.DepthEnable = false;
-				}
-
-				D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveTopologyType = D3D_PRIMITIVE_TOPOLOGYToD3D12_PRIMITIVE_TOPOLOGY_TYPE.at(topology());
-
-				std::string plName = "pipelineState:" + name() + ":" + std::to_string(i);
-
-				pipelineStates[rp][i] = CreateGraphicsPipelineState(plName, vsLayout, vsByteCode, psByteCode, rootSignature, blendDesc, rasterizerDesc, depthStencilDesc, primitiveTopologyType, rtFormats, depthFormat);
-			};
-
-		pipelineStates[rp].resize(meshes.size(), nullptr);
-
-		for (unsigned int i = 0; i < meshes.size(); i++)
-		{
-			setPipelineStateAt(rp, i);
-			auto& mi = materials[rp].at(i);
-			auto& material = mi->materialUUID;
-			auto& renderPass = rp->renderPassTemplate;
-			size_t hash = 0;
-			nostd::hash_combine(hash, std::get<0>(SUuuid()), std::get<1>(SUuuid()), rp(), i);
-
-			material->SetPipelineStateCallback(hash, [=] { setPipelineStateAt(rp, i); });
-			renderPass->SetPipelineStateCallback(hash, [=] { setPipelineStateAt(rp, i); });
-		}
-	}
-*/
-/*
-	void Renderable::DestroyPipelineStates(CameraID cam)
-	{
-		if (cam.empty()) return;
-		for (auto& rp : GetCameraRenderPasses(cam))
-		{
-			DestroyRenderPassPipelineStates(rp);
-		}
-	}
-*/
-/*
-	void Renderable::DestroyRenderPassPipelineStates(RenderPassInstanceID rp)
-	{
-		if (pipelineStates.contains(rp))
-		{
-			for (auto& ps : pipelineStates.at(rp))
-			{
-				ps = nullptr;
-			}
-			pipelineStates.erase(rp);
-		}
-	}
-
+	/*
 	void Renderable::CreateRenderMethods(CameraID cam)
 	{
 		for (auto& rp : GetCameraRenderPasses(cam))

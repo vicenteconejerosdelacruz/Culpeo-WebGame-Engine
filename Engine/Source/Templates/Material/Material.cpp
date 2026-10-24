@@ -559,40 +559,32 @@ namespace Templates
 	{
 		using namespace DeviceUtils;
 		
-		std::unordered_map<std::string, ShaderResourceBinding> vsBinding = vertexShaderInstanceID->GetBindingMap();
+		// std::unordered_map<std::string, ShaderResourceBinding> vsBinding = vertexShaderInstanceID->GetBindingMap();
 		std::unordered_map<std::string, ShaderResourceBinding> psBinding = pixelShaderInstanceID->GetBindingMap();
 				
-		auto itVS = std::find_if(vsBinding.begin(), vsBinding.end(), [ubName](auto& pair) { return pair.first == ubName; });
+		// auto itVS = std::find_if(vsBinding.begin(), vsBinding.end(), [ubName](auto& pair) { return pair.first == ubName; });
 		auto itPS = std::find_if(psBinding.begin(), psBinding.end(), [ubName](auto& pair) { return pair.first == ubName; });
 		
-		if(itVS==vsBinding.end() && itPS==psBinding.end())
-			return UniformBufferID("");
+		// if(itVS==vsBinding.end() && itPS==psBinding.end())
+		// 	return UniformBufferID("");
 		
 		if(itPS!=psBinding.end())
 		{
 			auto [group, binding, buffer_size, multi_frame, num_offsets, name] = itPS->second;
 			return CreateUniformBuffer(id, buffer_size, multi_frame, num_offsets, ubName);
 		}
-		else
-		{
-			auto [group, binding, buffer_size, multi_frame, num_offsets, name] = itVS->second;
-			return CreateUniformBuffer(id, buffer_size, multi_frame, num_offsets, ubName);
-		}
+		// else
+		// {
+		// 	auto [group, binding, buffer_size, multi_frame, num_offsets, name] = itVS->second;
+		// 	return CreateUniformBuffer(id, buffer_size, multi_frame, num_offsets, ubName);
+		// }
 
 		return UniformBufferID("");
-		/*
-		std::cout << "bindings VS" << std::endl;
-		for(auto it=vsBinding.begin();it!=vsBinding.end();it++)
-		{
-			//<group, binding, buffer size, multi frame, num offsets>
-			std::cout << it->first << " group(" << std::get<0>(it->second) << ") binding(" << std::get<1>(it->second) << "), buffer size(" << std::get<2>(it->second) << "), multi frame(" << std::get<3>(it->second) << "), num offsets(" << std::get<4>(it->second) << ")" << " name(" << std::get<5>(it->second) << ")" << std::endl;
-		}
-		std::cout << "bindings PS" << std::endl;
-		for(auto it=psBinding.begin();it!=psBinding.end();it++)
-		{
-			std::cout << it->first << " group(" << std::get<0>(it->second) << ") binding(" << std::get<1>(it->second) << "), buffer size(" << std::get<2>(it->second) << "), multi frame(" << std::get<3>(it->second) << "), num offsets(" << std::get<4>(it->second) << ")" << " name(" << std::get<5>(it->second) << ")" << std::endl;
-		}
-		*/
+	}
+
+	std::unordered_map<std::string, ShaderResourceBinding> MaterialInstance::GetShaderBindings()
+	{
+		return pixelShaderInstanceID->GetBindingMap();
 	}
 
 	void DestroyMaterialInstance(JUUID materialInstance)

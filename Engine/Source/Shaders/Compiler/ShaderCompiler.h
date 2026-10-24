@@ -1,14 +1,5 @@
 #pragma once
 
-// #include "CustomIncludeHandler.h"
-// #include <Shader/Shader.h>
-
-// namespace Templates
-// {
-// 	struct ShaderInstance;
-// };
-// using namespace Templates;
-
 struct ShaderResourceInfo {
 	uint32_t group;
 	uint32_t binding;
@@ -55,7 +46,6 @@ namespace ShaderCompiler {
 		{ COMPUTE_SHADER, L"_COMPUTE_SHADER" },
 	};
 
-	// void BuildShaderCompiler();
 	std::vector<ShaderResourceInfo> ParseWGSLBindings(const std::string& preprocessedWGSL);
 	std::string PreprocessWGSL(
 		const std::string& filename, 
@@ -64,9 +54,4 @@ namespace ShaderCompiler {
 		std::unordered_set<std::string>& includedFiles);
 	std::vector<VertexAttributeInfo> ParseVertexInputAttributes(const std::string& preprocessedWGSL);
 	bool Compile(SceneUnitId id, ShaderInstanceID shaderInstance, Source params, ShaderIncludesDependencies& dependencies);
-	// void DestroyShaderCompiler();
-
-	//compiler and utils
-	// static ComPtr<IDxcCompiler3> pCompiler;
-	// static ComPtr<IDxcUtils> pUtils;
 };

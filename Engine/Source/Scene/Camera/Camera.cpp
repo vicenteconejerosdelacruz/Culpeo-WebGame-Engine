@@ -547,7 +547,7 @@ namespace Scene
 
 		renderable->CreateMaterialsInstances(uuid());
 		renderable->CreateUniformBuffersInstances(uuid());
-		// renderable->CreateBindGroups(uuid());
+		renderable->CreateBindGroups(uuid());
 		// renderable->CreatePipelineStates(uuid());
 		// renderable->CreateRenderMethods(uuid());
 	}
