@@ -19,9 +19,14 @@
 
 using RenderableMeshes = std::vector<MeshInstanceID>;
 using RenderableMaterials = std::unordered_map<RenderPassInstanceID, std::vector<MaterialInstanceID>>; //RenderPassInstanceID -> MaterialInstanceID
-using RenderableUniformBuffer = std::unordered_map<RenderPassInstanceID, std::vector<UniformBufferID>>; //RenderPassUUID -> vector<UniformBufferID>[meshIdx]
-using RenderableBindGroupLayout = std::unordered_map<RenderPassInstanceID, std::vector<std::vector<wgpu::BindGroupLayout>>>; // RenderPass -> vector<vector<BindGroupLayout>>[meshIdx][groupId]
-using RenderableBindGroup =  std::unordered_map<RenderPassInstanceID, std::vector<std::vector<std::vector<wgpu::BindGroup>>>>; //RenderPassUUID -> vector<vector<vector<BindGroup>>>[meshIdx][groupId][frame]
+using RenderableUniformBuffer = std::unordered_map<RenderPassInstanceID, std::vector<UniformBufferID>>; //RenderPassInstanceID -> vector<UniformBufferID>[meshIdx]
+using RenderableBindGroupLayout = std::unordered_map<RenderPassInstanceID, std::vector<std::vector<wgpu::BindGroupLayout>>>; // RenderPassInstanceID -> vector<vector<BindGroupLayout>>[meshIdx][groupId]
+using RenderableBindGroup =  std::unordered_map<RenderPassInstanceID, std::vector<std::vector<std::vector<wgpu::BindGroup>>>>; //RenderPassInstanceID -> vector<vector<vector<BindGroup>>>[meshIdx][groupId][frame]
+using RenderableShaderBinding = std::unordered_map<RenderPassInstanceID, std::vector<std::vector<std::vector<ShaderResourceBinding>>>>; //RenderPassInstanceID -> vector<vector<ShaderResourceBinding>>[mesh][groupId][binding]
+using RenderableBindingGroupOffsets = std::unordered_map<RenderPassInstanceID, std::unordered_map<unsigned int, size_t>>; //RenderPassInstanceID -> map<group, size_t>
+using RenderablePipelines = std::unordered_map<RenderPassInstanceID, std::vector<wgpu::RenderPipeline>>; //RenderPassInstanceID -> vector<pipeline>[mesh]
+using BindGroupSetter = std::function<void(wgpu::RenderPassEncoder& encoder, unsigned int backBufferIndex)>;
+using BindGroupRender = std::map<std::tuple<CameraID, RenderPassInstanceID>, std::vector<std::vector<BindGroupSetter>>>;
 // using DescriptorTableSetter = std::function<void(CComPtr<ID3D12GraphicsCommandList2>& commandList, unsigned int backBufferIndex, unsigned int& slot)>;
 // using DescriptorTableRender = std::map<std::tuple<CameraID, RenderPassInstanceID>, std::vector<std::vector<DescriptorTableSetter>>>;
 
@@ -131,7 +136,12 @@ namespace Scene
 		void CreateRenderPassMaterialsInstances(RenderPassInstanceID pass);
 		void DestroyMaterialsInstances(CameraID cam);
 		void DestroyRenderPassMaterialsInstances(RenderPassInstanceID pass);
-		// //Uniform Buffers
+		//Pipelines
+		void CreatePipelines(CameraID cam);
+		void CreateRenderPassPipelines(RenderPassInstanceID pass);
+		void DestroyPipelines(CameraID cam);
+		void DestroyRenderPassPipelines(RenderPassInstanceID pass);
+		//Uniform Buffers
 		void CreateUniformBuffersInstances(CameraID cam);
 		void CreateRenderPassUniformBuffersInstances(RenderPassInstanceID pass);
 		void DestroyUniformBuffersInstances(CameraID cam);
@@ -142,8 +152,8 @@ namespace Scene
 		void DestroyBindGroups(CameraID cam);
 		void DestroyRenderPassBindGroups(RenderPassInstanceID rp);
 		//Render Methods
-		// void CreateRenderMethods(CameraID cam);
-		// std::vector<std::vector<DescriptorTableSetter>> CreateRenderPassRenderMethods(CameraID cam, RenderPassInstanceID rp);
+		void CreateRenderMethods(CameraID cam);
+		std::vector<std::vector<BindGroupSetter>> CreateRenderPassRenderMethods(CameraID cam, RenderPassInstanceID rp);
 #if defined(_EDITOR)
 		// std::vector<std::vector<DescriptorTableSetter>> CreateEditorCameraRenderPassRenderMethods(CameraID edCam, CameraID cam, RenderPassInstanceID rp);
 #endif
@@ -164,7 +174,7 @@ namespace Scene
 		// void WriteMaterialVariablesToConstantsBufferSpace(MaterialInstanceID material, ConstantsBufferID cbvData, unsigned int cbvFrameIndex);
 		// void WriteConstantsBuffer(std::string constantName, void* data, unsigned int backbufferIndex, unsigned int slot = 0U, size_t offset = 0ULL);
 		// void WriteAnimationConstantsBuffer(unsigned int frame);
-		// void WriteConstantsBuffer(unsigned int frame);
+		void WriteUniformBuffer(unsigned int frame);
 
 		//Animation
 		// void CreateAnimationSequences();
@@ -204,16 +214,19 @@ namespace Scene
 		//Model3D
 		// Model3DInstanceID model3D;
 		//Meshes
+		UniformBufferID worldUb;
 		RenderableMeshes meshes;
 		RenderableMaterials materials;
-		UniformBufferID worldUb;
+		RenderablePipelines pipelines;
 		RenderableUniformBuffer uniformBuffers;
 		// std::unique_ptr<std::atomic_bool> constantsBuffersLock[JRenderer::numFrames];
 		std::unordered_map<std::string, std::vector<UniformBufferBufferWritter>> uniformsWriter;
 		// std::unordered_map<std::string, std::vector<ConstantsBufferReader>> constantsReader;
-		// DescriptorTableRender descriptorsRenders;
+		RenderableShaderBinding shaderBindings;
 		RenderableBindGroupLayout bindGroupsLayout;
 		RenderableBindGroup bindGroups;
+		BindGroupRender bindGroupRenders;
+		RenderableBindingGroupOffsets bingGroupOffsets;
 		//Animations
 		// float lastAnimationTime;
 		// bool forceAnimation;

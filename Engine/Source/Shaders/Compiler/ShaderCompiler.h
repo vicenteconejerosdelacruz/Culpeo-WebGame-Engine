@@ -25,18 +25,18 @@ struct VertexAttributeInfo {
 
 namespace ShaderCompiler {
 
-	inline static std::unordered_map<JShaderType, std::wstring> shaderEntryPoint =
+	inline static std::unordered_map<JShaderType, std::string> shaderEntryPoint =
 	{
-		{ VERTEX_SHADER, L"main_vs"	},
-		{ PIXEL_SHADER, L"main_ps" },
-		{ COMPUTE_SHADER, L"main_cs" },
+		{ VERTEX_SHADER, "main_vs"	},
+		{ PIXEL_SHADER, "main_ps" },
+		{ COMPUTE_SHADER, "main_cs" },
 	};
 
-	inline static std::unordered_map<JShaderType, std::wstring> shaderTarget =
+	inline static std::unordered_map<JShaderType, std::string> shaderTarget =
 	{
-		{ VERTEX_SHADER, L"vs_6_5" },
-		{ PIXEL_SHADER, L"ps_6_5" },
-		{ COMPUTE_SHADER, L"cs_6_5" },
+		{ VERTEX_SHADER, "vs_6_5" },
+		{ PIXEL_SHADER, "ps_6_5" },
+		{ COMPUTE_SHADER, "cs_6_5" },
 	};
 
 	inline static std::unordered_map<JShaderType, std::wstring> shaderDefine =

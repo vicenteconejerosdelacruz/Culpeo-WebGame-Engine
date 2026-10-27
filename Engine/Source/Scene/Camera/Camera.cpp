@@ -548,8 +548,8 @@ namespace Scene
 		renderable->CreateMaterialsInstances(uuid());
 		renderable->CreateUniformBuffersInstances(uuid());
 		renderable->CreateBindGroups(uuid());
-		// renderable->CreatePipelineStates(uuid());
-		// renderable->CreateRenderMethods(uuid());
+		renderable->CreatePipelines(uuid());
+		renderable->CreateRenderMethods(uuid());
 	}
 
 /*
@@ -862,7 +862,7 @@ namespace Scene
 
 	void Camera::CreateUniformsBuffer()
 	{
-		cameraUb = DeviceUtils::CreateUniformBuffer(unit, sizeof(CameraAttributes), true, 0, name());
+		cameraUb = DeviceUtils::CreateUniformBuffer(unit, sizeof(CameraAttributes), true, name());
 	}
 
 	void Camera::WriteUniformsBuffer(unsigned int frame)
@@ -891,6 +891,7 @@ namespace Scene
 			atts.IBLNumEnvLevels = 0.0f;
 		}
 
+		//DumpCameraAttributes(atts);
 		cameraUb->push(atts, frame);
 	}
 

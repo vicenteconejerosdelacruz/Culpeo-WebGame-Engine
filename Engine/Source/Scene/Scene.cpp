@@ -5,10 +5,11 @@
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 #include <Level.h>
 #include <Camera/Camera.h>
+#include <Renderer.h>
 // #include <unordered_map>
 // #include <Application.h>
 
-// extern std::unique_ptr<JRenderer> renderer;
+extern std::unique_ptr<JRenderer> renderer;
 extern std::atomic<bool> g_EngineReady;
 #if defined(_EDITOR)
 namespace Editor
@@ -767,19 +768,22 @@ namespace Scene
 // 		}
 // 	}
 
-// 	void WriteConstantsBuffers(SceneUnitId id)
-// 	{
+	void WriteUniformBuffers(SceneUnitId id)
+	{
 // 		auto& scene = GetSceneUnit(id);
 // 		unsigned int frame = scene->Frame();
 
-// 		for (JUUID uuid : GetRenderables(id))
-// 		{
+ 		for (RenderableID r : GetRenderables(id))
+ 		{
+			if(!ControllerExists(r())) continue;
+
+			r->WriteUniformBuffer(renderer->GetBackBufferIndex());
 // 			RenderableID r = MAKESUUUID(id, uuid);
 // 			if (!RenderableSceneObjectExist(r) || !r->RenderReady()) continue;
 
 // 			r->WriteAnimationConstantsBuffer(frame);
 // 			r->WriteConstantsBuffer(frame);
-// 		}
+ 		}
 
 // 		//write the constants buffers of the cameras which renders shadow maps
 // 		for (JUUID uuid : GetCameras(id))
@@ -790,7 +794,7 @@ namespace Scene
 // 			c->WriteLightsConstantsBuffer(frame);
 // 			c->WriteShadowMapsConstantsBuffer(frame);
 // 		}
-// 	}
+	}
 
 // 	void RenderSceneShadowMaps(SceneUnitId id)
 // 	{

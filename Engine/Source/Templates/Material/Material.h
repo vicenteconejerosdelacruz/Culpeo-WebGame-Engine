@@ -191,7 +191,7 @@ namespace Templates
 		void UpdateTexture(TextureShaderUsage usage, TextureJsonID texture);
 		const MaterialVariablesMapping& GetVariablesMapping() const { return variablesMapping; }
 		UniformBufferID CreateUniformBuffers(SceneUnitId id, std::string ubName);
-		std::unordered_map<std::string, ShaderResourceBinding> GetShaderBindings();
+		std::vector<std::vector<ShaderResourceBinding>> GetShaderBindings();
 	};
 
 	void DestroyMaterialInstance(JUUID materialInstance);

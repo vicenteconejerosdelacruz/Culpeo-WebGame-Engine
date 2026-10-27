@@ -9,9 +9,9 @@
 // GRUPO 0: Frecuencia por FRAME (Globales)
 // ------------------------------------------
 @group(0) @binding(0) var<uniform> camera: Camera;
-@group(0) @binding(1) var<uniform> lights: Lights;
+//@group(0) @binding(1) var<uniform> lights: Lights;
 #ifdef _HAS_SHADOWMAPS_TEXTURES
-@group(0) @binding(2) var<uniform> shadowMaps: ShadowMaps;
+//@group(0) @binding(2) var<uniform> shadowMaps: ShadowMaps;
 #endif
 
 // ------------------------------------------
@@ -138,8 +138,10 @@ fn main_ps(input: PixelShaderInput) -> @location(0) vec4<f32> {
     */
 
     let baseColor = material.baseColor.rgb;
-    var outputColor = baseColor * getGridColor(input) * diffuseFinalLightContribution;
-    outputColor += specularFinalLightContribution;
+    //var outputColor = baseColor * getGridColor(input) * diffuseFinalLightContribution;
+    //outputColor += specularFinalLightContribution;
+	//outputColor -= vec3<f32>(100.0f);
+	var outputColor = getGridColor(input);
     
     return vec4<f32>(toGammaSpace(outputColor), 1.0f);
 }

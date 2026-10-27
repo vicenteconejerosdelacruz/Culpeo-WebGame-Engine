@@ -9,6 +9,7 @@ namespace DeviceUtils
 	{
 		wgpu::Buffer vertexBuffer;
 		unsigned int vertexCount;
+		std::vector<std::byte> rawData;
 	};
 
 	std::unique_ptr<VertexBuffer>& GetVertexBuffer(JUUID uuid);

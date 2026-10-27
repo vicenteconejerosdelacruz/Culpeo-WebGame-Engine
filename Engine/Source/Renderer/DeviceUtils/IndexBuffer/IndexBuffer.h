@@ -9,6 +9,7 @@ namespace DeviceUtils
 	{
 		wgpu::Buffer indexBuffer;
 		unsigned int indexCount;
+		std::vector<std::byte> rawData;
 	};
 
 	std::unique_ptr<IndexBuffer>& GetIndexBuffer(JUUID uuid);

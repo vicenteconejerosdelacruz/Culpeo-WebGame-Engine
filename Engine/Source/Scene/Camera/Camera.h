@@ -41,7 +41,22 @@ struct CameraAttributes {
 	XMFLOAT4 widthHeight;
 	float white;
 	float IBLNumEnvLevels;
+	float _pad0;                         //  4 bytes
+    float _pad1;                         //  4 bytes
 };
+
+inline void DumpCameraAttributes(CameraAttributes& atts)
+{
+	MatrixDump("view",atts.view);
+	MatrixDump("viewProjection",atts.viewProjection);
+	PrintXMFloat4(atts.eyePosition,"eyePosition");
+    PrintXMFloat4(atts.eyeForward,"eyeForward");
+    PrintXMFloat4(atts.eyeUp,"eyeUp");
+    PrintXMFloat4(atts.eyeRight,"eyeRight");
+    PrintXMFloat4(atts.widthHeight,"widthHeight");
+	std::cout << "white:" << atts.white << std::endl;
+	std::cout << "IBLNumEnvLevels:" << atts.IBLNumEnvLevels << std::endl;
+}
 
 using namespace Scene::CameraProjections;
 using namespace Game;

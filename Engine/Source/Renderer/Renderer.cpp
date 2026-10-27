@@ -7,6 +7,7 @@
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 // #include <DeviceUtils/RenderToTexture/RenderToTexture.h>
 #include <RenderPass/RenderPass.h>
+#include <Camera/Camera.h>
 
 // using namespace Templates::RenderPass;
 //using namespace DeviceUtils;
@@ -88,6 +89,8 @@ void JRenderer::CreateWindow()
 		renderer->ResizeSwapChain(width, height);
 	});
 	glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
+	hWndRect.right = windowWidth;
+	hWndRect.bottom = windowHeight;
 }
 
 void JRenderer::ResizeSwapChain(int width, int height)
@@ -98,6 +101,7 @@ void JRenderer::ResizeSwapChain(int width, int height)
 	windowHeight = height;
 	hWndRect.right = width;
 	hWndRect.bottom = height;
+	PrintRect("hWndRect", hWndRect);
 	ConfigureSurface(windowWidth, windowHeight);
 }
 
@@ -129,10 +133,10 @@ void JRenderer::CreateSwapChainPass()
 	swapChainPass = CreateRenderPassInstance(CameraID(), GetRenderPassUUIDByName("simplePass"), 0);
 }
 
-// unsigned int JRenderer::GetBackBufferIndex()
-// {
-// 	return backBufferIndex;
-// }
+unsigned int JRenderer::GetBackBufferIndex()
+{
+	return backBufferIndex;
+}
 
 // void JRenderer::UpdateViewportPerspective() {
 // 	RECT rect;

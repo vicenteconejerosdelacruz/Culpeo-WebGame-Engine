@@ -120,8 +120,27 @@ typedef Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING> VertexPosNorm
 typedef Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0> VertexPosNormalTangentBiTangentTexCoord;
 typedef Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING> VertexPosNormalTangentBiTangentTexCoordSkinning;
 
+inline static const std::map<VertexClass, size_t> VertexStrides {
+	{ VertexClass::POS, sizeof(Vertex<VertexClass::POS>) },
+	{ VertexClass::POS_SKINNING, sizeof(Vertex<VertexClass::POS_SKINNING>) },
+	{ VertexClass::POS_COLOR, sizeof(Vertex<VertexClass::POS_COLOR>) },
+	{ VertexClass::POS_TEXCOORD0, sizeof(Vertex<VertexClass::POS_TEXCOORD0>) },
+	{ VertexClass::POS_TEXCOORD0_SKINNING, sizeof(Vertex<VertexClass::POS_TEXCOORD0_SKINNING>) },
+	{ VertexClass::POS_NORMAL, sizeof(Vertex<VertexClass::POS_NORMAL>) },
+	{ VertexClass::POS_NORMAL_TEXCOORD0, sizeof(Vertex<VertexClass::POS_NORMAL_TEXCOORD0>) },
+	{ VertexClass::POS_NORMAL_TANGENT_TEXCOORD0, sizeof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0>) },
+	{ VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING, sizeof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING>) },
+	{ VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0, sizeof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0>) },
+	{ VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING, sizeof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING>) },
+};
+
 //define the D3D12 input layout of each vertex type
-template<typename T> struct VertexInputLayout;
+//template<typename T> struct VertexInputLayout;
+// template<> struct VertexInputLayout<VertexPos> {
+// 	static constexpr D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
+// 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(VertexPos,Position), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+// 	};
+// };
 // template<> struct VertexInputLayout<VertexPos> {
 // 	static constexpr D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
 // 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(VertexPos,Position), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
@@ -300,7 +319,7 @@ enum VertexComponent {
 	_MAX
 };
 
-static const std::map<VertexComponent, std::string> VertexComponentDefines = {
+inline static const std::map<VertexComponent, std::string> VertexComponentDefines = {
 	{ VertexComponent::_POS,"_HAS_POS" },
 	{ VertexComponent::_COLOR,"_HAS_COLOR" },
 	{ VertexComponent::_TEXCOORD0,"_HAS_TEXCOORD0" },
@@ -312,6 +331,280 @@ static const std::map<VertexComponent, std::string> VertexComponentDefines = {
 	{ VertexComponent::_BITANGENT,"_HAS_BITANGENT" },
 	{ VertexComponent::_SKINNING,"_HAS_SKINNING" }
 };
+
+inline const std::map<VertexClass, std::vector<wgpu::VertexAttribute>> WebGPUVertexInputLayout = 
+{
+ 	{ VertexClass::POS,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS>, Position),
+					.shaderLocation = 0
+				}
+			}
+		)
+ 	},
+	{ VertexClass::POS_SKINNING,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_SKINNING>, Position),
+					.shaderLocation = 0
+				},
+				{
+					.format = wgpu::VertexFormat::Uint32x4,
+					.offset = offsetof(Vertex<VertexClass::POS_SKINNING>, BoneIds),
+					.shaderLocation = 1
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x4,
+					.offset = offsetof(Vertex<VertexClass::POS_SKINNING>, BoneWeights),
+					.shaderLocation = 2
+				}
+			}
+		)
+ 	},
+	{ VertexClass::POS_COLOR,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_COLOR>, Position),
+					.shaderLocation = 0
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_COLOR>, Color),
+					.shaderLocation = 1
+				}
+			}
+		)
+ 	},
+	{ VertexClass::POS_TEXCOORD0,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_TEXCOORD0>, Position),
+					.shaderLocation = 0
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x2,
+					.offset = offsetof(Vertex<VertexClass::POS_TEXCOORD0>, TexCoord),
+					.shaderLocation = 1
+				}
+			}
+		)
+ 	},
+	{ VertexClass::POS_TEXCOORD0_SKINNING,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_TEXCOORD0_SKINNING>, Position),
+					.shaderLocation = 0
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x2,
+					.offset = offsetof(Vertex<VertexClass::POS_TEXCOORD0_SKINNING>, TexCoord),
+					.shaderLocation = 1
+				},
+				{
+					.format = wgpu::VertexFormat::Uint32x4,
+					.offset = offsetof(Vertex<VertexClass::POS_TEXCOORD0_SKINNING>, BoneIds),
+					.shaderLocation = 2
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x4,
+					.offset = offsetof(Vertex<VertexClass::POS_TEXCOORD0_SKINNING>, BoneWeights),
+					.shaderLocation = 3
+				}
+			}
+		)
+ 	},
+	{ VertexClass::POS_NORMAL,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL>, Position),
+					.shaderLocation = 0
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL>, Normal),
+					.shaderLocation = 1
+				}
+			}
+		)
+ 	},
+	{ VertexClass::POS_NORMAL_TEXCOORD0,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TEXCOORD0>, Position),
+					.shaderLocation = 0
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TEXCOORD0>, Normal),
+					.shaderLocation = 1
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x2,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TEXCOORD0>, TexCoord),
+					.shaderLocation = 2
+				}
+			}
+		)
+ 	},
+	{ VertexClass::POS_NORMAL_TANGENT_TEXCOORD0,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0>, Position),
+					.shaderLocation = 0
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0>, Normal),
+					.shaderLocation = 1
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0>, Tangent),
+					.shaderLocation = 2
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x2,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0>, TexCoord),
+					.shaderLocation = 3
+				}
+			}
+		)
+ 	},
+	{ VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING>, Position),
+					.shaderLocation = 0
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING>, Normal),
+					.shaderLocation = 1
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING>, Tangent),
+					.shaderLocation = 2
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x2,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING>, TexCoord),
+					.shaderLocation = 3
+				},
+				{
+					.format = wgpu::VertexFormat::Uint32x4,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING>, BoneIds),
+					.shaderLocation = 4
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x4,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_TEXCOORD0_SKINNING>, BoneWeights),
+					.shaderLocation = 5
+				}
+			}
+		)
+ 	},
+	{ VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0>, Position),
+					.shaderLocation = 0
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0>, Normal),
+					.shaderLocation = 1
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0>, Tangent),
+					.shaderLocation = 2
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0>, BiTangent),
+					.shaderLocation = 3
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x2,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0>, TexCoord),
+					.shaderLocation = 4
+				}
+			}
+		)
+ 	},
+	{ VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING,
+		std::vector<wgpu::VertexAttribute>(
+			{
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING>, Position),
+					.shaderLocation = 0
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING>, Normal),
+					.shaderLocation = 1
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING>, Tangent),
+					.shaderLocation = 2
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x3,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING>, BiTangent),
+					.shaderLocation = 3
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x2,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING>, TexCoord),
+					.shaderLocation = 4
+				},
+				{
+					.format = wgpu::VertexFormat::Uint32x4,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING>, BoneIds),
+					.shaderLocation = 5
+				},
+				{
+					.format = wgpu::VertexFormat::Float32x4,
+					.offset = offsetof(Vertex<VertexClass::POS_NORMAL_TANGENT_BITANGENT_TEXCOORD0_SKINNING>, BoneWeights),
+					.shaderLocation = 6
+				}
+			}
+		)
+ 	},
+};
+
+inline wgpu::VertexBufferLayout GetVertexBufferLayout(VertexClass T) {
+    return wgpu::VertexBufferLayout{
+        .stepMode = wgpu::VertexStepMode::Vertex,
+        .arrayStride = VertexStrides.at(T), // El tamaño total de tu estructura en C++ (ej. 32 bytes)
+        .attributeCount = static_cast<size_t>(WebGPUVertexInputLayout.at(T).size()),
+        .attributes = WebGPUVertexInputLayout.at(T).data()
+    };
+}
 
 static const std::set<std::string> VertexTextureComponentsString =
 {

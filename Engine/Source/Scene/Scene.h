@@ -136,7 +136,7 @@ std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName =
 // 	void SceneObjectsStep(DX::StepTimer& timer);
 // 	void FetchPhysicsScenesResults(DX::StepTimer& timer);
 // 	void SimulatePhysicScenes(DX::StepTimer& timer);
-// 	void WriteConstantsBuffers(SceneUnitId id);
+ 	void WriteUniformBuffers(SceneUnitId id);
 // 	void RenderSceneShadowMaps(SceneUnitId id);
 	void RenderSceneCameras(SceneUnitId id);
 // 	void RenderControllers(SceneUnitId id);

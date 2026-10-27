@@ -13,47 +13,11 @@ namespace DeviceUtils
 		return uniformBuffers.at(uuid);
 	}
 	
-	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, bool multiFrame, unsigned int numOffsets, std::string ubName)
+	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, bool multiFrame, std::string ubName)
 	{
 		UniformBufferID uniformBufferID = getUUID();
-		std::unique_ptr<UniformBuffer> ubData = std::make_unique<UniformBuffer>(bufferSize, multiFrame, numOffsets, ubName);
+		std::unique_ptr<UniformBuffer> ubData = std::make_unique<UniformBuffer>(bufferSize, multiFrame, ubName);
 
-		/*
-		//create the binding layout entry
-		wgpu::BindGroupLayoutEntry bindingLayout = {};
-		bindingLayout.binding = binding;
-		bindingLayout.visibility = wgpu::ShaderStage::Vertex | wgpu::ShaderStage::Fragment;
-		bindingLayout.buffer.type = wgpu::BufferBindingType::Uniform;
-		bindingLayout.buffer.hasDynamicOffset = false;
-		bindingLayout.buffer.minBindingSize = bufferSize;
-
-		//create the binding layout descriptor
-		wgpu::BindGroupLayoutDescriptor layoutDesc = {};
-		layoutDesc.nextInChain = nullptr;
-		layoutDesc.label = cbName.c_str();
-		layoutDesc.entryCount = 1;
-		layoutDesc.entries = &bindingLayout;
-
-		//create the bind group layout
-		cbvData->bindGroupLayout = renderer->GetDevice().CreateBindGroupLayout(&layoutDesc);
-
-		//now we create the bind groups
-		for(unsigned int i=0U ; i < JRenderer::numFrames; i++ )
-		{
-			wgpu::BindGroupEntry entry = {};
-			entry.binding = 0;
-			entry.buffer = cbvData->constantBuffer;
-			entry.offset = i * cbvData->alignedConstantBufferSize;
-			entry.size = cbvData->alignedConstantBufferSize;
-
-			wgpu::BindGroupDescriptor desc = {};
-			desc.layout = cbvData->bindGroupLayout;
-			desc.entryCount=1;
-			desc.entries = &entry;
-
-			cbvData->bindGroup.push_back(renderer->GetDevice().CreateBindGroup(&desc));
-		}
-		*/
 		assert(!uniformBuffers.contains(uniformBufferID()));
 		uniformBuffers.insert_or_assign(uniformBufferID(), std::move(ubData));
 
@@ -85,22 +49,20 @@ namespace DeviceUtils
 		uniformBuffers.clear();
 	}
 
-	UniformBuffer::UniformBuffer(size_t bufferSize, bool multiFrame, unsigned int nOffsets, std::string ubName)
+	UniformBuffer::UniformBuffer(size_t bufferSize, bool multiFrame, std::string ubName)
 	{
 		name = ubName;
 		alignedBufferSize = (bufferSize + 255) & ~255;
 		numFrames = multiFrame?JRenderer::numFrames:0U;
-		numOffsets = nOffsets;
 		size_t size = alignedBufferSize;
 		if(multiFrame) size*=JRenderer::numFrames;
-		if(numOffsets>1) size*=nOffsets;
 		mappedBuffer.resize(size);
 	}
 
 	void UniformBuffer::push(void* data, size_t offset, size_t size)
 	{
 		memcpy(mappedBuffer.data()+offset, data, size);
-		renderer->GetDevice().GetQueue().WriteBuffer(uniformBuffer,offset, &data, size);
+		renderer->GetDevice().GetQueue().WriteBuffer(uniformBuffer, offset, mappedBuffer.data() + offset, size);
 	}
 
 	void UniformBuffer::Destroy()

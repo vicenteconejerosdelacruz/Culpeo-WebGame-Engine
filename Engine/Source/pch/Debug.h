@@ -30,6 +30,11 @@ inline void PrintXMFloat3(XMFLOAT3 v, std::string name = "")
 	std::cout << std::string(name + std::string((name != "") ? ":" : "") + std::to_string(v.x) + "," + std::to_string(v.y) + "," + std::to_string(v.z)) << std::endl;
 }
 
+inline void PrintXMFloat4(XMFLOAT4 v, std::string name = "")
+{
+	std::cout << std::string(name + std::string((name != "") ? ":" : "") + std::to_string(v.x) + "," + std::to_string(v.y) + "," + std::to_string(v.z) + "," + std::to_string(v.w)) << std::endl;
+}
+
 // #if defined(_EDITOR)
 // inline void PrintImVec2(ImVec2 v, std::string name = "")
 // {

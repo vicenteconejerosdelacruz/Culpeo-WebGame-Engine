@@ -225,7 +225,7 @@ namespace Scene
 // 			if (!IsPlaying(id))
 // 				HandleEditorMouseMovements(id);
 // #endif
-// 			WriteConstantsBuffers(id);
+			WriteUniformBuffers(id);
 // 			ResetCommandList();
 // 			{
 // #if defined(_EDITOR)

@@ -113,7 +113,7 @@ namespace Scene
 #include "RenderableAtt.h"
 #include <JEnd.h>
 
-		worldUb = CreateUniformBuffer(unit, sizeof(XMMATRIX), true, 0, "world");
+		worldUb = CreateUniformBuffer(unit, sizeof(XMMATRIX), true, "world");
 		CreateMeshInstances();
     }
 
@@ -469,6 +469,88 @@ namespace Scene
 		// materials.erase(rp);
 	}
 
+	//Pipelines
+	void Renderable::CreatePipelines(CameraID cam)
+	{
+		for (auto& rp : GetCameraRenderPasses(cam))
+		{
+			CreateRenderPassPipelines(rp);
+		}
+	}	
+
+	void Renderable::CreateRenderPassPipelines(RenderPassInstanceID pass)
+	{
+		RenderableID r(uuid());
+		
+		GetSceneUnit(unit)->PushToPreRender([r,pass]{
+			
+			using namespace ShaderCompiler;
+
+			auto& meshes = r->meshes;
+			for(unsigned int i=0; i < meshes.size(); i++)
+			{
+				auto& material = r->materials[pass].at(i);
+				
+				//create the bindgroup pipeline layout
+				std::vector<wgpu::BindGroupLayout> bindGroupLayouts;
+				for(unsigned int group = 0; group < r->bindGroupsLayout[pass].at(i).size(); group++) {
+					bindGroupLayouts.push_back(r->bindGroupsLayout[pass].at(i).at(group));
+				}
+
+				wgpu::PipelineLayoutDescriptor pipelineLayoutDesc{};
+				pipelineLayoutDesc.bindGroupLayoutCount = bindGroupLayouts.size();
+				pipelineLayoutDesc.bindGroupLayouts = bindGroupLayouts.data();
+
+				wgpu::PipelineLayout pipelineLayout = renderer->GetDevice().CreatePipelineLayout(&pipelineLayoutDesc);
+
+				//create the color target state
+				std::vector<wgpu::ColorTargetState> colorTargetStates;
+				auto formats = pass->renderPassTemplate->renderTargetFormats();
+				std::transform(formats.begin(), formats.end(), std::back_inserter(colorTargetStates), [](auto f){ return wgpu::ColorTargetState({.format=f}); });
+				
+				//the vertex buffer layout
+				wgpu::VertexBufferLayout vertexBufferLayout = GetVertexBufferLayout(meshes.at(i)->vertexClass);
+				wgpu::VertexState vertexState {
+					.module = material->vertexShaderInstanceID->shaderModule,
+					.entryPoint = shaderEntryPoint.at(VERTEX_SHADER).c_str(),
+					.bufferCount = 1,
+					.buffers = &vertexBufferLayout
+				};
+
+				//the fragment state
+				wgpu::FragmentState fragmentState {
+      				.module = material->pixelShaderInstanceID->shaderModule,
+					.entryPoint = shaderEntryPoint.at(PIXEL_SHADER).c_str(),
+					.targetCount = colorTargetStates.size(),
+					.targets = colorTargetStates.data()
+				};
+				
+				//and the descriptor
+				wgpu::RenderPipelineDescriptor descriptor{
+					.layout = pipelineLayout,
+					.vertex = vertexState,
+					.fragment = &fragmentState,
+				};
+
+  				r->pipelines[pass].push_back(renderer->GetDevice().CreateRenderPipeline(&descriptor));
+			}
+		});
+	}	
+
+	void Renderable::DestroyPipelines(CameraID cam)
+	{
+		for (auto& rp : GetCameraRenderPasses(cam))
+		{
+			DestroyRenderPassPipelines(rp);
+		}
+	}	
+
+	void Renderable::DestroyRenderPassPipelines(RenderPassInstanceID pass)
+	{
+
+	}
+
+	//Uniform Buffers
 	void Renderable::CreateUniformBuffersInstances(CameraID cam)
 	{
 		for (auto& rp : GetCameraRenderPasses(cam))
@@ -479,22 +561,7 @@ namespace Scene
 
 	void Renderable::CreateRenderPassUniformBuffersInstances(RenderPassInstanceID pass)
 	{
-		// auto createUniformstWriter=[](UniformBufferID cbuffer)
-		// {
-		// 	return [cbuffer](void* data, unsigned int backbufferIndex, size_t offset)
-		// 	{
-		// 		return cbuffer->push(data, backbufferIndex, offset);
-		// 	};
-		// };
-
-		// inline static const std::string CameraUniformBufferName = "camera";
-		// inline static const std::string LightUniformBufferName = "lights";
-		// inline static const std::string ShadowMapUniformBufferName = "shadowMaps";
-		// inline static const std::string ModelUniformBufferName = "model";
-		// inline static const std::string MaterialUniformBufferName = "material";
-		// inline static const std::string AnimationUniformBufferName = "animation";
-
-		uniformBuffers[pass].push_back({});
+		uniformBuffers[pass]={};
 		for (unsigned int i = 0; i < meshes.size(); i++)
 		{
 			auto& mi = materials[pass].at(i);
@@ -504,7 +571,6 @@ namespace Scene
 
 			UniformBufferID matBuffer = mi->CreateUniformBuffers(unit, matStr);
 			uniformBuffers[pass].push_back(matBuffer);
-			//uniformsWriter[matStr].push_back(createUniformstWriter(matBuffer));
 		}
 	}
 
@@ -557,102 +623,103 @@ namespace Scene
 	}
 
 	void Renderable::CreateRenderPassBindGroups(RenderPassInstanceID rp)
-	{
-		RenderableID r = uuid();
+    {
+        RenderableID r(uuid());
 
-		GetSceneUnit(unit)->PushToPreRender([r,rp]{
+        GetSceneUnit(unit)->PushToPreRender([r,rp]{
 
-			std::unordered_map<std::string, std::function<UniformBufferID(RenderPassInstanceID rp, unsigned int meshId)>> getUniformBuffer = {
-				{ CameraUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) {
-					if(!rp->camera && rp->renderPassTemplate->type() == RenderPassType_SwapChainPass && rp->renderPassTemplate->renderCallbackOverride() != RenderPassRenderCallbackOverride_Resolve)
-						return CameraID(*(GetSwapChainCameras(r->unit).begin()))->cameraUb;
-					return rp->camera->cameraUb;
-				} },
-				{ LightUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
-				{ ShadowMapUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
-				{ ModelUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->worldUb; } },
-				{ MaterialUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->uniformBuffers[rp][meshId]; } },
-				{ AnimationUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
-			};
+            std::unordered_map<std::string, std::function<UniformBufferID(RenderPassInstanceID rp, unsigned int meshId)>> getUniformBuffer = {
+                { CameraUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) {
+                    if(!rp->camera && rp->renderPassTemplate->type() == RenderPassType_SwapChainPass && rp->renderPassTemplate->renderCallbackOverride() != RenderPassRenderCallbackOverride_Resolve)
+                        return CameraID(*(GetSwapChainCameras(r->unit).begin()))->cameraUb;
+                    return rp->camera->cameraUb;
+                } },
+                { LightUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
+                { ShadowMapUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
+                { ModelUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->worldUb; } },
+                { MaterialUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->uniformBuffers[rp][meshId]; } },
+                { AnimationUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
+            };
 
-			for (unsigned int i = 0; i < r->meshes.size(); i++)
-			{
-				r->bindGroupsLayout[rp].push_back({});
-				r->bindGroups[rp].push_back({});
+            // Aseguramos que los contenedores principales tengan espacio para todos los meshes
+            r->shaderBindings[rp].resize(r->meshes.size());
+            r->bindGroupsLayout[rp].resize(r->meshes.size());
+            r->bindGroups[rp].resize(r->meshes.size());
 
-				auto& mi = r->materials[rp].at(i);
-				auto& meshLayout = r->bindGroupsLayout[rp].back();
-				auto& meshBindGroups = r->bindGroups[rp].back();
-				auto bindings = mi->GetShaderBindings();
-				
-				auto maxGroups = std::get<0>(std::max_element(bindings.begin(),bindings.end(),[](auto a, auto b){
-					return std::get<0>(a.second) < std::get<0>(b.second);
-				})->second);
-				
-				for(unsigned int group=0; group <= maxGroups; group++)
-				{
-					std::unordered_map<std::string, ShaderResourceBinding> samegroup;
-					std::copy_if(bindings.begin(), bindings.end(), std::inserter(samegroup,samegroup.begin()), [i](auto binding){ return std::get<0>(binding.second)==i;});
-					std::vector<ShaderResourceBinding> sorted;
-					std::transform(samegroup.begin(), samegroup.end(), std::back_inserter(sorted), [](auto g){ return g.second; });
-					std::sort(sorted.begin(), sorted.end(), [](auto a, auto b){ return std::get<1>(a) < std::get<1>(b);});
-					
-					std::vector<wgpu::BindGroupLayoutEntry> layoutEntries;
-					unsigned int numFrames = 1U;
-					for(auto b:sorted)
-					{
-						auto [group, binding, buffer_size, multi_frame, num_offsets, name] = b;
-						wgpu::BindGroupLayoutEntry entry;
+            for(unsigned int mesh = 0U; mesh < r->meshes.size(); mesh++)
+            {
+                auto& mi = r->materials[rp].at(mesh);
+                r->shaderBindings[rp][mesh] = mi->GetShaderBindings();
+                auto& bindings = r->shaderBindings[rp][mesh];
 
-						entry.binding = binding;
-						entry.visibility = wgpu::ShaderStage::Vertex | wgpu::ShaderStage::Fragment;
-						entry.buffer.type = wgpu::BufferBindingType::Uniform;
-						entry.buffer.minBindingSize = buffer_size;
-						entry.buffer.hasDynamicOffset = (num_offsets>0);
+                // Preparamos los vectores para este mesh exacto
+                auto& meshLayouts = r->bindGroupsLayout[rp][mesh];
+                meshLayouts.clear();
+                
+                auto& meshBindGroups = r->bindGroups[rp][mesh];
+                meshBindGroups.resize(bindings.size()); // Un vector de frames por cada grupo
 
-						layoutEntries.push_back(entry);
+                for(unsigned int group = 0; group < bindings.size(); group++)
+                {
+                    auto& sorted = bindings.at(group);  
+                    std::vector<wgpu::BindGroupLayoutEntry> layoutEntries;
+                    
+                    for(auto b : sorted)
+                    {
+                        auto [g_idx, binding, buffer_size, multi_frame, name] = b;
+                        
+                        wgpu::BindGroupLayoutEntry entry;
+                        entry.binding = binding;
+                        entry.visibility = wgpu::ShaderStage::Vertex | wgpu::ShaderStage::Fragment;
+                        entry.buffer.type = wgpu::BufferBindingType::Uniform;
+                        entry.buffer.minBindingSize = buffer_size;
+                        entry.buffer.hasDynamicOffset = false;
+                        layoutEntries.push_back(entry);
+                    }
 
-						if(multi_frame)
-							numFrames=JRenderer::numFrames;
-					}
+                    wgpu::BindGroupLayoutDescriptor layoutDesc = {};
+                    layoutDesc.entryCount = layoutEntries.size();
+                    layoutDesc.entries = layoutEntries.data();
 
-					wgpu::BindGroupLayoutDescriptor layoutDesc = {};
-					layoutDesc.entryCount = layoutEntries.size();
-					layoutDesc.entries = layoutEntries.data();
+                    std::string layoutLabel = "layout:" + std::to_string(group);
+                    layoutDesc.label = layoutLabel.c_str();
 
-					wgpu::BindGroupLayout layout = renderer->GetDevice().CreateBindGroupLayout(&layoutDesc);
-					meshLayout.push_back(layout);
+                    wgpu::BindGroupLayout layout = renderer->GetDevice().CreateBindGroupLayout(&layoutDesc);
+                    meshLayouts.push_back(layout); // Guardado ordenado en el índice del grupo
 
-					std::vector<wgpu::BindGroup> bindGroups;
-					for(unsigned int i=0;i<numFrames;i++)
-					{
-						std::vector<wgpu::BindGroupEntry> bgEntries;
-						for(auto b:sorted)
-						{
-							wgpu::BindGroupEntry entry;
-							auto [group, binding, buffer_size, multi_frame, num_offsets, name] = b;
+                    // Creamos los BindGroups para cada frame de ESTE grupo específico
+                    auto& frameBindGroups = meshBindGroups[group];
+                    frameBindGroups.clear();
 
-							entry.binding = binding;
-							entry.buffer = getUniformBuffer.at(name)(rp, i)->uniformBuffer;
-							entry.offset = i * ((buffer_size + 255) & ~255); 
-							entry.size = buffer_size;
+                    for(unsigned int frame = 0; frame < JRenderer::numFrames; frame++)
+                    {
+                        std::vector<wgpu::BindGroupEntry> bgEntries;
+                        for(auto b : sorted)
+                        {
+                            wgpu::BindGroupEntry entry;
+                            auto [g_idx, binding, buffer_size, multi_frame, name] = b;
 
-							bgEntries.push_back(entry);
-						}
+                            entry.binding = binding;
+                            entry.buffer = getUniformBuffer.at(name)(rp, mesh)->uniformBuffer;
+                            entry.offset = multi_frame ? (frame * ((buffer_size + 255) & ~255)) : 0U; 
+                            entry.size = buffer_size;
+                            bgEntries.push_back(entry);
+                        }
 
-						wgpu::BindGroupDescriptor bgDesc = {};
-						bgDesc.entryCount = bgEntries.size();
-						bgDesc.entries = bgEntries.data();
-						bgDesc.layout = layout;
+                        wgpu::BindGroupDescriptor bgDesc = {};
+                        bgDesc.entryCount = bgEntries.size();
+                        bgDesc.entries = bgEntries.data();
+                        bgDesc.layout = layout; // <-- ¡Vinculado estrictamente a su layout correcto!
 
-						wgpu::BindGroup bindGroup = renderer->GetDevice().CreateBindGroup(&bgDesc);
-						bindGroups.push_back(bindGroup);
-					}
-					meshBindGroups.push_back(bindGroups);
-				}
-			}
-		});
-	}
+                        std::string bgLabel = "group:" + std::to_string(group) + "-" + std::to_string(frame);
+                        bgDesc.label = bgLabel.c_str();
+
+                        frameBindGroups.push_back(renderer->GetDevice().CreateBindGroup(&bgDesc));
+                    }
+                }
+            }
+        });
+    }
 
 	void Renderable::DestroyBindGroups(CameraID cam)
 	{
@@ -665,7 +732,6 @@ namespace Scene
 		*/
 	}
 
-
 	void Renderable::DestroyRenderPassBindGroups(RenderPassInstanceID rp)
 	{
 		/*
@@ -674,15 +740,19 @@ namespace Scene
 		*/
 	}
 
-	/*
 	void Renderable::CreateRenderMethods(CameraID cam)
 	{
+		RenderableID r(uuid());
+		
 		for (auto& rp : GetCameraRenderPasses(cam))
 		{
-			std::tuple<CameraID, RenderPassInstanceID> key = std::make_tuple(cam, rp);
-			std::vector<std::vector<DescriptorTableSetter>> setters = CreateRenderPassRenderMethods(cam, rp);
-			descriptorsRenders[key] = setters;
+			GetSceneUnit(unit)->PushToPreRender([rp,cam,r] {
+				std::tuple<CameraID, RenderPassInstanceID> key = std::make_tuple(cam, rp);
+				std::vector<std::vector<BindGroupSetter>> setters = r->CreateRenderPassRenderMethods(cam, rp);
+				r->bindGroupRenders[key] = setters;
+			});
 		}
+/*
 #if defined(_EDITOR)
 		//this is a complete hack, but what the hell
 		using namespace Editor;
@@ -697,100 +767,37 @@ namespace Scene
 			}
 		}
 #endif
-	}
 */
-/*
-	std::vector<std::vector<DescriptorTableSetter>> Renderable::CreateRenderPassRenderMethods(CameraID cam, RenderPassInstanceID rp)
+	}
+
+	std::vector<std::vector<BindGroupSetter>> Renderable::CreateRenderPassRenderMethods(CameraID cam, RenderPassInstanceID rp)
 	{
-		using namespace Animation;
+		RenderableID r(uuid());
+		std::vector<std::vector<BindGroupSetter>> setters; //[mesh][group]
 
-		Camera* pcamera = (!cam.empty()) ? (*cam).get() : nullptr;
-		auto& meshesMaterials = materials.at(rp);
-
-		std::vector<std::vector<DescriptorTableSetter>> meshSetters;
-
-		for (unsigned int i = 0; i < meshes.size(); i++)
+		for (unsigned int mesh = 0; mesh < meshes.size(); mesh++)
 		{
-			auto& material = meshesMaterials.at(i);
-			MaterialInstance* material_ins = (*material).get();
-			ShaderInstance* vertexShader_ins = (*material_ins->vertexShaderInstanceID).get();
-			ShaderInstance* pixelShader_ins = (*material_ins->pixelShaderInstanceID).get();
-
-			std::vector<DeviceUtils::ConstantsBufferID>& cbuffers = constantsBuffers.at(rp).at(i);
-			std::vector<DeviceUtils::ConstantsBuffer*> pcbuffers;
-			std::transform(cbuffers.begin(), cbuffers.end(), std::back_inserter(pcbuffers), [](auto& c)
+			setters.push_back({});
+			auto& groupSetter = setters.back();
+			auto& groupBindings = shaderBindings.at(rp).at(mesh);
+			for(unsigned int group = 0U; group < groupBindings.size(); group++)
+			{
+				auto setter = [rp, mesh, group, r](wgpu::RenderPassEncoder& encoder, unsigned int backBufferIndex)
 				{
-					return (*c).get();
-				}
-			);
-			DeviceUtils::ConstantsBuffer* pcam_cbuffer = (pcamera) ? (*pcamera->cameraCb).get() : nullptr;
-			DeviceUtils::ConstantsBuffer* pcam_light_cbuffer = (pcamera && pcamera->lightsCB) ? (*pcamera->lightsCB).get() : nullptr;
-			DeviceUtils::ConstantsBuffer* pcam_shadowmap_cbuffer = (pcamera && pcamera->shadowMapsCB) ? (*pcamera->shadowMapsCB).get() : nullptr;
-			DeviceUtils::ConstantsBuffer* animated_cbuffer = (!animable.empty()) ? (*GetAnimatedConstantsBuffer(SUuuid())).get() : nullptr;
+					// Seleccionas el BindGroup pre-creado para este frame específico
+					auto& frameBindGroups = r->bindGroups[rp].at(mesh).at(group); // asumiendo que guardaste por frame
+					auto& g = frameBindGroups.at(backBufferIndex % frameBindGroups.size());
 
-			std::vector<std::vector<::CD3DX12_GPU_DESCRIPTOR_HANDLE>> gpu_handles_cbuffers;
-			std::transform(pcbuffers.begin(), pcbuffers.end(), std::back_inserter(gpu_handles_cbuffers), [](auto& c)
-				{
-					return c->gpu_xhandle;
-				}
-			);
-			std::vector<::CD3DX12_GPU_DESCRIPTOR_HANDLE> gpu_handles_camera;
-			if (pcam_cbuffer)
-			{
-				gpu_handles_camera = pcam_cbuffer->gpu_xhandle;
+					// Llamada limpia de 2 parámetros: Cero punteros, cero arreglos, cero errores de Emscripten
+					encoder.SetBindGroup(group, g);
+				};
+
+				groupSetter.push_back(setter);
 			}
-			std::vector<::CD3DX12_GPU_DESCRIPTOR_HANDLE> gpu_handles_lights;
-			if (pcam_light_cbuffer)
-			{
-				gpu_handles_lights = pcam_light_cbuffer->gpu_xhandle;
-			}
-			std::vector<::CD3DX12_GPU_DESCRIPTOR_HANDLE> gpu_handles_shadowMaps;
-			if (pcam_shadowmap_cbuffer)
-			{
-				gpu_handles_shadowMaps = pcam_shadowmap_cbuffer->gpu_xhandle;
-			}
-			std::vector<::CD3DX12_GPU_DESCRIPTOR_HANDLE> gpu_handles_skinning;
-			if (animated_cbuffer)
-			{
-				gpu_handles_skinning = animated_cbuffer->gpu_xhandle;
-			}
-			std::map<unsigned int, ::CD3DX12_GPU_DESCRIPTOR_HANDLE> mat_uav = material_ins->uav;
-
-			CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle_iblIrradiance = (pcamera && pcamera->iblTextures.contains(TextureShaderUsage_IBLIrradiance)) ? GetTextureInstance(pcamera->iblTextures.at(TextureShaderUsage_IBLIrradiance))->gpuHandle : CD3DX12_GPU_DESCRIPTOR_HANDLE();
-
-			CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle_iblPrefiteredEnv = (pcamera && pcamera->iblTextures.contains(TextureShaderUsage_IBLPreFilteredEnvironment)) ? GetTextureInstance(pcamera->iblTextures.at(TextureShaderUsage_IBLPreFilteredEnvironment))->gpuHandle : CD3DX12_GPU_DESCRIPTOR_HANDLE();
-
-			CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle_iblBRDFLUT = (pcamera && pcamera->iblTextures.contains(TextureShaderUsage_IBLBRDFLUT)) ? GetTextureInstance(pcamera->iblTextures.at(TextureShaderUsage_IBLBRDFLUT))->gpuHandle : CD3DX12_GPU_DESCRIPTOR_HANDLE();
-
-			std::vector<CD3DX12_GPU_DESCRIPTOR_HANDLE> gpu_handle_srv;
-			for (auto& [textureType, texParam] : pixelShader_ins->srvTexParameters)
-			{
-				if (texParam.numSRV == 0xFFFFFFFF || iblUsageTexture.contains(textureType)) continue;
-				auto& texInstance = GetTextureInstance(material_ins->textures.at(textureType));
-				gpu_handle_srv.push_back(texInstance->gpuHandle);
-			}
-
-			CD3DX12_GPU_DESCRIPTOR_HANDLE gpu_handle_srv_shadowMap = (pcamera && pcamera->SceneHasShadowMaps()) ? GetShadowMapGpuDescriptorHandleStart(unit) : CD3DX12_GPU_DESCRIPTOR_HANDLE();
-
-			std::vector<DescriptorTableSetter> descriptor_table_setters;
-
-			//f2f
-			SetConstantsBuffersDescriptorTables(descriptor_table_setters, gpu_handles_cbuffers);
-			SetCameraConstantsBufferDescriptorTable(descriptor_table_setters, gpu_handles_camera, vertexShader_ins, pixelShader_ins);
-			SetLightsConstantsBufferDescriptorTable(descriptor_table_setters, gpu_handles_lights, vertexShader_ins, pixelShader_ins);
-			SetShadowMapsConstantsBufferDescriptorTable(descriptor_table_setters, pcamera, gpu_handles_shadowMaps, vertexShader_ins, pixelShader_ins);
-			SetSkinningConstantsBufferDescriptorTable(descriptor_table_setters, gpu_handles_skinning, vertexShader_ins, pixelShader_ins);
-			//not f2f
-			SetUAVRootDescriptorTable(descriptor_table_setters, mat_uav, pixelShader_ins);
-			SetIBLRootDescriptorTable(descriptor_table_setters, vertexShader_ins, pixelShader_ins, gpu_handle_iblIrradiance, gpu_handle_iblPrefiteredEnv, gpu_handle_iblBRDFLUT);
-			SetSRVRootDescriptorTable(descriptor_table_setters, gpu_handle_srv);
-			SetShadowMapsSRVDescriptorTable(descriptor_table_setters, pcamera, vertexShader_ins, pixelShader_ins, gpu_handle_srv_shadowMap);
-
-			meshSetters.push_back(descriptor_table_setters);
 		}
-		return meshSetters;
+
+		return setters;
 	}
-*/
 /*
 #if defined(_EDITOR)
 	std::vector<std::vector<DescriptorTableSetter>> Renderable::CreateEditorCameraRenderPassRenderMethods(CameraID edCam, CameraID cam, RenderPassInstanceID rp)
@@ -1095,13 +1102,14 @@ namespace Scene
 		WriteBoneTransformationsToConstantsBuffer(SUuuid(), bonesTransformation, frame);
 	}
 */
-/*
-	void Renderable::WriteConstantsBuffer(unsigned int frame)
+
+	void Renderable::WriteUniformBuffer(unsigned int frame)
 	{
 		XMMATRIX w = world();
-		WriteConstantsBuffer("world", &w, frame);
+		worldUb->push(w,frame);
+		//WriteConstantsBuffer("world", &w, frame);
 	}
-	*/
+	
 	//Animation
 	/*
 	void Renderable::CreateAnimationSequences()
@@ -1337,14 +1345,31 @@ namespace Scene
 		// using namespace Animation;
 		using namespace Scene;
 
-		/*
-		if (!RenderReady() || markedForDelete || !visible() || !materials.contains(renderPass) || renderException) return;
+		if (/*!RenderReady() || markedForDelete ||*/ !visible() || !materials.contains(renderPass) || !pipelines.contains(renderPass) /* || renderException*/) return;
 
 		std::tuple<CameraID, RenderPassInstanceID> key = std::make_tuple(camera, renderPass);
 
-		if (!descriptorsRenders.contains(key))
+		if (!bindGroupRenders.contains(key))
 			return;
 
+		for (unsigned int i = 0; i < meshes.size(); i++)
+		{
+			auto& bindGroupSetters = bindGroupRenders.at(key).at(i);
+			if (skipMeshes_contains(i)) continue;
+
+			auto& mesh = meshes.at(i);
+			pass.SetPipeline(pipelines.at(renderPass).at(i));
+			pass.SetVertexBuffer(0, mesh->vertexBufferId->vertexBuffer);
+			pass.SetIndexBuffer(mesh->indexBufferId->indexBuffer, IndexFormat::Uint32);
+
+			for(unsigned int j = 0; j < bindGroupSetters.size(); j++)
+			{
+				bindGroupSetters.at(j)(pass, renderer->GetBackBufferIndex());
+			}
+			pass.DrawIndexed(mesh->indexBufferId->indexCount);
+		}
+
+		/*
 		auto& scene = GetSceneUnit(unit);
 		unsigned int frame = scene->Frame();
 		auto& commandList = scene->GetCommandList();

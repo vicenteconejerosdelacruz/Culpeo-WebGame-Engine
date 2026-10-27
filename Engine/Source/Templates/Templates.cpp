@@ -925,7 +925,7 @@ namespace Templates {
   name: resolvePass
   renderCallbackOverride: Resolve
   renderTargetFormats:
-    - R8G8B8A8_UNORM
+    - B8GRB8A8_UNORM
   systemCreated: true
   type: SwapChainPass
   uuid: 53693830-779c-4ed0-a985-402d6a72485b
@@ -948,7 +948,7 @@ namespace Templates {
   name: simplePass
   renderCallbackOverride: None
   renderTargetFormats:
-    - R8G8B8A8_UNORM
+    - B8G8R8A8_UNORM
   systemCreated: true
   type: SwapChainPass
   uuid: c483d4c9-94ce-48d6-8116-ea838e69119b

@@ -21,16 +21,25 @@ namespace DeviceUtils
 		std::unique_ptr<VertexBuffer> vb = std::make_unique<VertexBuffer>();
 		vb->vertexCount = verticesCount;
 
+		size_t totalSize = vertexSize * verticesCount;
+		vb->rawData.resize(totalSize);
+		std::memcpy(vb->rawData.data(), vertices, totalSize);
+
 		assert(!vertexBuffers.contains(vertexBufferID()));
 		vertexBuffers.insert_or_assign(vertexBufferID(), std::move(vb));
 
-		GetSceneUnit(id)->PushToPreRender([vertexBufferID, vertices, vertexSize, verticesCount]
+		GetSceneUnit(id)->PushToPreRender([vertexBufferID]
 			{
 				BufferDescriptor bufferDesc{};
 				bufferDesc.usage = BufferUsage::CopyDst | BufferUsage::Vertex;
-				bufferDesc.size = vertexSize * verticesCount;
+				bufferDesc.size = vertexBufferID->rawData.size();
 				vertexBufferID->vertexBuffer = renderer->GetDevice().CreateBuffer(&bufferDesc);
-				renderer->GetDevice().GetQueue().WriteBuffer(vertexBufferID->vertexBuffer, 0, vertices, vertexSize * verticesCount);
+				renderer->GetDevice().GetQueue().WriteBuffer(
+					vertexBufferID->vertexBuffer,
+					0, 
+					vertexBufferID->rawData.data(), 
+					vertexBufferID->rawData.size()
+				);
 			}
 		);
 

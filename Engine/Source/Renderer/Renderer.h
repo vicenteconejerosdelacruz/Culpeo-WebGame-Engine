@@ -33,7 +33,7 @@ struct JRenderer
 	void ConfigureSurface(uint32_t width, uint32_t height);
 
 	//READ&GET
-	// unsigned int GetBackBufferIndex();
+	unsigned int GetBackBufferIndex();
 	wgpu::Instance GetInstance() { return instance; }
 	wgpu::Adapter GetAdapter() { return adapter; }
 	wgpu::Device GetDevice() { return device; }
@@ -69,7 +69,7 @@ struct JRenderer
 	// bool supportsTearing;
 
 	//GPU <-> CPU synchronization 
-	//unsigned int backBufferIndex;
+	unsigned int backBufferIndex;
 	// CComPtr<ID3D12Fence> fence;
 	// unsigned long long fenceValue = 0;
 	// unsigned long long frameFenceValues[numFrames] = {};

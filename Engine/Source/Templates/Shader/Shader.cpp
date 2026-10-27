@@ -136,11 +136,7 @@ namespace Templates {
 		};
 
 		const std::set<std::string> uniformsMultiframe = {
-			CameraUniformBufferName, LightUniformBufferName, ShadowMapUniformBufferName,
-		};
-
-		const std::set<std::string> uniformsFrameOffsets = {
-			ModelUniformBufferName, AnimationUniformBufferName,
+			CameraUniformBufferName, LightUniformBufferName, ShadowMapUniformBufferName, ModelUniformBufferName, AnimationUniformBufferName
 		};
 
 		auto mapResourceInfo=[&](ShaderResourceInfo& info)
@@ -153,8 +149,7 @@ namespace Templates {
 
 			size_t size = uniformsSizesMap.contains(it->first)?uniformsSizesMap.at(it->first):0ULL;
 			bool multiFrame = uniformsMultiframe.contains(it->first)?true:false;
-			unsigned int numOffsets = uniformsFrameOffsets.contains(it->first)?JRenderer::numFrames:0U;
-			it->second = std::make_tuple(info.group, info.binding, size, multiFrame, numOffsets, it->first);
+			it->second = std::make_tuple(info.group, info.binding, size, multiFrame, it->first);
 		};
 
 		for(auto &info:shaderInfo)

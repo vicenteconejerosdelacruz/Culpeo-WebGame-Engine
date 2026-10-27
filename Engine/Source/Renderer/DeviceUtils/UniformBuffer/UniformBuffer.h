@@ -17,11 +17,11 @@ namespace DeviceUtils
 	using UniformBufferBufferReader = std::function<void(MaterialVariablesTypes, nlohmann::json& value)>;
 
 	struct UniformBuffer {
-		UniformBuffer(size_t bufferSize, bool multiFrame, unsigned int numOffsets, std::string ubName);
+		UniformBuffer(size_t bufferSize, bool multiFrame, std::string ubName);
 		~UniformBuffer() { Destroy(); }
 		
 		template<typename T> size_t push(T& data, unsigned int index, size_t offset = 0ULL) {
-			size_t offInMap = ((numFrames>0)?index:0)*alignedBufferSize + ((numOffsets>0)?index:1)*offset;
+			size_t offInMap = ((numFrames>0)?index:0)*alignedBufferSize;
 			push(&data, offInMap, sizeof(T));
 			return offset + sizeof(T);
 		}
@@ -31,14 +31,13 @@ namespace DeviceUtils
 		std::string name;
 		unsigned int alignedBufferSize;
 		wgpu::Buffer uniformBuffer;
-		unsigned int numOffsets;
 		unsigned int numFrames;
 		std::vector<std::byte> mappedBuffer;
 	};
 
 	std::unique_ptr<UniformBuffer>& GetUniformBuffer(JUUID uuid);
 
-	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, bool multiFrame, unsigned int numOffsets, std::string ubName = "");
+	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, bool multiFrame, std::string ubName = "");
 	void DestroyUniformBuffer(UniformBufferID uuid);
 	void DestroyUniformBuffers();
 };

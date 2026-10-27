@@ -559,32 +559,38 @@ namespace Templates
 	{
 		using namespace DeviceUtils;
 		
-		// std::unordered_map<std::string, ShaderResourceBinding> vsBinding = vertexShaderInstanceID->GetBindingMap();
 		std::unordered_map<std::string, ShaderResourceBinding> psBinding = pixelShaderInstanceID->GetBindingMap();
 				
-		// auto itVS = std::find_if(vsBinding.begin(), vsBinding.end(), [ubName](auto& pair) { return pair.first == ubName; });
 		auto itPS = std::find_if(psBinding.begin(), psBinding.end(), [ubName](auto& pair) { return pair.first == ubName; });
-		
-		// if(itVS==vsBinding.end() && itPS==psBinding.end())
-		// 	return UniformBufferID("");
 		
 		if(itPS!=psBinding.end())
 		{
-			auto [group, binding, buffer_size, multi_frame, num_offsets, name] = itPS->second;
-			return CreateUniformBuffer(id, buffer_size, multi_frame, num_offsets, ubName);
+			auto [group, binding, buffer_size, multi_frame, name] = itPS->second;
+			return CreateUniformBuffer(id, buffer_size, multi_frame, ubName);
 		}
-		// else
-		// {
-		// 	auto [group, binding, buffer_size, multi_frame, num_offsets, name] = itVS->second;
-		// 	return CreateUniformBuffer(id, buffer_size, multi_frame, num_offsets, ubName);
-		// }
 
 		return UniformBufferID("");
 	}
 
-	std::unordered_map<std::string, ShaderResourceBinding> MaterialInstance::GetShaderBindings()
+	std::vector<std::vector<ShaderResourceBinding>> MaterialInstance::GetShaderBindings()
 	{
-		return pixelShaderInstanceID->GetBindingMap();
+		auto bindings = pixelShaderInstanceID->GetBindingMap();
+		auto maxGroups = std::get<0>(std::max_element(bindings.begin(),bindings.end(),[](auto a, auto b){
+			return std::get<0>(a.second) < std::get<0>(b.second);
+		})->second);
+
+		std::vector<std::vector<ShaderResourceBinding>> shaderBindings;
+		for(unsigned int group=0; group <= maxGroups; group++)
+		{
+			shaderBindings.push_back({});
+			std::unordered_map<std::string, ShaderResourceBinding> samegroup;
+			std::copy_if(bindings.begin(), bindings.end(), std::inserter(samegroup,samegroup.begin()), [group](auto binding){ return std::get<0>(binding.second)==group;});
+			std::vector<ShaderResourceBinding> sorted;
+			std::transform(samegroup.begin(), samegroup.end(), std::back_inserter(sorted), [](auto g){ return g.second; });
+			std::sort(sorted.begin(), sorted.end(), [](auto a, auto b){ return std::get<1>(a) < std::get<1>(b);});
+			shaderBindings.back()=sorted;
+		}
+		return shaderBindings;
 	}
 
 	void DestroyMaterialInstance(JUUID materialInstance)

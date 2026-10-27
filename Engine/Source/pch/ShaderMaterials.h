@@ -6,17 +6,16 @@
 #include <map>
 #include <Renderer.h>
 
-//<group, binding, buffer size, multi frame, num offsets, name>
-using ShaderResourceBinding = std::tuple<int,int, size_t, bool, unsigned int, std::string>;
-static inline const ShaderResourceBinding defaultBinding = std::tuple(-1,-1, 0ULL, false, 0U, "");
+//<group, binding, buffer size, multi frame, name>
+using ShaderResourceBinding = std::tuple<int,int, size_t, bool, std::string>;
+static inline const ShaderResourceBinding defaultBinding = std::tuple(-1,-1, 0ULL, false, "");
 inline void dumpBinding(ShaderResourceBinding b)
 {
-	auto [group, binding, buffer_size, multi_frame, num_offsets, name] = b;
+	auto [group, binding, buffer_size, multi_frame, name] = b;
 	std::cout << "group(" << group << ") ";
 	std::cout << "binding(" << binding << ") ";
 	std::cout << "buffer_size(" << buffer_size << ") ";
 	std::cout << "multi_frame(" << multi_frame << ") ";
-	std::cout << "num_offsets(" << num_offsets << ") ";
 	std::cout << "name(" << name << ") ";
 	std::cout << std::endl;
 }
@@ -25,11 +24,7 @@ inline size_t getBindingSize(ShaderResourceBinding b)
 	size_t bufferSize = std::get<2>(b);
 	size_t alignedBufferSize = (bufferSize + 255) & ~255;
 	bool multiFrame = std::get<3>(b);
-	unsigned int numOffsets = std::get<4>(b);
-	size_t size = alignedBufferSize;
-	if(multiFrame) size*=JRenderer::numFrames;
-	if(numOffsets>1) size*=numOffsets;
-	return size;
+	return alignedBufferSize * (multiFrame?JRenderer::numFrames:1ULL);
 }
 
 enum JShaderType {
@@ -62,7 +57,7 @@ namespace Templates
 using namespace Templates;
 struct Source {
 	JShaderType shaderType;
-	std::wstring shaderTarget;
+	std::string shaderTarget;
 	ShaderJsonID shaderTemplate;
 	std::vector<std::string> defines;
 
