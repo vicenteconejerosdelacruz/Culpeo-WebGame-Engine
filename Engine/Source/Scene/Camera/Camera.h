@@ -156,13 +156,13 @@ namespace Scene {
 		void BindToScene() override;
 		void Bind(JUUID uuid) override;
 		void BindRenderable(RenderableID renderable);
-		// void BindLight(LightID light);
-		// void BindLightWithShadowMap(LightID light);
+		void BindLight(LightID light);
+		void BindLightWithShadowMap(LightID light);
 		void UnbindFromScene() override;
 		void Unbind(JUUID uuid) override;
 		void UnbindRenderable(RenderableID renderable);
-		// void UnbindLight(LightID light);
-		// void UnbindLightWithShadowMap(LightID light);
+		void UnbindLight(LightID light);
+		void UnbindLightWithShadowMap(LightID light);
 
 		bool ResolvesToSwapChain();
 		bool RenderReady();
@@ -190,11 +190,11 @@ namespace Scene {
 		void MoveLeft(float step);
 		void MoveRight(float step);
 
-		// //Lighting
-		// void CreateLightsConstantsBuffer();
+		//Lighting
+		void CreateLightsUniformBuffer();
 		// void DestroyLightsConstantsBuffer();
 		// ConstantsBufferID GetLightsConstantsBuffer() const { return lightsCB; }
-		// void WriteLightsConstantsBuffer(unsigned int frame);
+		void WriteLightsUniformBuffer(unsigned int frame);
 
 		// //ShadowMaps
 		// void CreateShadowMapsConstantsBuffer();
@@ -238,11 +238,11 @@ namespace Scene {
 		//renderables
 		std::set<RenderableID> renderables;
 		//lights
-		// ConstantsBufferID lightsCB;
-		// std::vector<LightID> lights;
+		UniformBufferID lightsUb;
+		std::vector<LightID> lights;
 		//lights shadowmaps
 		// ConstantsBufferID shadowMapsCB;
-		// std::set<LightID> lightsWithShadowMaps;
+		std::set<LightID> lightsWithShadowMaps;
 		//projection
 		CameraProjections::Perspective perspectiveProjection;
 		CameraProjections::Orthographic orthographicProjection;
@@ -255,7 +255,6 @@ namespace Scene {
 	};
 
 	CONTROLLER_DECL_FULL(Camera);
-// 	SODECL_FULL(Camera);
 
 #include <TrackUUID/JDecl.h>
 #include "CameraAtt.h"
@@ -269,7 +268,3 @@ namespace Scene {
 // 	void WriteCamerasJson(SceneUnitId id, nlohmann::json& json);
 // #endif
 };
-
-// using namespace Scene;
-// DEF_CONTROLLER_ID_HASH(Camera);
-// DEF_SCENEOBJECT_ID_HASH(Camera);

@@ -13,9 +13,12 @@ namespace DeviceUtils
 
     wgpu::Adapter GetAdapter(wgpu::Instance& instance)
     {
+        wgpu::RequestAdapterOptions options = {};
+        options.powerPreference = wgpu::PowerPreference::HighPerformance;
+
         wgpu::Adapter adapter;
         wgpu::Future f1 = instance.RequestAdapter(
-            nullptr, wgpu::CallbackMode::WaitAnyOnly,
+            &options, wgpu::CallbackMode::WaitAnyOnly,
             [&adapter](wgpu::RequestAdapterStatus status, wgpu::Adapter a,
                 wgpu::StringView message) {
                 if (status != wgpu::RequestAdapterStatus::Success) {

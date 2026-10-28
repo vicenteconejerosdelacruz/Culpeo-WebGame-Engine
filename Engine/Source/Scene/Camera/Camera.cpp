@@ -8,6 +8,7 @@
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 // #include <NoMath.h>
 #include <SimpleMath.h>
+#include <Light.h>
 #if defined(_EDITOR)
 // #include <Builder/ReleaseBuilder.h>
 #endif
@@ -114,11 +115,11 @@ namespace Scene
 // 			RegisterBillboard(unit, uuid());
 // #endif
 
-// 		if (shadowMapLight().empty())
-// 		{
-// 			CreateLightsConstantsBuffer();
+		// if (shadowMapLight().empty())
+		// {
+			CreateLightsUniformBuffer();
 // 			CreateShadowMapsConstantsBuffer();
-// 		}
+		// }
 // 		SetInitialConditions();
 	}
 
@@ -212,22 +213,20 @@ namespace Scene
 
 	XMVECTOR Camera::forward()
 	{
-		/*
-		if (!shadowMapLight().empty())
-		{
-			LightID lcam = MAKESUUUID(unit, shadowMapLight());
-			if (lcam->lightType() == LT_Point)
-			{
-				unsigned int i = 0U;
-				for (; i < 6U; i++) {
-					if (lcam->shadowMapCameras[i] == SUuuid())
-					{
-						return Scene::PointLightDirection[i];
-					}
-				}
-			}
-		}
-		*/
+		// if (!shadowMapLight().empty())
+		// {
+		// 	LightID lcam(shadowMapLight());
+		// 	if (lcam->lightType() == LT_Point)
+		// 	{
+		// 		unsigned int i = 0U;
+		// 		for (; i < 6U; i++) {
+		// 			if (lcam->shadowMapCameras[i] == SUuuid())
+		// 			{
+		// 				return Scene::PointLightDirection[i];
+		// 			}
+		// 		}
+		// 	}
+		// }
 
 		FXMVECTOR dir = { 0.0f, 0.0f, 1.0f,0.0f };
 		return XMVector3Normalize(XMVector3Rotate(dir, sceneObject->rotationQ()));
@@ -552,15 +551,12 @@ namespace Scene
 		renderable->CreateRenderMethods(uuid());
 	}
 
-/*
 	void Camera::BindLight(LightID light)
 	{
 		lights.push_back(light);
 		BindLightWithShadowMap(light);
 	}
-*/
 
-/*
 	void Camera::BindLightWithShadowMap(LightID light)
 	{
 		if (light->hasShadowMaps())
@@ -568,7 +564,6 @@ namespace Scene
 			lightsWithShadowMaps.insert(light);
 		}
 	}
-*/
 
 	void Camera::UnbindFromScene()
 	{
@@ -620,15 +615,12 @@ namespace Scene
 		*/
 	}
 
-/*
 	void Camera::UnbindLight(LightID light)
 	{
 		nostd::vector_erase(lights, light);
 		UnbindLightWithShadowMap(light);
 	}
-*/
 
-/*
 	void Camera::UnbindLightWithShadowMap(LightID light)
 	{
 		if (lightsWithShadowMaps.contains(light))
@@ -636,7 +628,6 @@ namespace Scene
 			lightsWithShadowMaps.erase(light);
 		}
 	}
-*/
 
 	bool Camera::ResolvesToSwapChain()
 	{
@@ -665,7 +656,8 @@ namespace Scene
 
 	void Camera::Render()
 	{
-		unsigned int frame = GetSceneUnit(unit)->Frame();
+		//unsigned int frame = GetSceneUnit(unit)->Frame();
+		unsigned int frame = renderer->GetBackBufferIndex();
 		WriteUniformsBuffer(frame);
 		CalculateBoundingFrustum();
 
@@ -1005,13 +997,11 @@ namespace Scene
 		// UpdateLightPosition();
 	}
 
-/*
 	//Lights
-	void Camera::CreateLightsConstantsBuffer()
+	void Camera::CreateLightsUniformBuffer()
 	{
-		lightsCB = DeviceUtils::CreateConstantsBuffer(sizeof(LightPool), JRenderer::numFrames, std::string(name() + "-lightsCbv"));
+		lightsUb = DeviceUtils::CreateUniformBuffer(unit, sizeof(LightPool), true, name() + "-lightsUb");
 	}
-*/
 
 /*
 	void Camera::DestroyLightsConstantsBuffer()
@@ -1021,19 +1011,19 @@ namespace Scene
 	}
 */
 
-/*
-	void Camera::WriteLightsConstantsBuffer(unsigned int frame)
+	void Camera::WriteLightsUniformBuffer(unsigned int frame)
 	{
-		size_t offset = lightsCB->alignedConstantBufferSize * frame;
-		LightPool* lpool = (LightPool*)(lightsCB->mappedConstantBuffer + offset);
+		size_t offset = lightsUb->alignedBufferSize * frame;
+		LightPool* lpool = (LightPool*)(lightsUb->mappedBuffer.data() + offset);
 		unsigned int numLights = static_cast<unsigned int>(lights.size());
 		lpool->numLights = numLights;
 		for (unsigned int i = 0; i < numLights; i++)
 		{
-			lights[i]->WriteConstantsBufferLightAttributes(lpool->lights[i]);
+			lights[i]->WriteUniformBufferLightAttributes(lpool->lights[i]);
 		}
+		lightsUb->sync(frame);
+		// DumpLightPool(*lpool, numLights);
 	}
-*/
 
 /*
 	//ShadowMaps

@@ -216,6 +216,7 @@ namespace Scene
 	void Renderable::BindToCamera(JUUID camId)
 	{
 		CameraID cam(camId);
+		bindedCameras.insert(cam);
 		cam->BindRenderable(uuid());
 	}
 
@@ -634,7 +635,11 @@ namespace Scene
                         return CameraID(*(GetSwapChainCameras(r->unit).begin()))->cameraUb;
                     return rp->camera->cameraUb;
                 } },
-                { LightUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
+                { LightUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { 
+					if(!rp->camera && rp->renderPassTemplate->type() == RenderPassType_SwapChainPass && rp->renderPassTemplate->renderCallbackOverride() != RenderPassRenderCallbackOverride_Resolve)
+                        return CameraID(*(GetSwapChainCameras(r->unit).begin()))->lightsUb;
+                    return rp->camera->lightsUb;
+				 } },
                 { ShadowMapUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
                 { ModelUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->worldUb; } },
                 { MaterialUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->uniformBuffers[rp][meshId]; } },

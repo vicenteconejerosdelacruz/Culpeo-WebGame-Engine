@@ -34,6 +34,7 @@ struct JRenderer
 
 	//READ&GET
 	unsigned int GetBackBufferIndex();
+	void MoveToNextBuffer(){ backBufferIndex = (backBufferIndex+1)%numFrames;}
 	wgpu::Instance GetInstance() { return instance; }
 	wgpu::Adapter GetAdapter() { return adapter; }
 	wgpu::Device GetDevice() { return device; }

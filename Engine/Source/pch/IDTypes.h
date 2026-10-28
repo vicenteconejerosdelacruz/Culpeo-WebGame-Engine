@@ -22,5 +22,6 @@ DEF_TYPE_ID(Templates, TUUID, MeshInstance, GetMeshInstance);
 
 DEF_TYPE_CID(Scene, CUUID, Camera, GetCamera);
 DEF_TYPE_CID(Scene, CUUID, Renderable, GetRenderable);
+DEF_TYPE_CID(Scene, CUUID, Light, GetLight);
 
 DEF_TYPE_SID(Scene, TSUUUID, SceneObject, GetSceneObject)

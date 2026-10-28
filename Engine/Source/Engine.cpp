@@ -27,7 +27,6 @@ using namespace Game;
 RECT hWndRect = { 0L, 0L, 0L, 0L };
 
 std::unique_ptr<JRenderer> renderer;
-wgpu::RenderPipeline pipeline;
 
 bool InitInstance()
 {
@@ -38,34 +37,6 @@ bool InitInstance()
   renderer->CreateSurface(); 
 
   return true;
-}
-
-const char shaderCode[] = R"(
-    @vertex fn vertexMain(@builtin(vertex_index) i : u32) ->
-      @builtin(position) vec4f {
-        const pos = array(vec2f(0, 1), vec2f(-1, -1), vec2f(1, -1));
-        return vec4f(pos[i], 0, 1);
-    }
-    @fragment fn fragmentMain() -> @location(0) vec4f {
-        return vec4f(1, 0, 0, 1);
-    }
-)";
-
-void CreateRenderPipeline() {
-  wgpu::ShaderSourceWGSL wgsl{{.code = shaderCode}};
-
-  wgpu::ShaderModuleDescriptor shaderModuleDescriptor{.nextInChain = &wgsl};
-  wgpu::ShaderModule shaderModule =
-      renderer->GetDevice().CreateShaderModule(&shaderModuleDescriptor);
-
-  wgpu::ColorTargetState colorTargetState{.format = renderer->format};
-
-  wgpu::FragmentState fragmentState{
-      .module = shaderModule, .targetCount = 1, .targets = &colorTargetState};
-
-  wgpu::RenderPipelineDescriptor descriptor{.vertex = {.module = shaderModule},
-                                            .fragment = &fragmentState};
-  pipeline = renderer->GetDevice().CreateRenderPipeline(&descriptor);
 }
 
 void Render() {
@@ -87,39 +58,7 @@ void Render() {
   
   SceneRender();
 
-  /*
-  wgpu::SurfaceTexture surfaceTexture;
-  renderer->surface.GetCurrentTexture(&surfaceTexture);
-
-  // Validación de seguridad para evitar crashes si la ventana se minimiza o invalida
-  if (!surfaceTexture.texture) {
-    return;
-  }
-
-  wgpu::TextureView view = surfaceTexture.texture.CreateView();
-
-  wgpu::RenderPassColorAttachment attachment{
-      .view = view,
-      .loadOp = wgpu::LoadOp::Clear,
-      .storeOp = wgpu::StoreOp::Store};
-
-  wgpu::RenderPassDescriptor renderpass{.colorAttachmentCount = 1,
-                                        .colorAttachments = &attachment};
-
-  wgpu::CommandEncoder encoder = renderer->GetDevice().CreateCommandEncoder();
-  wgpu::RenderPassEncoder pass = encoder.BeginRenderPass(&renderpass);
-  pass.SetPipeline(pipeline);
-  pass.Draw(3);
-  pass.End();
-  
-  wgpu::CommandBuffer commands = encoder.Finish();
-  renderer->GetDevice().GetQueue().Submit(1, &commands);
-
-#ifndef __EMSCRIPTEN__
-  // Solo en ejecuciones nativas de escritorio (Dawn C++ nativo)
-  renderer->surface.Present();
-#endif
-*/
+  renderer->MoveToNextBuffer();
 
   // 2. Procesar eventos de WebGPU
   renderer->GetInstance().ProcessEvents();
@@ -130,17 +69,16 @@ int main() {
   CreateTemplates();
   InitInstance();
   BootGame();
-  CreateRenderPipeline();
 
-#if defined(__EMSCRIPTEN__)
+// #if defined(__EMSCRIPTEN__)
   // 0 = Usar requestAnimationFrame del navegador
   // true = Simular bucle infinito interrumpiendo el flujo lineal sin destruir variables globales
   emscripten_set_main_loop(Render, 0, true);
-#else
-  while (!glfwWindowShouldClose(renderer->GetWindow())) {
-    Render();
-  }
-#endif
+// #else
+  // while (!glfwWindowShouldClose(renderer->GetWindow())) {
+    // Render();
+  // }
+// #endif
 
   return 0;
 }

@@ -26,6 +26,11 @@ namespace DeviceUtils
 			return offset + sizeof(T);
 		}
 		void push(void* data, size_t offset, size_t size);
+		void sync(unsigned int index)
+		{
+			size_t offInMap = ((numFrames>0)?index:0)*alignedBufferSize;
+			push(mappedBuffer.data(), offInMap, alignedBufferSize);
+		}
 		void Destroy();
 
 		std::string name;

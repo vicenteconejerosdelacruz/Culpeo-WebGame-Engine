@@ -79,12 +79,16 @@ add_executable(CulpeoEngine
     "Source/Scene/SceneUnit.cpp"
     "Source/Scene/SceneObject.h"
     "Source/Scene/SceneObject.cpp"
+    "Source/Scene/Light/Light.h"
+    "Source/Scene/Light/LightAtt.h"
+    "Source/Scene/Light/Light.cpp"
     "Source/Scene/Camera/Camera.h"
     "Source/Scene/Camera/CameraAtt.h"
     "Source/Scene/Camera/Camera.cpp"
     "Source/Scene/Camera/Projections/Orthographic.h"
     "Source/Scene/Camera/Projections/Perspective.h"
     "Source/Scene/Renderable/Renderable.h"
+    "Source/Scene/Renderable/RenderableAtt.h"
     "Source/Scene/Renderable/Renderable.cpp"
     "Source/Templates/JTemplate.h"
     "Source/Templates/Templates.h"
@@ -151,8 +155,9 @@ target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Shaders/Compiler
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene
-    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Renderable
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Camera
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Light
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Renderable
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Templates
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Primitives
     ${CMAKE_SOURCE_DIR}/SDKs/assimp/include

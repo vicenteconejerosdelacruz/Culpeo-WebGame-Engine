@@ -772,6 +772,7 @@ namespace Scene
 	{
 // 		auto& scene = GetSceneUnit(id);
 // 		unsigned int frame = scene->Frame();
+		unsigned int frame = renderer->GetBackBufferIndex();
 
  		for (RenderableID r : GetRenderables(id))
  		{
@@ -785,13 +786,13 @@ namespace Scene
 // 			r->WriteConstantsBuffer(frame);
  		}
 
-// 		//write the constants buffers of the cameras which renders shadow maps
-// 		for (JUUID uuid : GetCameras(id))
+		//write the constants buffers of the cameras which renders shadow maps
+		for (CameraID c : GetCameras(id))
 // 		{
 // 			CameraID c = MAKESUUUID(id, uuid);
 // 			if (!c->RenderReady() || !c->shadowMapLight().empty()) continue;
 
-// 			c->WriteLightsConstantsBuffer(frame);
+			c->WriteLightsUniformBuffer(frame);
 // 			c->WriteShadowMapsConstantsBuffer(frame);
 // 		}
 	}

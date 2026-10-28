@@ -3,6 +3,7 @@
 #include <ShaderCompiler.h>
 #include <Renderer.h>
 #include <Scene.h>
+#include <Light.h>
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 // #include <CompilerQueue.h>
 #if defined(_EDITOR)
@@ -133,6 +134,7 @@ namespace Templates {
 			{ CameraUniformBufferName, sizeof(CameraAttributes) },
 			{ ModelUniformBufferName, sizeof(XMMATRIX) },
 			{ MaterialUniformBufferName, sizeof(MaterialAttributes) },
+			{ LightUniformBufferName, sizeof(LightPool) },
 		};
 
 		const std::set<std::string> uniformsMultiframe = {
