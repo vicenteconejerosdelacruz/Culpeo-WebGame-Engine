@@ -23,3 +23,18 @@ struct Lights {
     _pad3: vec3<u32>,             // Padding de 12 bytes para alinear el array a múltiplo de 16
     atts: array<LightAttributes, 100>,
 }
+
+/*
+uint numLights;
+uint3 _pad3;
+  struct LightAttributes {
+  uint lightType;
+  uint shadowMapIndex;
+  uint hasShadowMap;
+  float _pad0;
+  float4 lightColor;
+  float4 atts1;
+  float4 atts2;
+  float4 atts3;
+} atts[100];
+*/

@@ -246,7 +246,7 @@ namespace Scene
 	void Light::WriteUniformBufferLightAttributes(LightAttributes& atts)
 	{
 		memset(&atts, 0, sizeof(atts));
-		atts.lightType = lightType();
+		atts.lightType = static_cast<unsigned int>(lightType());
 
 		switch (lightType())
 		{

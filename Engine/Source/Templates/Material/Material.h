@@ -170,6 +170,7 @@ namespace Templates
 		VertexClass vertexClass;
 		bool shadowed;
 		bool ibl;
+		MaterialAttributes materialAttributes;
 		MaterialVariablesMapping variablesMapping;
 		std::vector<size_t> variablesBufferSize;
 		std::vector<std::vector<std::byte>> variablesBuffer;

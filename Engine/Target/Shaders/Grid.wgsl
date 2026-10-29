@@ -4,6 +4,7 @@
 #include "UBVars/Material.h"
 #include "UBVars/Lights.h"
 #include "UBVars/ShadowMaps.h"
+#include "Lighting/BlinnPhong/SceneLighting.h"
 
 // ------------------------------------------
 // GRUPO 0: Frecuencia por FRAME (Globales)
@@ -121,27 +122,9 @@ fn main_ps(input: PixelShaderInput) -> @location(0) vec4<f32> {
 #endif
 */
 
-    // Llamada a la función de iluminación (equivalente a SceneLighting.h traducido a WGSL)
-    /*
-    SceneLighting(
-        worldPos, normal, material.specularExponent,
-        viewDir,
-        lights,
-        #if defined(_HAS_SHADOWMAPS_TEXTURES)
-        viewPos,
-        shadowMaps,
-        shadowMapsTextures,
-        shadowSampler,
-        #endif
-        &diffuseFinalLightContribution, &specularFinalLightContribution
-    );
-    */
-
-    let baseColor = material.baseColor.rgb;
-    //var outputColor = baseColor * getGridColor(input) * diffuseFinalLightContribution;
-    //outputColor += specularFinalLightContribution;
-	//outputColor -= vec3<f32>(100.0f);
-	var outputColor = getGridColor(input) * lights.atts[0].lightColor.xyz;
-    
-    return vec4<f32>(toGammaSpace(outputColor), 1.0f);
+	SceneLighting(worldPos, normal, material.specularExponent, viewDir, lights, &diffuseFinalLightContribution, &specularFinalLightContribution);
+    var outputColor = material.baseColor * getGridColor(input) * diffuseFinalLightContribution;
+    outputColor += specularFinalLightContribution;
+	
+    return vec4<f32>(outputColor, 1.0f);
 }

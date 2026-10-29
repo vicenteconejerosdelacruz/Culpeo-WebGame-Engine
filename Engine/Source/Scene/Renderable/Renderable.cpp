@@ -573,6 +573,15 @@ namespace Scene
 			UniformBufferID matBuffer = mi->CreateUniformBuffers(unit, matStr);
 			uniformBuffers[pass].push_back(matBuffer);
 		}
+		RenderableID r(uuid());
+		GetSceneUnit(unit)->PushToPreRender([r,pass]{
+			for (unsigned int i = 0; i < r->meshes.size(); i++)
+			{
+				auto& mi = r->materials[pass].at(i);
+				auto& ub = r->uniformBuffers[pass].at(i);
+				ub->push(mi->materialAttributes,0);
+			}
+		});
 	}
 
 	void Renderable::DestroyUniformBuffersInstances(CameraID cam)

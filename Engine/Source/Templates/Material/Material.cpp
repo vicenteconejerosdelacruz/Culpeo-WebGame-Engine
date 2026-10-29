@@ -378,6 +378,18 @@ namespace Templates
 
 	void MaterialInstance::LoadVariablesMapping()
 	{
+		std::map<std::string, std::function<void(MaterialAttributes& att, nlohmann::json j)>> attributeWriter =
+		{
+			{ "baseColor", [](MaterialAttributes& att, nlohmann::json j){ att.baseColor = ToXMFLOAT3(j); } },
+			{ "alphaCut", [](MaterialAttributes& att, nlohmann::json j){ att.alphaCut = j.get<nlohmann::json::number_float_t>(); } },
+			{ "colorKey", [](MaterialAttributes& att, nlohmann::json j){ att.colorKey = ToXMFLOAT3(j); } },
+			{ "specularExponent", [](MaterialAttributes& att, nlohmann::json j){ att.specularExponent = j.get<nlohmann::json::number_float_t>(); } },
+			{ "metallicFactor", [](MaterialAttributes& att, nlohmann::json j){ att.metallicFactor = j.get<nlohmann::json::number_float_t>(); } },
+			{ "roughnessFactor", [](MaterialAttributes& att, nlohmann::json j){ att.roughnessFactor = j.get<nlohmann::json::number_float_t>(); } },
+			{ "frameIndex", [](MaterialAttributes& att, nlohmann::json j){ att.frameIndex = j.get<nlohmann::json::number_unsigned_t>(); } },
+			{ "luminanceCutOff", [](MaterialAttributes& att, nlohmann::json j){ att.luminanceCutOff = j.get<nlohmann::json::number_float_t>(); } },
+		};
+
 		/*
 		auto& vertexShader = vertexShaderInstanceID;
 		auto& pixelShader = pixelShaderInstanceID;
@@ -404,28 +416,30 @@ namespace Templates
 
 		ShaderConstantsBufferVariablesMap& vsVars = vertexShader->constantsBuffersVariables;
 		ShaderConstantsBufferVariablesMap& psVars = pixelShader->constantsBuffersVariables;
-
+		*/
 		//initialize the variables mapping
+
 		auto& material = materialUUID;
-		ShaderJsonID shader_vs = material->shader_vs();
-		ShaderJsonID shader_ps = material->shader_ps();
+		// ShaderJsonID shader_vs(material->shader_vs());
+		ShaderJsonID shader_ps(material->shader_ps());
 
 		nlohmann::json materialMappedValues = nlohmann::json::array();
-		nlohmann::json shaderVSMappedValues = nlohmann::json::array();
+		// nlohmann::json shaderVSMappedValues = nlohmann::json::array();
 		nlohmann::json shaderPSMappedValues = nlohmann::json::array();
 
 		std::map<std::string, nlohmann::json> mappedValues;
 
 		//mapped values comes from the material, vertex and pixel shaders
 		if (material->contains("mappedValues")) { materialMappedValues = material->at("mappedValues"); }
-		if (shader_vs->contains("mappedValues")) { shaderVSMappedValues = shader_vs->at("mappedValues"); }
+		// if (shader_vs->contains("mappedValues")) { shaderVSMappedValues = shader_vs->at("mappedValues"); }
 		if (shader_ps->contains("mappedValues")) { shaderPSMappedValues = shader_ps->at("mappedValues"); }
 		for (nlohmann::json mappedValue : materialMappedValues) { mappedValues.insert_or_assign(mappedValue.at("variable"), mappedValue); }
-		for (nlohmann::json mappedValue : shaderVSMappedValues) { mappedValues.insert_or_assign(mappedValue.at("variable"), mappedValue); }
+		// for (nlohmann::json mappedValue : shaderVSMappedValues) { mappedValues.insert_or_assign(mappedValue.at("variable"), mappedValue); }
 		for (nlohmann::json mappedValue : shaderPSMappedValues) { mappedValues.insert_or_assign(mappedValue.at("variable"), mappedValue); }
 
 		variablesMapping.clear();
 
+		/*
 		for (auto& [varName, mappedValue] : mappedValues)
 		{
 			if (vsVars.contains(varName))
@@ -461,8 +475,13 @@ namespace Templates
 			};
 
 		std::set<std::string> unmapped;
+		*/
+
 		for (auto& [varName, mappedValue] : mappedValues)
 		{
+			attributeWriter.at(varName)(materialAttributes,mappedValue.at("value"));
+
+			/*
 			if (!constantsBufferContains(varName)) continue;
 
 			auto def = getConstantsBufferVariable(varName);
@@ -474,8 +493,10 @@ namespace Templates
 			dst += def.offset;
 			auto initialValue = JsonToMaterialInitialValue(mappedValue);
 			WriteMappedInitialValuesToDestination(initialValue, dst, size);
+			*/
 		}
 
+		/*
 		//write the values to mapped memory
 		for (auto [varName, mapping] : variablesMapping)
 		{

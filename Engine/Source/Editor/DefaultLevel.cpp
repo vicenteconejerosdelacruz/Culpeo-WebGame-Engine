@@ -40,7 +40,10 @@ position:
 rotation:
   - 0.0
   - 0.0
-  - 0.0
+  - 0.0  
+#  - 65.0
+#  - -40.0
+#  - 0.0
 controllers:
   camera:
     fitWindow: true

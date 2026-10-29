@@ -132,7 +132,7 @@ inline void DumpLightAttributes(const LightAttributes &atts)
 
 struct LightPool {
     unsigned int numLights;       // 4 bytes
-    unsigned int _pad3[3];        // 12 bytes (equivalente al vec3<u32> de la cabecera) -> Total cabecera: 16 bytes
+    unsigned int _pad3[7];        // 12 bytes (equivalente al vec3<u32> de la cabecera) -> Total cabecera: 16 bytes
     LightAttributes lights[MaxLights];  // 100 * 80 = 8000 bytes
 	unsigned int _pad_end[4]; //16 bytes
 	// Total exacto: 8032 bytes
