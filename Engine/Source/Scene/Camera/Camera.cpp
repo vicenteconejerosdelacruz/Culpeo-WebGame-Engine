@@ -131,14 +131,15 @@ namespace Scene
 		Controller::Unmap();
 	}
 
-/*
 #if defined(_EDITOR)
 	void Camera::WriteJson(nlohmann::json& j)
 	{
-#include <Editor/JWriteJson.h>
-#include "CameraAtt.h"
-#include <JEnd.h>
+		#include <Editor/JWriteJson.h>
+		#include "CameraAtt.h"
+		#include <JEnd.h>
+		Controller::WriteJson(j);
 	}
+/*
 	void Camera::GatherFiles(nlohmann::json& json, std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream)
 	{
 #include <Editor/JReleaseBuilder.h>
@@ -160,8 +161,8 @@ namespace Scene
 
 		return options;
 	}
-#endif
 */
+#endif
 
 /*
 	void Camera::Initialize()

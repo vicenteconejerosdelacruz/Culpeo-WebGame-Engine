@@ -13,6 +13,9 @@
 #include <Game.h>
 #include <Renderer.h>
 #include <Templates.h>
+#if defined(_EDITOR)
+#include <Editor.h>
+#endif
 
 std::atomic<bool> g_EngineReady{false};
 
@@ -36,6 +39,9 @@ bool InitInstance()
   renderer->CreateWindow(); 
   renderer->CreateSurface(); 
 
+  #if defined(_EDITOR)
+  Editor::InitEditor();
+  #endif
   return true;
 }
 

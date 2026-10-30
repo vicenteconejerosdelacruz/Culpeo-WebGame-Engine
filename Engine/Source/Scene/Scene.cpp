@@ -1,6 +1,6 @@
 #include <Scene.h>
 #include <thread>
-// #include <SceneObject.h>
+#include <SceneObject.h>
 #include <Renderer.h>
 // #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
 #include <Level.h>
@@ -488,7 +488,7 @@ namespace Scene
 	{
 		std::set<JUUID> cs = GetControllersInSceneUnit(id);
 		std::for_each(cs.begin(),cs.end(),[](JUUID uuid){
-			GetController(uuid)->BindToScene();			
+			GetController(uuid)->BindToScene();
 		});
 
 		/*
@@ -573,9 +573,12 @@ namespace Scene
 	}
 
 #if defined(_EDITOR)
-	/*
-	JUUID CloneSceneObject(SceneUnitId id, JUUID sceneObject, nlohmann::json parameters)
+	SceneObjectID CloneSceneObject(SceneObjectID sceneObject, nlohmann::json parameters)
 	{
+		nlohmann::json data;
+		sceneObject->WriteJson(data);
+
+		/*
 		auto& scene = GetSceneUnit(id);
 		LoadingProcessor loading = CreateLoadingProcessor();
 
@@ -583,6 +586,7 @@ namespace Scene
 		SceneObjectType type = sceneObjectO->JType();
 		nlohmann::json data;
 		sceneObjectO->WriteJson(data);
+		*/
 
 		JUUID uuid = getUUID();
 		std::string name = data.at("name");
@@ -590,10 +594,14 @@ namespace Scene
 		data.at("name") = name;
 		data.at("uuid") = uuid;
 
-		scene->AddSceneObjectToUnboundPool(uuid);
+		//scene->AddSceneObjectToUnboundPool(uuid);
 
 		data.merge_patch(parameters);
 
+		CreateSceneObject(sceneObject.unit(), data);
+
+		return SceneObjectID(sceneObject.unit(), data.at("uuid"));
+		/*
 		auto createAvatars = [&]
 			{
 				std::set<SceneObjectType> physicAbleTypes = { SO_Renderables, SO_Triggers, SO_Boundaries };
@@ -677,8 +685,8 @@ namespace Scene
 		}
 
 		return uuid;
+		*/
 	}
-	*/
 #endif
 
 	void BindToScene(SceneUnitId id, JUUID uuidA, JUUID uuidB)

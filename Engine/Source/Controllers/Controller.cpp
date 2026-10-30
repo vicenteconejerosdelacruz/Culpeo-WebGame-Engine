@@ -74,16 +74,16 @@ namespace Game
 		JObject::JPatch(p);
 	}
 
-// #if defined(_EDITOR)
-// 	void Controller::WriteJson(nlohmann::json& j)
-// 	{
-// #include <Editor/JWriteJson.h>
-// #include <ControllerAtt.h>
-// #include <JEnd.h>
-// 		if (j.contains("uuid"))
-// 			j.erase("uuid");
-// 	}
-// #endif
+#if defined(_EDITOR)
+	void Controller::WriteJson(nlohmann::json& j)
+	{
+#include <Editor/JWriteJson.h>
+#include <ControllerAtt.h>
+#include <JEnd.h>
+		if (j.contains("uuid"))
+			j.erase("uuid");
+	}
+#endif
 
 	void Controller::Map(SUUUID so)
 	{

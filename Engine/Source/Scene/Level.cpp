@@ -8,6 +8,7 @@
 // #include <Physics.h>
 // #include <Yaml2Json.h>
 #if defined(_EDITOR)
+#include <Editor.h>
 #include <DefaultLevel.h>
 // #include <BootLevel/BootLevel.h>
 
@@ -16,8 +17,8 @@
 // 	extern void CreateSceneUnitBoundingBox(SceneUnitId id);
 // 	extern void CreateSceneUnitBillboards(SceneUnitId id);
 // 	extern void CreateRegisteredBillboards(SceneUnitId id);
-// 	extern void CreateSceneUnitEditorIndependentCamera(SceneUnitId id);
-// 	extern void CopySceneUnitEditorCameraRenderPasses(SceneUnitId id);
+	// extern void CreateSceneUnitEditorIndependentCamera(SceneUnitId id);
+	// extern void CopySceneUnitEditorCameraRenderPasses(SceneUnitId id);
 // 	extern void CreatePickingPass(SceneUnitId id);
 // 	extern void CreateSceneUnitPhysicsController(SceneUnitId id);
 // 	extern void SwitchToSceneUnitEditorCamera(SceneUnitId id);
@@ -102,6 +103,10 @@ namespace Scene::Level
 	static std::mutex loadLevelMutex;
 	void LoadLevel(std::unique_ptr<SceneUnit>& scene, std::string filename, nlohmann::json data, std::function<void(std::string, unsigned int, unsigned int)> progress, bool initPhysX)
 	{
+
+#if defined(_EDITOR)
+		using namespace Editor;
+#endif
 		std::lock_guard<std::mutex> lock(loadLevelMutex);
 		using namespace Scene;
 		SceneUnitId id = scene->Id();
@@ -207,7 +212,7 @@ namespace Scene::Level
 // #if defined(_EDITOR)
 // 		if (!scene->IsIsolated())
 // 		{
-// 			CreatePickingPass(id);
+// // 			CreatePickingPass(id);
 // 			CreateSceneUnitEditorIndependentCamera(id);
 // 		}
 // #endif
@@ -231,12 +236,14 @@ namespace Scene::Level
 // 		}
 		//leave this to last
 		//MapControllers(id);
-// #if defined(_EDITOR)
-// 		if (!scene->IsIsolated())
-// 		{
-// 			CopySceneUnitEditorCameraRenderPasses(id);
-// 		}
-// #endif
+#if defined(_EDITOR)
+		if (!scene->IsIsolated())
+		{
+			CreateSceneUnitEditorIndependentCamera(id);
+			CopySceneUnitEditorCameraRenderPasses(id);
+			CreateSceneUnitGameController(id);
+		}
+#endif
 
 // 		for (auto& intoThePool : objectsToLoad)
 // 		{

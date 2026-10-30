@@ -36,6 +36,13 @@ namespace Scene
 		// #include <JEnd.h>
 	}
 
+	void SceneObject::WriteJson(nlohmann::json& j)
+	{
+		#include <Editor/JWriteJson.h>
+		#include "SceneObjectAtt.h"
+		#include <JEnd.h>
+	}
+
 	void SceneObject::create_rotation(XMFLOAT3 v)
 	{
 		if (!contains("rotation"))

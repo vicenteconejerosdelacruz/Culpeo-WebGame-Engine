@@ -36,13 +36,13 @@ struct JObject : nlohmann::json
 	void clean(std::vector<size_t> flags);
 	void clear();
 
-// #if defined(_EDITOR)
-// 	virtual void WriteJson(nlohmann::json& j);
+#if defined(_EDITOR)
+	virtual void WriteJson(nlohmann::json& j){};
 // 	virtual std::function<bool(JObject*)> GetAssetsConditioner();
 // 	virtual void EditorPreview(size_t flags);
 // 	virtual void DestroyEditorPreview();
 // 	virtual std::map<std::string, ScriptBinding> GetScriptBindingOptions();
-// #endif
+#endif
 
     //Update flags management
     std::map<std::string, std::tuple<size_t, bool>> UpdateFlagsMap;

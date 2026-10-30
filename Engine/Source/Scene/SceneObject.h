@@ -125,6 +125,10 @@ namespace Scene
 		//lifecycle
 		SceneObject(SceneUnitId id, nlohmann::json& json);
 
+#if defined(_EDITOR)
+		void WriteJson(nlohmann::json& j) override;
+#endif
+
 		//static std::string GetClassName() { return "SceneObject"; }
 		//std::string GetJClassName() override { return GetClassName(); }
 

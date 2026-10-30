@@ -4,9 +4,9 @@
 // #include <Renderable/Renderable.h>
 // #include <SceneObject.h>
 // #include <Scripting.h>
-// #if defined(_EDITOR)
-// #include <Editor.h>
-// #endif
+#if defined(_EDITOR)
+#include <Editor.h>
+#endif
 
 extern std::unique_ptr<JRenderer> renderer;
 
@@ -203,12 +203,12 @@ namespace Scene
 	void SceneUnit::Render()
 	{
 		using namespace Scene;
+#if defined(_EDITOR)
+		using namespace Editor;
+#endif
 
 		PreRender();
 		
-// #if defined(_EDITOR)
-// 		using namespace Editor;
-// #endif
 // 		bool processRendering = commandsProcessor && renderer->GetBackBufferIndex() == Frame();
 		bool processRendering = true;
 		if (!IsIsolated())
@@ -220,11 +220,10 @@ namespace Scene
 // #endif
 		if (processRendering)
 		{
-
-// #if defined(_EDITOR)
-// 			if (!IsPlaying(id))
-// 				HandleEditorMouseMovements(id);
-// #endif
+#if defined(_EDITOR)
+			if (!IsPlaying(id))
+				HandleEditorMouseMovements(id);
+#endif
 			WriteUniformBuffers(id);
 // 			ResetCommandList();
 // 			{

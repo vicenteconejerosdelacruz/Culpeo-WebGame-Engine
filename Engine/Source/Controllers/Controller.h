@@ -147,7 +147,7 @@ namespace Game
 		void JPatch(nlohmann::json p) override;
 		// virtual void SetInitialConditions() {};
 #if defined(_EDITOR)
-		// virtual void WriteJson(nlohmann::json& j);
+		void WriteJson(nlohmann::json& j) override;
 		// static void GatherFiles(nlohmann::json& json, std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream) {}
 		// virtual std::map<std::string, JEdvEditorDrawerFunction> GetControllerDrawers() { return Game::GetControllerDrawers(); }
 		// virtual std::vector<std::pair<std::string, JsonToEditorValueType>> GetControllerAttributes() { return Game::GetControllerAttributes(); }

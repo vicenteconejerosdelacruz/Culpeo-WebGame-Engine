@@ -1,7 +1,10 @@
 #include "Game.h"
 #include <Scene.h>
 #include <Level.h>
-#include <Editor/DefaultLevel.h>
+#if defined(_EDITOR)
+#include <Editor.h>
+#include <DefaultLevel.h>
+#endif
 
 namespace Game
 {
@@ -55,13 +58,19 @@ namespace Game
 	void BootGame()
 	{
 		using namespace Scene::Level;
+		#if defined(_EDITOR)
+		using namespace Editor;
 		using namespace Editor::DefaultLevel;
+		#endif
 		
 		LoadLevelIntoSceneUnit(
 			"default",
 			GetDefaultLevel,
 			[](SceneUnitId id){
 				EnableSceneUnitRendering(id);
+				#if defined(_EDITOR)
+				OnLevelLoaded(id);
+				#endif
 			},
 			[](std::string asset, unsigned int count, unsigned int total) {}
 		);
