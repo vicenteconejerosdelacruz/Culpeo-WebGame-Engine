@@ -5,6 +5,7 @@
 #include <Templates.h>
 // #include <SimpleMath.h>
 // #include <SceneUnitId.h>
+#include <emscripten/html5.h>
 
 #define _EDITOR_BOUNDINGBOX
 #define _EDITOR_PICKINGPASS
@@ -43,6 +44,13 @@ enum MouseGameAreaMode
 	MOUSE_GAMEAREA_MODE_CAMERA
 };
 
+inline const std::map<MouseGameAreaMode, std::string> MouseGameAreaModeToString = {
+	{ MOUSE_GAMEAREA_MODE_NONE, "MOUSE_GAMEAREA_MODE_NONE" },
+	{ MOUSE_GAMEAREA_MODE_PICKING, "MOUSE_GAMEAREA_MODE_PICKING" },
+	{ MOUSE_GAMEAREA_MODE_GIZMO, "MOUSE_GAMEAREA_MODE_GIZMO" },
+	{ MOUSE_GAMEAREA_MODE_CAMERA, "MOUSE_GAMEAREA_MODE_CAMERA" },
+};
+
 namespace Editor {
 
 	// static const LONG ApplicationBarBottom = 19L;
@@ -55,7 +63,6 @@ namespace Editor {
 	void CreateSceneUnitGameController(SceneUnitId id);
 	// void CreateSceneUnitPhysicsController(SceneUnitId id);
 	// void CreateSceneUnitBoundingBox(SceneUnitId id);
-	// void CreateSceneUnitBillboards(SceneUnitId id);
 	void CreateSceneUnitEditorIndependentCamera(SceneUnitId id);
 	// CameraID GetLevelCamera(SceneUnitId id);
 	// void DeleteSceneUnitLevel(SceneUnitId id);
@@ -87,7 +94,7 @@ namespace Editor {
 	// std::set<std::string> GetOpenedScenes(bool skipDefault = true);
 	// std::set<SceneUnitId> GetOpenedSceneUnitIds(bool skipDefault = true);
 	// void ResizeEditorResources(unsigned int width, unsigned int height);
-
+	
 	// //Editor Drawing
 	// void AddSceneUnitToEditor(SceneUnitId id);
 	// void SetCurrentSceneUnit(SceneUnitId id);
@@ -120,33 +127,33 @@ namespace Editor {
 	// void BuildAssetsTree();
 	// void OpenPopupForSceneObject(SceneUnitId id, JUUID uuid, std::set<std::string> selected_uuids);
 	// void OpenPopupForTemplate(JUUID uuid);
-
+	
 	// //SceneObjects Panel
 	// void OnChangeSceneObjectTab(std::string newTab);
 	// void OpenSceneObject(JUUID uuid);
 	// void OpenSceneObjectOnNextFrame(JUUID uuid);
 	// void MarkScenePanelAssetsAsDirty();
-
+	
 	// //Templates Panel
 	// void OnChangeTemplateTab(std::string newTab);
 	// void OpenTemplate(JUUID uuid);
 	// void OpenTemplateOnNextFrame(JUUID uuid);
 	// void MarkTemplatesPanelAssetsAsDirty();
 	// void RemoveFromTemplateSelection(std::set<JUUID> uuids);
-
+	
 	// //JObject's Preview Panel
 	// void SendEditorPreview(JUUID uuid, auto GetJObject, auto drawers);
 	// void SendEditorDestroyPreview(JUUID uuid, auto GetJObject);
-
+	
 	// //Model3D Animation Sequencer
 	// void OpenAnimationSequencer(JUUID uuid);
-
+	
 	// //Gizmos
 	// void ResetGizmoVariableWorkers(SceneUnitId unit);
 	// bool InteractWithGizmos(SceneUnitId unit, std::set<SceneObject*>& objects2Gizmo);
 	// void DrawPickedObjectsGizmo(SceneUnitId unit, CameraID camera);
 	// void BeginGizmoInteraction(CameraID camera, std::function<void(DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4)> interaction = [](DirectX::XMFLOAT4X4, DirectX::XMFLOAT4X4) {});
-
+	
 	// //SceneObject Selection
 	// void SelectSceneObject(SceneUnitId unit, JUUID uuid);
 	// void SelectRenderable(RenderableID renderable);
@@ -160,19 +167,23 @@ namespace Editor {
 	// void InsertSceneObjectToSelection(SceneUnitId unit, JUUID uuid);
 	// void EraseSceneObjectFromSelection(SceneUnitId unit, JUUID uuid);
 	// void ClearSceneObjectsSelection(SceneUnitId unit);
-
+	
 	// //BoundingBox
 	// void UpdateBoundingBox(SceneUnitId unit);
-
+	
 	// //Mouse Processing
 	void CreateMouseProcessingCallbacks();
+	EM_BOOL OnMouseMove(int eventType, const EmscriptenMouseEvent* e, void* userData);
+	EM_BOOL OnMouseDown(int eventType, const EmscriptenMouseEvent* e, void* userData);
+	EM_BOOL OnMouseUp(int eventType, const EmscriptenMouseEvent* e, void* userData);
+	EM_BOOL OnWheel(int eventType, const EmscriptenWheelEvent* e, void* userData);
 	void HandleEditorMouseMovements(SceneUnitId id);
-	void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-	void CursorPosCallback(GLFWwindow* window, double xpos, double ypos);
-	void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+	// void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+	// void CursorPosCallback(GLFWwindow* window, double xpos, double ypos);
+	// void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 	// bool MouseIsInGameArea(std::unique_ptr<DirectX::Mouse>& mouse);
 	void GameAreaMouseProcessing(CameraID camera);
-
+	
 	// //SceneObject Picking
 	// bool PickingPassExists(SceneUnitId id);
 	// void CreatePickingPass(SceneUnitId id);
@@ -182,25 +193,26 @@ namespace Editor {
 	// void RenderPickingPass(SceneUnitId id, CameraID camera);
 	// void PickFromScene(SceneUnitId id);
 	// void PickSceneObject(SceneUnitId id, unsigned int pickedObjectId);
-
+	
 	// //JObjects Creation
 	// void StartSceneObjectCreation(SceneObjectType type);
 	// void StartTemplateCreation(TemplateType type);
-
-	// //Billboards
-	// RenderableID CreateBillboardFromMaterials(SceneUnitId id, CameraID camera, std::string name, std::string material, std::string pickingMaterial);
-	// void RegisterBillboard(SceneUnitId id, JUUID sceneObject);
-	// std::set<RenderableID> GetBillboards(SceneUnitId id);
-	// RenderableID GetBillboard(SceneUnitId id, JUUID sceneObject);
-	// void DestroyBillboard(SceneUnitId id, JUUID sceneObject);
-	// void CreateRegisteredBillboards(SceneUnitId id);
-	// bool PendingBillboards(SceneUnitId id);
-	// void ShowBillboards(SceneUnitId id);
-	// void ShowBillboard(RenderableID billboard);
-	// void HideBillboards(SceneUnitId id);
-	// void HideBillboard(RenderableID billboard);
-	// void UpdateBillboards();
-	// void DestroyPendingBillboards();
+	
+	//Billboards
+	void CreateSceneUnitBillboards(SceneUnitId id);
+	void RegisterBillboard(JUUID controllerId);
+	bool PendingBillboards(SceneUnitId id);
+	void DestroyPendingBillboards();
+	void CreateRegisteredBillboards(SceneUnitId id);
+	RenderableID CreateBillboardFromMaterials(SceneUnitId id, CameraID camera, std::string name, std::string material, std::string pickingMaterial);
+	std::set<RenderableID> GetBillboards(SceneUnitId id);
+	RenderableID GetBillboard(SceneUnitId id, JUUID sceneObject);
+	void DestroyBillboard(SceneUnitId id, JUUID sceneObject);
+	void ShowBillboards(SceneUnitId id);
+	void ShowBillboard(RenderableID billboard);
+	void HideBillboards(SceneUnitId id);
+	void HideBillboard(RenderableID billboard);
+	void UpdateBillboards();
 
 	// //Game Mode Activation
 	bool IsPlaying(SceneUnitId id);

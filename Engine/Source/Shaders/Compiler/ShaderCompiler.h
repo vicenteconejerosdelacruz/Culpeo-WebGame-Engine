@@ -5,10 +5,19 @@ struct ShaderResourceInfo {
 	uint32_t binding;
 	std::string variableName; // Ej: "camera", "modelUniform"
 	std::string typeName;     // Ej: "Camera", "Model", "texture_depth_2d_array"
+	bool isTexture;
+	bool isSampler;
 
 	void dump()
 	{
-		std::cout << variableName << ":" << typeName << " group(" << group << ") binding(" << binding << ")" << std::endl;
+		if(!isTexture && !isSampler)
+			std::cout << variableName << ":" << typeName << " group(" << group << ") binding(" << binding << ")" << std::endl;
+		else if(isTexture)
+			std::cout << variableName << ":" << typeName << " group(" << group << ") binding(" << binding << ") [Texture]" << std::endl;
+		else if(isSampler)
+			std::cout << variableName << ":" << typeName << " group(" << group << ") binding(" << binding << ") [Sampler]" << std::endl;
+		else
+			std::cout << variableName << ":" << typeName << " group(" << group << ") binding(" << binding << ") [Unknown]" << std::endl;
 	}
 };
 

@@ -169,6 +169,9 @@ namespace Game
 		// virtual std::set<std::string> GetControllerAliases() { return {}; }
 		// virtual void BindNestedControllers(Local<Context> context, Isolate* isolate, std::unique_ptr<SceneUnitScripting>& scriptData) {}
 
+		//Billboard
+		virtual RenderableID CreateBillboard(CameraID camera) { return RenderableID(); }
+
 		SceneUnitId unit;
 		SceneObjectID sceneObject;
 	};

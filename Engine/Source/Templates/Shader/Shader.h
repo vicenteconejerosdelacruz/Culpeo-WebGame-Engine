@@ -110,6 +110,12 @@ namespace Templates
 
 		struct
 		{
+			ShaderResourceBinding baseTexture = defaultBinding;
+			ShaderResourceBinding normalMap = defaultBinding;
+			ShaderResourceBinding roughnessMap = defaultBinding;
+			ShaderResourceBinding metallicMap = defaultBinding;
+			ShaderResourceBinding aoMap = defaultBinding;
+			ShaderResourceBinding emissiveMap = defaultBinding;
 			ShaderResourceBinding lightsShadowMap = defaultBinding;
 			ShaderResourceBinding iblIrradiance = defaultBinding;
 			ShaderResourceBinding iblPrefiteredEnv = defaultBinding;

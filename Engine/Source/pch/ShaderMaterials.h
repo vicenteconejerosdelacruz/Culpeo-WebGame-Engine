@@ -6,17 +6,21 @@
 #include <map>
 #include <Renderer.h>
 
-//<group, binding, buffer size, multi frame, name>
-using ShaderResourceBinding = std::tuple<int,int, size_t, bool, std::string>;
-static inline const ShaderResourceBinding defaultBinding = std::tuple(-1,-1, 0ULL, false, "");
+// <group, binding, buffer size, multi frame, storage buffer, name, isTexture, isSampler>
+using ShaderResourceBinding = std::tuple<int, int, size_t, bool, bool, std::string, bool, bool>;
+static inline const ShaderResourceBinding defaultBinding = std::tuple(-1, -1, 0ULL, false, false, "", false, false);
+
 inline void dumpBinding(ShaderResourceBinding b)
 {
-	auto [group, binding, buffer_size, multi_frame, name] = b;
+	auto [group, binding, buffer_size, multi_frame, storage_buffer, name, isTexture, isSampler] = b;
 	std::cout << "group(" << group << ") ";
 	std::cout << "binding(" << binding << ") ";
 	std::cout << "buffer_size(" << buffer_size << ") ";
 	std::cout << "multi_frame(" << multi_frame << ") ";
+	std::cout << "storage_buffer(" << storage_buffer << ") ";
 	std::cout << "name(" << name << ") ";
+	std::cout << "isTexture(" << isTexture << ") ";
+	std::cout << "isSampler(" << isSampler << ") ";
 	std::cout << std::endl;
 }
 inline size_t getBindingSize(ShaderResourceBinding b)

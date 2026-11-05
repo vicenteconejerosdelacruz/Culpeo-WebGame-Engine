@@ -1,7 +1,11 @@
 #include "Texture.h"
 #include <Renderer.h>
 #include <Scene.h>
-// #include <DirectXHelper.h>
+#include <Utils/FileSystem.h>
+#include <webgpu/webgpu_cpp.h>
+#include <Scene/SceneUnit.h>
+#define TINYDDSLOADER_IMPLEMENTATION
+#include <tinyddsloader.h>
 #if defined(_DEVELOPMENT)
 // #include <ImageConvert.h>
 #endif
@@ -9,7 +13,7 @@
 // #include <Builder/ReleaseBuilder.h>
 #endif
 
-// extern std::unique_ptr<JRenderer> renderer;
+extern std::unique_ptr<JRenderer> renderer;
 
 #if defined(_EDITOR)
 // namespace Editor {
@@ -631,23 +635,100 @@ namespace Templates
 		// }
 #endif
 		std::string pathS = path.string();
-		std::cout << "creating texture " << pathS << std::endl;
-		// auto loading = CreateLoadingProcessor();
-		// auto& cmd = loading.cmd;
-		// auto& commandList = cmd.GetCommandList();
-		// CreateTextureResource(commandList, pathS, tex->format(), tex->type(), tex->numFrames(), tex->mipLevels(), startFrame);
 		CreateTextureResource(id, pathS, tex->format(), tex->type(), tex->numFrames(), tex->mipLevels(), startFrame);
-		// cmd.RunPreDeletion([&]
-		// 	{
-		// 		upload = nullptr;
-		// 	}
-		// );
 	}
 
 	void TextureInstance::CreateTextureResource(SceneUnitId id, std::string& path, wgpu::TextureFormat format, TextureType type, unsigned int numFrames, unsigned int nMipMaps, unsigned int startFrame)
 	{
-		std::cout << path << std::endl;
+		TextureInstanceID tex = materialTexture;
+
+		AssetStream assetStream(path);
+		
+		auto& file = assetStream.get();
+		
+		if (!assetStream) {
+			std::cerr << "Error: Could not open the AssetStream for: " << path << std::endl;
+			return;
+		}
+
+		// 1. Extraer el contenido binario directamente desde el rdbuf del stringstream interno
+		auto& stream = assetStream.get();
+		
+		// Obtenemos el string subyacente del stringstream de forma limpia y segura
+		std::string fileContent = stream.str();
+
+		if (fileContent.empty()) {
+			std::cerr << "Error: El contenido descargado está vacío para: " << path << std::endl;
+			return;
+		}
+
+		// 2. Almacenar los datos de la textura
+		textureData.resize(fileContent.size());
+		std::memcpy(textureData.data(), fileContent.data(), fileContent.size());
+
+		GetSceneUnit(id)->PushToPreRender([id, tex, path, format, type, numFrames, nMipMaps, startFrame] {
+			
+			// 3. Pasar los datos en crudo a tinyddsloader desde la memoria
+			tinyddsloader::DDSFile dds;
+			auto ddsResult = dds.Load(reinterpret_cast<const uint8_t*>(tex->textureData.data()), tex->textureData.size());
+
+			if (ddsResult != tinyddsloader::Result::Success) {
+				std::cerr << "Error: Fallo al parsear el DDS desde la memoria. Código: " << static_cast<int>(ddsResult) << std::endl;
+				return;
+			}
+
+			// 3. Crear la textura en WebGPU
+			wgpu::TextureDescriptor textureDesc = {};
+			textureDesc.dimension = wgpu::TextureDimension::e2D;
+			textureDesc.size = { dds.GetWidth(), dds.GetHeight(), dds.GetDepth() };
+			textureDesc.mipLevelCount = dds.GetMipCount();
+			textureDesc.sampleCount = 1;
+			textureDesc.format = format;
+			textureDesc.usage = wgpu::TextureUsage::TextureBinding | wgpu::TextureUsage::CopyDst;
+
+			tex->texture = renderer->GetDevice().CreateTexture(&textureDesc);
+
+			// 4. Subir todos los MipMaps y Layers a la GPU
+			for (uint32_t mip = 0; mip < dds.GetMipCount(); ++mip) {
+				for (uint32_t layer = 0; layer < dds.GetArraySize(); ++layer) {
+					auto imageData = dds.GetImageData(mip, layer);
+
+					wgpu::TexelCopyTextureInfo destination = {};
+					destination.texture = tex->texture;
+					destination.mipLevel = mip;
+					destination.origin = { 0, 0, 0 };
+					destination.aspect = wgpu::TextureAspect::All;
+
+					wgpu::TexelCopyBufferLayout layout = {};
+					layout.offset = 0;
+					layout.bytesPerRow = imageData->m_memPitch;
+					layout.rowsPerImage = imageData->m_height;
+
+					wgpu::Extent3D copySize = {
+						imageData->m_width,
+						imageData->m_height,
+						imageData->m_depth
+					};
+					
+					size_t dataSize = imageData->m_memSlicePitch > 0 ? imageData->m_memSlicePitch : (imageData->m_memPitch * imageData->m_height);
+					renderer->GetQueue().WriteTexture(&destination, imageData->m_mem, dataSize, &layout, &copySize);
+				}
+			}
+
+			// 5. Crear la vista de la textura para los bindings del shader
+			wgpu::TextureViewDescriptor viewDesc = {};
+			viewDesc.format = format;
+			viewDesc.dimension = wgpu::TextureViewDimension::e2D;
+			viewDesc.baseMipLevel = 0;
+			viewDesc.mipLevelCount = dds.GetMipCount();
+			viewDesc.baseArrayLayer = 0;
+			viewDesc.arrayLayerCount = dds.GetArraySize();
+			viewDesc.aspect = wgpu::TextureAspect::All;
+
+			tex->textureView = tex->texture.CreateView(&viewDesc);
+		});
 	}
+
 	/*
 	void TextureInstance::CreateTextureResource(CComPtr<ID3D12GraphicsCommandList2>& commandList, std::string& path, DXGI_FORMAT format, TextureType type, unsigned int numFrames, unsigned int nMipMaps, unsigned int firstArraySlice)
 	{

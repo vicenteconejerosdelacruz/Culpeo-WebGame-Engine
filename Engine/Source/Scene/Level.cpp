@@ -111,103 +111,24 @@ namespace Scene::Level
 		using namespace Scene;
 		SceneUnitId id = scene->Id();
 
-// #if defined(_EDITOR)
-// 		using namespace Editor;
+#if defined(_EDITOR)
 // 		scene->SetCanBuildAssetsTree(false);
 
-// 		if (!scene->IsIsolated())
-// 		{
-// 			CreateSceneUnitBillboards(id);
+		if (!scene->IsIsolated())
+		{
+			CreateSceneUnitBillboards(id);
 // 			CreateSceneUnitPhysicsController(id);
 // 			AttachPhysicsAvatars(id, data);
-// 		}
+		}
 // #elif defined(_DEVELOPMENT)
 // 		AttachPhysicsAvatars(id, data);
-// #endif
+#endif
 
 // 		auto loading = CreateLoadingProcessor();
 
 // 		CreateSceneUnitSceneObjects(id);
 
- 		// unsigned int total = std::accumulate(SceneObjectTypeJsonContainer.begin(), SceneObjectTypeJsonContainer.end(), 0U, [&](unsigned int sum, auto& pair)
- 		// 	{
- 		// 		return sum + (data.contains(pair.second) ? static_cast<unsigned int>(data.at(pair.second).size()) : 0U);
- 		// 	}
- 		// );
-
 		LoadSceneObjects(scene, data, progress);
-
-// 		unsigned int count = 0U;
-
-// 		std::vector<std::tuple<SceneObjectType, SUUUID>> objectsToLoad;
-
-// 		LoadSceneObjects(scene, data, SceneObjectTypeJsonContainer.at(SO_Renderables), [&](nlohmann::json& json)
-// 			{
-// 				progress(json.at("name"), count, total);
-// 				CreateRenderable(id, json);
-// 				objectsToLoad.push_back(std::make_tuple(SO_Renderables, MAKESUUUID(id, JUUID(json.at("uuid")))));
-// 				count++;
-// 				progress(json.at("name"), count, total);
-// 			}
-// 		);
-// 		LoadSceneObjects(scene, data, SceneObjectTypeJsonContainer.at(SO_Cameras), [&](nlohmann::json& json)
-// 			{
-// 				progress(json.at("name"), count, total);
-// 				CreateCamera(id, json);
-// 				objectsToLoad.push_back(std::make_tuple(SO_Cameras, MAKESUUUID(id, JUUID(json.at("uuid")))));
-// 				count++;
-// 				progress(json.at("name"), count, total);
-// 			}
-// 		);
-// 		LoadSceneObjects(scene, data, SceneObjectTypeJsonContainer.at(SO_Lights), [&](nlohmann::json& json)
-// 			{
-// 				progress(json.at("name"), count, total);
-// 				CreateLight(id, json);
-// 				objectsToLoad.push_back(std::make_tuple(SO_Lights, MAKESUUUID(id, JUUID(json.at("uuid")))));
-// 				count++;
-// 				progress(json.at("name"), count, total);
-// 			}
-// 		);
-// 		LoadSceneObjects(scene, data, SceneObjectTypeJsonContainer.at(SO_SoundEffects), [&](nlohmann::json& json)
-// 			{
-// 				progress(json.at("name"), count, total);
-// 				CreateSoundFX(id, json);
-// 				count++;
-// 				progress(json.at("name"), count, total);
-// 			}
-// 		);
-// 		LoadSceneObjects(scene, data, SceneObjectTypeJsonContainer.at(SO_PhysicScenes), [&](nlohmann::json& json)
-// 			{
-// 				progress(json.at("name"), count, total);
-// 				CreatePhysicScene(id, json);
-// 				count++;
-// 				progress(json.at("name"), count, total);
-// 			}
-// 		);
-// 		LoadSceneObjects(scene, data, SceneObjectTypeJsonContainer.at(SO_Triggers), [&](nlohmann::json& json)
-// 			{
-// 				progress(json.at("name"), count, total);
-// 				CreateTrigger(id, json);
-// 				count++;
-// 				progress(json.at("name"), count, total);
-// 			}
-// 		);
-// 		LoadSceneObjects(scene, data, SceneObjectTypeJsonContainer.at(SO_Boundaries), [&](nlohmann::json& json)
-// 			{
-// 				progress(json.at("name"), count, total);
-// 				CreateBoundary(id, json);
-// 				count++;
-// 				progress(json.at("name"), count, total);
-// 			}
-// 		);
-// 		LoadSceneObjects(scene, data, SceneObjectTypeJsonContainer.at(SO_SceneControllers), [&](nlohmann::json& json)
-// 			{
-// 				progress(json.at("name"), count, total);
-// 				CreateSceneController(id, json);
-// 				count++;
-// 				progress(json.at("name"), count, total);
-// 			}
-// 		);
 
 // #if defined(_EDITOR)
 // 		if (!scene->IsIsolated())
@@ -219,13 +140,7 @@ namespace Scene::Level
 
 		MapControllers(id);
 		BindSceneObjects(id);
-// #if defined(_EDITOR)
-// 		if (!scene->IsIsolated())
-// 		{
-// 			CreateSceneUnitBoundingBox(id);
-// 			CreateRegisteredBillboards(id);
-// 		}
-// #endif
+
 // 		if (initPhysX)
 // 		{
 // 			CreatePhysicsObjectsBehaviors(id);
@@ -242,6 +157,8 @@ namespace Scene::Level
 			CreateSceneUnitEditorIndependentCamera(id);
 			CopySceneUnitEditorCameraRenderPasses(id);
 			CreateSceneUnitGameController(id);
+// 			CreateSceneUnitBoundingBox(id);
+			CreateRegisteredBillboards(id);
 		}
 #endif
 

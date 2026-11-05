@@ -7,11 +7,13 @@ struct EditorMouseCamera
 	double mouseY = 0.0;
 	double dx = 0.0;
 	double dy = 0.0;
+	double sx = 0.0;
+	double sy = 0.0;
 	//buttons
 	bool leftButton = false;
 	bool rightButton = false;
 	//wheel
-	double wheelValue;
+	double wheelValue = 0.0;
 	double dw = 0.0;
 	// bool wheelCaptured = false;
 	// bool wheelMode = false;
@@ -21,8 +23,11 @@ struct EditorMouseCamera
 	void UpdateMouseXY(double x, double y, double* mdx=nullptr, double *mdy=nullptr);
 	double GetMouseDx();
 	double GetMouseDy();
+	double GetMouseSx();
+	double GetMouseSy();
+	void ResetSxSy();
 
-	void RickClick(double x, double y);
+	void RightClick(double x, double y);
 	void LeftClick(double x, double y);
 	bool RightButton();
 	bool LeftButton();

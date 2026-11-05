@@ -13,7 +13,7 @@ namespace DeviceUtils
 		return uniformBuffers.at(uuid);
 	}
 	
-	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, bool multiFrame, std::string ubName)
+	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, bool multiFrame, bool storageBuffer, std::string ubName)
 	{
 		UniformBufferID uniformBufferID = getUUID();
 		std::unique_ptr<UniformBuffer> ubData = std::make_unique<UniformBuffer>(bufferSize, multiFrame, ubName);
@@ -21,14 +21,14 @@ namespace DeviceUtils
 		assert(!uniformBuffers.contains(uniformBufferID()));
 		uniformBuffers.insert_or_assign(uniformBufferID(), std::move(ubData));
 
-		GetSceneUnit(id)->PushToPreRender([uniformBufferID]
+		GetSceneUnit(id)->PushToPreRender([uniformBufferID, storageBuffer]
 			{
 				//create the gpu buffer
 				wgpu::BufferDescriptor desc = {};
 				desc.nextInChain = nullptr;
 				desc.size = uniformBufferID->mappedBuffer.size();
 				desc.label = uniformBufferID->name.c_str();
-				desc.usage = wgpu::BufferUsage::Uniform | wgpu::BufferUsage::CopyDst;
+				desc.usage = ((storageBuffer ? wgpu::BufferUsage::Storage : wgpu::BufferUsage::Uniform) | wgpu::BufferUsage::CopyDst);
 				desc.mappedAtCreation = false;
 				uniformBufferID->uniformBuffer = renderer->GetDevice().CreateBuffer(&desc);
 			}

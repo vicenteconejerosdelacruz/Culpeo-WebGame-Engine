@@ -44,7 +44,7 @@ std::unique_ptr<SceneUnit>& CreateScene(SceneUnitId unit, std::string unitName =
 // 	std::set<SceneUnitId> GetSceneUnitIds();
 // 	SceneUnitId GetNextSceneUnitId(SceneUnitId id);
 
-// 	bool SceneIsIsolated(SceneUnitId id);
+	bool SceneIsIsolated(SceneUnitId id);
 
 // 	void ResizeReleaseScenePasses();
 // 	void ResizeScenePasses(unsigned int width, unsigned int height);

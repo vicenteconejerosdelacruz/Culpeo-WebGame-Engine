@@ -216,6 +216,7 @@ static inline std::unordered_map<std::string, wgpu::MipmapFilterMode> StringToWG
 // ==========================================
 
 static inline std::unordered_map<wgpu::CompareFunction, std::string> WGPU_COMPARISON_FUNCToString = {
+	{ wgpu::CompareFunction::Undefined, "UNDEFINED" },
 	{ wgpu::CompareFunction::Never, "NEVER" },
 	{ wgpu::CompareFunction::Less, "LESS" },
 	{ wgpu::CompareFunction::Equal, "EQUAL" },
@@ -227,6 +228,7 @@ static inline std::unordered_map<wgpu::CompareFunction, std::string> WGPU_COMPAR
 };
 
 static inline std::unordered_map<std::string, wgpu::CompareFunction> StringToWGPU_COMPARISON_FUNC = {
+	{ "UNDEFINED", wgpu::CompareFunction::Undefined },
 	{ "NEVER", wgpu::CompareFunction::Never },
 	{ "LESS", wgpu::CompareFunction::Less },
 	{ "EQUAL", wgpu::CompareFunction::Equal },

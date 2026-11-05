@@ -2,11 +2,12 @@
 #include <Renderer.h>
 #include "Variables.h"
 #include <ShaderCompiler.h>
+#include <Scene.h>
 // #if defined(_EDITOR)
 // #include <Builder/ReleaseBuilder.h>
 // #endif
 
-// extern std::unique_ptr<JRenderer> renderer;
+extern std::unique_ptr<JRenderer> renderer;
 
 namespace Templates
 {
@@ -259,7 +260,6 @@ namespace Templates
 		auto matTextures = material->textures();
 		std::transform(matTextures.begin(), matTextures.end(), std::inserter(textures, textures.end()), [&](auto& pair)
 			{
-				std::cout << "creating texture instance " << pair.second << std::endl;
 				CreateTextureInstance(pair.second, [&]
 					{
 						return std::make_unique<TextureInstance>(id, pair.second);
@@ -270,7 +270,6 @@ namespace Templates
 		);
 		std::transform(overrideTextures.begin(), overrideTextures.end(), std::inserter(textures, textures.end()), [&](auto& pair)
 			{
-				std::cout << "creating ov-texture instance " << pair.second << std::endl;
 				CreateTextureInstance(pair.second, [&]
 					{
 						return std::make_unique<TextureInstance>(id, pair.second);
@@ -279,7 +278,6 @@ namespace Templates
 				return TextureUsageInstancePair(pair.first, pair.second);
 			}
 		);
-		if (textures.size() > 0ULL) samplers = material->samplers();
 	
 		vertexShaderUUID = material->shader_vs();
 		pixelShaderUUID = material->shader_ps();
@@ -289,6 +287,7 @@ namespace Templates
 		ibl = hasIBL;
 		CreateMaterialShaderDefines();
 		CreateShaderInstances(id);
+		CreateSamplers(id);
 		LoadVariablesMapping();
 	}
 
@@ -363,6 +362,39 @@ namespace Templates
 		Compile(id, pixelShaderInstanceID, compPS, dependenciesPS);
 	}
 
+	void MaterialInstance::CreateSamplers(SceneUnitId id)
+	{
+		MaterialJsonID material = materialUUID;
+		MaterialInstanceID instance = instanceUUID;
+
+		GetSceneUnit(id)->PushToPreRender([material, instance]
+		{
+			auto samplersDesc = material->samplers();
+
+			std::unordered_map<std::string, ShaderResourceBinding> psBinding = instance->pixelShaderInstanceID->GetBindingMap();
+			std::unordered_map<std::string, ShaderResourceBinding> samplersBinding;
+			std::copy_if(psBinding.begin(), psBinding.end(), std::inserter(samplersBinding, samplersBinding.begin()), [](auto& pair)
+				{
+					return std::get<7>(pair.second);
+				}
+			);
+			unsigned int samplerOffset = samplersBinding.size() > 0 ?
+				std::get<1>(std::min_element(samplersBinding.begin(), samplersBinding.end(), [](auto& a, auto& b) {
+					return std::get<1>(a.second) < std::get<1>(b.second);
+				})->second) : 0;
+
+
+			std::for_each(samplersBinding.begin(), samplersBinding.end(), [instance, samplerOffset, &samplersDesc](auto& pair)
+			{
+				unsigned int bindingIndex = std::get<1>(pair.second);
+				int index = bindingIndex - samplerOffset;
+				MaterialSamplerDesc samplerDesc = samplersDesc.size() > index ? samplersDesc[index] : MaterialSamplerDesc();
+				auto sampler = renderer->GetDevice().CreateSampler(&samplerDesc);
+				instance->samplers.insert_or_assign(bindingIndex, sampler);
+			});
+		});
+	}
+
 	void MaterialInstance::Destroy()
 	{
 		// using namespace ShaderCompiler;
@@ -390,180 +422,27 @@ namespace Templates
 			{ "luminanceCutOff", [](MaterialAttributes& att, nlohmann::json j){ att.luminanceCutOff = j.get<nlohmann::json::number_float_t>(); } },
 		};
 
-		/*
-		auto& vertexShader = vertexShaderInstanceID;
-		auto& pixelShader = pixelShaderInstanceID;
-
-		//do i really need this?
-		unsigned int numConstantsBuffers = static_cast<unsigned int>(
-			std::max(vertexShader->cbufferSize.size(), pixelShader->cbufferSize.size())
-			);
-
-		variablesBufferSize.clear();
-		variablesBuffer.clear();
-		for (unsigned int index = 0; index < numConstantsBuffers; index++)
-		{
-			//get the CBuffer size
-			size_t vsConstantBufferSize = vertexShader->cbufferSize.size() > index ? vertexShader->cbufferSize[index] : 0;
-			size_t psConstantBufferSize = pixelShader->cbufferSize.size() > index ? pixelShader->cbufferSize[index] : 0;
-
-			unsigned int constantsBufferSize = static_cast<unsigned int>(std::max(vsConstantBufferSize, psConstantBufferSize));
-			variablesBufferSize.push_back(constantsBufferSize);
-
-			//allocate memory for the cbuffer on the CPU
-			variablesBuffer.push_back(std::vector<std::byte>(constantsBufferSize));
-		}
-
-		ShaderConstantsBufferVariablesMap& vsVars = vertexShader->constantsBuffersVariables;
-		ShaderConstantsBufferVariablesMap& psVars = pixelShader->constantsBuffersVariables;
-		*/
-		//initialize the variables mapping
-
 		auto& material = materialUUID;
-		// ShaderJsonID shader_vs(material->shader_vs());
 		ShaderJsonID shader_ps(material->shader_ps());
 
 		nlohmann::json materialMappedValues = nlohmann::json::array();
-		// nlohmann::json shaderVSMappedValues = nlohmann::json::array();
 		nlohmann::json shaderPSMappedValues = nlohmann::json::array();
 
 		std::map<std::string, nlohmann::json> mappedValues;
 
 		//mapped values comes from the material, vertex and pixel shaders
 		if (material->contains("mappedValues")) { materialMappedValues = material->at("mappedValues"); }
-		// if (shader_vs->contains("mappedValues")) { shaderVSMappedValues = shader_vs->at("mappedValues"); }
 		if (shader_ps->contains("mappedValues")) { shaderPSMappedValues = shader_ps->at("mappedValues"); }
 		for (nlohmann::json mappedValue : materialMappedValues) { mappedValues.insert_or_assign(mappedValue.at("variable"), mappedValue); }
-		// for (nlohmann::json mappedValue : shaderVSMappedValues) { mappedValues.insert_or_assign(mappedValue.at("variable"), mappedValue); }
 		for (nlohmann::json mappedValue : shaderPSMappedValues) { mappedValues.insert_or_assign(mappedValue.at("variable"), mappedValue); }
 
 		variablesMapping.clear();
 
-		/*
-		for (auto& [varName, mappedValue] : mappedValues)
-		{
-			if (vsVars.contains(varName))
-			{
-				MaterialVariablesTypes variableType = StringToMaterialVariablesTypes.at(mappedValue.at("variableType"));
-				ShaderConstantsBufferVariable& mapping = vsVars.at(varName);
-				variablesMapping.insert_or_assign(varName, MaterialVariableMapping({ .variableType = variableType, .mapping = mapping }));
-				continue;
-			}
-
-			if (psVars.contains(varName))
-			{
-				MaterialVariablesTypes variableType = StringToMaterialVariablesTypes.at(mappedValue.at("variableType"));
-				ShaderConstantsBufferVariable& mapping = psVars.at(varName);
-				variablesMapping.insert_or_assign(varName, MaterialVariableMapping({ .variableType = variableType, .mapping = mapping }));
-				continue;
-			}
-		}
-
-		auto constantsBufferContains = [this, &vertexShader, &pixelShader](std::string varName)
-			{
-				ShaderConstantsBufferVariablesMap& vsVars = vertexShader->constantsBuffersVariables;
-				ShaderConstantsBufferVariablesMap& psVars = pixelShader->constantsBuffersVariables;
-
-				return vsVars.contains(varName) || psVars.contains(varName);
-			};
-
-		auto getConstantsBufferVariable = [this, &vertexShader, &pixelShader](std::string varName)
-			{
-				ShaderConstantsBufferVariablesMap& vsVars = vertexShader->constantsBuffersVariables;
-				ShaderConstantsBufferVariablesMap& psVars = pixelShader->constantsBuffersVariables;
-				return (vsVars.contains(varName) ? vsVars.at(varName) : psVars.at(varName));
-			};
-
-		std::set<std::string> unmapped;
-		*/
-
 		for (auto& [varName, mappedValue] : mappedValues)
 		{
 			attributeWriter.at(varName)(materialAttributes,mappedValue.at("value"));
-
-			/*
-			if (!constantsBufferContains(varName)) continue;
-
-			auto def = getConstantsBufferVariable(varName);
-
-			unmapped.insert(varName);
-
-			size_t size = def.size;
-			byte* dst = variablesBuffer[def.bufferIndex].data();
-			dst += def.offset;
-			auto initialValue = JsonToMaterialInitialValue(mappedValue);
-			WriteMappedInitialValuesToDestination(initialValue, dst, size);
-			*/
-		}
-
-		/*
-		//write the values to mapped memory
-		for (auto [varName, mapping] : variablesMapping)
-		{
-			if (!mappedValues.contains(varName)) continue;
-
-			nlohmann::json def = mappedValues.at(varName);
-
-			size_t size = mapping.mapping.size;
-			byte* dst = variablesBuffer[mapping.mapping.bufferIndex].data();
-			dst += mapping.mapping.offset;
-			auto initialValue = JsonToMaterialInitialValue(def);
-			WriteMappedInitialValuesToDestination(initialValue, dst, size);
-			unmapped.erase(varName);
-		}
-
-		//map variables defined in the shader that the material has not yet define, so it can be updated in the rendereable cbuffer
-		for (auto varName : unmapped)
-		{
-			if (!mappedValues.contains(varName)) continue;
-			if (!constantsBufferContains(varName)) continue;
-
-			//auto& matdef = material.at("mappedValues").at(matVarIndex.at(varName));
-			auto& matdef = mappedValues.at(varName);
-			auto& variableType = StringToMaterialVariablesTypes.at(std::string(matdef.at("variableType")));
-			auto mapping = getConstantsBufferVariable(varName);
-
-			variablesMapping.insert_or_assign(varName, MaterialVariableMapping({ .variableType = variableType, .mapping = mapping }));
-		}
-		*/
-	}
-
-	//READ&GET
-	/*
-	bool MaterialInstance::ShaderInstanceHasRegister(std::function<int(ShaderInstanceID)> getRegister)
-	{
-		return (getRegister(vertexShaderInstanceID) != -1) || (getRegister(pixelShaderInstanceID) != -1);
-	}
-	*/
-
-	/*
-	void MaterialInstance::SetUAVRootDescriptorTable(CComPtr<ID3D12GraphicsCommandList2>& commandList, unsigned int& slot)
-	{
-		auto& pixelShader = pixelShaderInstanceID;
-		for (auto& [name, uavParam] : pixelShader->uavParameters)
-		{
-			if (uav.contains(uavParam.registerId))
-			{
-				commandList->SetGraphicsRootDescriptorTable(slot, uav.at(uavParam.registerId));
-				slot++;
-			}
 		}
 	}
-	*/
-
-	/*
-	void MaterialInstance::SetSRVRootDescriptorTable(CComPtr<ID3D12GraphicsCommandList2>& commandList, unsigned int& slot)
-	{
-		auto& pixelShader = pixelShaderInstanceID;
-		for (auto& [textureType, texParam] : pixelShader->srvTexParameters)
-		{
-			if (texParam.numSRV == 0xFFFFFFFF || iblUsageTexture.contains(textureType)) continue;
-			auto& texInstance = GetTextureInstance(textures.at(textureType));
-			commandList->SetGraphicsRootDescriptorTable(slot, texInstance->gpuHandle);
-			slot++;
-		}
-	}
-	*/
 
 	void MaterialInstance::UpdateTexture(TextureShaderUsage usage, TextureJsonID texture)
 	{
@@ -586,8 +465,13 @@ namespace Templates
 		
 		if(itPS!=psBinding.end())
 		{
-			auto [group, binding, buffer_size, multi_frame, name] = itPS->second;
-			return CreateUniformBuffer(id, buffer_size, multi_frame, ubName);
+			auto [group, binding, buffer_size, multi_frame, storage_buffer, name, is_texture, is_sampler] = itPS->second;
+			if(is_texture || is_sampler)
+			{
+				std::cerr << "Error: " << ubName << " is not a uniform buffer in pixel shader instance " << pixelShaderInstanceID() << std::endl;
+				return UniformBufferID("");
+			}
+			return CreateUniformBuffer(id, buffer_size, multi_frame, storage_buffer, ubName);
 		}
 
 		return UniformBufferID("");

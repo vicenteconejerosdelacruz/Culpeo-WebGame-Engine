@@ -109,6 +109,7 @@ namespace Templates
 		inline static const std::string fallbackShader_vs = "BaseLighting_vs";
 		inline static const std::string fallbackShader_ps = "BaseLighting_ps";
 #endif
+		inline static const std::string Sampler0Name = "samp0";
 	};
 
 	struct MaterialJson : public JTemplate
@@ -178,12 +179,12 @@ namespace Templates
 		std::vector<std::string> defines;
 		ShaderInstanceID vertexShaderInstanceID;
 		ShaderInstanceID pixelShaderInstanceID;
-		std::vector<MaterialSamplerDesc> samplers;
+		std::map<unsigned int, wgpu::Sampler> samplers;
 		TextureUsageInstanceMap textures;
-		// std::map<unsigned int, ::CD3DX12_GPU_DESCRIPTOR_HANDLE> uav;
 
 		void CreateMaterialShaderDefines();
 		void CreateShaderInstances(SceneUnitId id);
+		void CreateSamplers(SceneUnitId id);
 		void Destroy();
 		// bool ShaderInstanceHasRegister(std::function<int(ShaderInstanceID)> getRegister);
 		void LoadVariablesMapping();

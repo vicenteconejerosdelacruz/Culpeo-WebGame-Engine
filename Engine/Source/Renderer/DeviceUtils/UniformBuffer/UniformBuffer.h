@@ -42,7 +42,7 @@ namespace DeviceUtils
 
 	std::unique_ptr<UniformBuffer>& GetUniformBuffer(JUUID uuid);
 
-	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, bool multiFrame, std::string ubName = "");
+	UniformBufferID CreateUniformBuffer(SceneUnitId id, size_t bufferSize, bool multiFrame, bool storageBuffer, std::string ubName);
 	void DestroyUniformBuffer(UniformBufferID uuid);
 	void DestroyUniformBuffers();
 };

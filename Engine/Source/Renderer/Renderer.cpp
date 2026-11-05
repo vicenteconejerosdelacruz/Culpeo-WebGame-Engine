@@ -1,42 +1,24 @@
-// #include "pch.h"
 #include "Renderer.h"
-// #include <DirectXHelper.h>
 #include <DeviceUtils/WebGpuDevice/Builder.h>
-// #include <DeviceUtils/D3D12Device/Builder.h>
-// #include <DeviceUtils/D3D12Device/Interop.h>
-// #include <DeviceUtils/ConstantsBuffer/ConstantsBuffer.h>
-// #include <DeviceUtils/RenderToTexture/RenderToTexture.h>
 #include <RenderPass/RenderPass.h>
 #include <Camera/Camera.h>
 #include <emscripten.h>
 
-// using namespace Templates::RenderPass;
-//using namespace DeviceUtils;
-
-// #if defined(_DEBUG)
-// CComPtr<ID3D12Debug1> debugController;
-// CComPtr<ID3D12DebugDevice1> debugDevice;
-// #endif
-
-// unsigned int backBufferIndex;
 extern std::unique_ptr<JRenderer> renderer;
 extern RECT hWndRect;
 
-
-//CREATE
-// void JRenderer::Initialize(HWND coreHwnd) {
+//Create the WebGPU instance, adapter, device, and queue
 void JRenderer::Initialize() {
 
 	instance = DeviceUtils::CreateInstance();
 	adapter = DeviceUtils::GetAdapter(instance);
 	device = DeviceUtils::CreateDevice(instance, adapter);
+    queue = device.GetQueue();
 
 // 	UpdateViewportPerspective();
-	CreateSwapChainPass();
-
-// 	fence = CreateFence(d3dDevice, "Renderer");
-// 	fenceEvent = CreateEventHandle();
+	// CreateSwapChainPass();
 }
+
 void JRenderer::CreateWindow()
 {
     if (!glfwInit())
@@ -108,7 +90,8 @@ void JRenderer::ConfigureSurface(uint32_t width, uint32_t height) {
                                       .format = format,
                                       .width = width,
                                       .height = height,
-                                      .presentMode = wgpu::PresentMode::Fifo
+                                      .alphaMode = wgpu::CompositeAlphaMode::Auto,
+                                      .presentMode = wgpu::PresentMode::Mailbox
                                   };
     surface.Configure(&config);
 }

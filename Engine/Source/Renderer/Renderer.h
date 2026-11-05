@@ -38,6 +38,7 @@ struct JRenderer
 	wgpu::Instance GetInstance() { return instance; }
 	wgpu::Adapter GetAdapter() { return adapter; }
 	wgpu::Device GetDevice() { return device; }
+	wgpu::Queue GetQueue() { return queue; }
 	GLFWwindow* GetWindow() { return window; }
 
 	//UPDATE
@@ -50,6 +51,7 @@ struct JRenderer
 	wgpu::Instance instance;
 	wgpu::Adapter adapter;
 	wgpu::Device device;
+	wgpu::Queue queue;
 	GLFWwindow* window = nullptr;
 	int windowWidth;
 	int windowHeight;

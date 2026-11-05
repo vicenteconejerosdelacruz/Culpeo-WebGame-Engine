@@ -2,6 +2,7 @@
 #include <SceneObject.h>
 #include <Scene.h>
 #include <Renderer.h>
+#include <Textures/Texture.h>
 // #include <DeviceUtils/RootSignature/RootSignature.h>
 // #include <DeviceUtils/PipelineState/PipelineState.h>
 // #include <Renderable/RenderableBoundingBox.h>
@@ -113,7 +114,7 @@ namespace Scene
 #include "RenderableAtt.h"
 #include <JEnd.h>
 
-		worldUb = CreateUniformBuffer(unit, sizeof(XMMATRIX), true, "world");
+		worldUb = CreateUniformBuffer(unit, sizeof(XMMATRIX), true, false,"world");
 		CreateMeshInstances();
     }
 
@@ -533,6 +534,22 @@ namespace Scene
 					.fragment = &fragmentState,
 				};
 
+				wgpu::DepthStencilState depthStencilState;
+
+				if(pass->renderPassTemplate->depthStencilFormat() != wgpu::TextureFormat::Undefined)
+				{
+					depthStencilState.format = pass->renderPassTemplate->depthStencilFormat(),
+					depthStencilState.depthWriteEnabled = true,
+					depthStencilState.depthCompare = wgpu::CompareFunction::Less,
+					
+					depthStencilState.stencilFront.compare = wgpu::CompareFunction::Always;
+					depthStencilState.stencilBack.compare = wgpu::CompareFunction::Always;
+					depthStencilState.stencilReadMask = 0xFFFFFFFF;
+					depthStencilState.stencilWriteMask = 0xFFFFFFFF;
+
+					descriptor.depthStencil = &depthStencilState;
+				}
+
   				r->pipelines[pass].push_back(renderer->GetDevice().CreateRenderPipeline(&descriptor));
 			}
 		});
@@ -634,6 +651,8 @@ namespace Scene
 
 	void Renderable::CreateRenderPassBindGroups(RenderPassInstanceID rp)
     {
+		using namespace Templates::Texture;
+
         RenderableID r(uuid());
 
         GetSceneUnit(unit)->PushToPreRender([r,rp]{
@@ -654,6 +673,20 @@ namespace Scene
                 { MaterialUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->uniformBuffers[rp][meshId]; } },
                 { AnimationUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
             };
+
+			std::unordered_map<std::string, TextureShaderUsage> bindingToTextureShaderUsage = {
+				//TextureShaderUsage_IBLIrradiance,
+				//TextureShaderUsage_IBLPreFilteredEnvironment,
+				//TextureShaderUsage_IBLBRDFLUT,
+				{ baseTexture, TextureShaderUsage_Base },
+				//TextureShaderUsage_NormalMap,
+				//TextureShaderUsage_MetallicRoughness,
+				//TextureShaderUsage_ShadowMaps,
+				//TextureShaderUsage_MinTexture,
+				//TextureShaderUsage_MaxTexture,
+				//TextureShaderUsage_DepthTexture,
+				//TextureShaderUsage_AverageLuminance,
+			};
 
             // Aseguramos que los contenedores principales tengan espacio para todos los meshes
             r->shaderBindings[rp].resize(r->meshes.size());
@@ -680,15 +713,35 @@ namespace Scene
                     
                     for(auto b : sorted)
                     {
-                        auto [g_idx, binding, buffer_size, multi_frame, name] = b;
+                        auto [g_idx, binding, buffer_size, multi_frame, storage_buffer, name, is_texture, is_sampler] = b;
                         
-                        wgpu::BindGroupLayoutEntry entry;
-                        entry.binding = binding;
-                        entry.visibility = wgpu::ShaderStage::Vertex | wgpu::ShaderStage::Fragment;
-                        entry.buffer.type = wgpu::BufferBindingType::Uniform;
-                        entry.buffer.minBindingSize = buffer_size;
-                        entry.buffer.hasDynamicOffset = false;
-                        layoutEntries.push_back(entry);
+						wgpu::BindGroupLayoutEntry entry = {};
+						entry.binding = binding;
+
+						if (is_texture)
+						{
+							// Las texturas suelen consumirse en el fragment shader (o vertex si usas vertex texture fetch)
+							entry.visibility = wgpu::ShaderStage::Fragment;
+							entry.texture.sampleType = wgpu::TextureSampleType::Float;
+							entry.texture.viewDimension = wgpu::TextureViewDimension::e2D;
+							entry.texture.multisampled = false;
+						} 
+						else if (is_sampler)
+						{
+							// Los samplers también viven típicamente en el fragment shader
+							entry.visibility = wgpu::ShaderStage::Fragment;
+							entry.sampler.type = wgpu::SamplerBindingType::Filtering;
+						} 
+						else
+						{
+							// Uniform Buffers tradicionales (Vertex + Fragment)
+							entry.visibility = wgpu::ShaderStage::Vertex | wgpu::ShaderStage::Fragment;
+							entry.buffer.type = storage_buffer ? wgpu::BufferBindingType::ReadOnlyStorage : wgpu::BufferBindingType::Uniform;
+							entry.buffer.minBindingSize = buffer_size;
+							entry.buffer.hasDynamicOffset = false;
+						}
+
+						layoutEntries.push_back(entry);
                     }
 
                     wgpu::BindGroupLayoutDescriptor layoutDesc = {};
@@ -711,12 +764,25 @@ namespace Scene
                         for(auto b : sorted)
                         {
                             wgpu::BindGroupEntry entry;
-                            auto [g_idx, binding, buffer_size, multi_frame, name] = b;
+                            auto [g_idx, binding, buffer_size, multi_frame, storage_buffer, name, is_texture, is_sampler] = b;
+							
+							entry.binding = binding;
+							if(is_texture)
+							{
+								TextureInstanceID texInst = mi->textures.at(bindingToTextureShaderUsage.at(name));
+								entry.textureView = texInst->textureView;
+							}
+							else if(is_sampler)
+							{
+								entry.sampler = mi->samplers.at(binding);
+							}
+							else
+                            {
+								entry.buffer = getUniformBuffer.at(name)(rp, mesh)->uniformBuffer;
+								entry.offset = multi_frame ? (frame * ((buffer_size + 255) & ~255)) : 0U; 
+								entry.size = buffer_size;
+							}
 
-                            entry.binding = binding;
-                            entry.buffer = getUniformBuffer.at(name)(rp, mesh)->uniformBuffer;
-                            entry.offset = multi_frame ? (frame * ((buffer_size + 255) & ~255)) : 0U; 
-                            entry.size = buffer_size;
                             bgEntries.push_back(entry);
                         }
 
@@ -1382,35 +1448,6 @@ namespace Scene
 			}
 			pass.DrawIndexed(mesh->indexBufferId->indexCount);
 		}
-
-		/*
-		auto& scene = GetSceneUnit(unit);
-		unsigned int frame = scene->Frame();
-		auto& commandList = scene->GetCommandList();
-
-		auto& meshesRootSignatures = rootSignatures.at(renderPass);
-		auto& meshesPipelineStates = pipelineStates.at(renderPass);
-
-		for (unsigned int i = 0; i < meshes.size(); i++)
-		{
-			if (skipMeshes_contains(i)) continue;
-
-			commandList->IASetPrimitiveTopology(topology());
-			commandList->SetGraphicsRootSignature(meshesRootSignatures.at(i));
-			commandList->SetPipelineState(meshesPipelineStates.at(i));
-
-			unsigned int slot = 0U;
-			for (auto& setter : descriptorsRenders.at(key).at(i))
-			{
-				setter(commandList, frame, slot);
-			}
-
-			auto& mesh = meshes.at(i);
-			commandList->IASetVertexBuffers(0, 1, &mesh->vbvData.vertexBufferView);
-			commandList->IASetIndexBuffer(&mesh->ibvData.indexBufferView);
-			commandList->DrawIndexedInstanced(mesh->ibvData.indexBufferView.SizeInBytes / sizeof(unsigned int), 1, 0, 0, 0);
-		}
-		*/
 	}
 
 	/*

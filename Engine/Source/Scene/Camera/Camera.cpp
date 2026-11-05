@@ -10,6 +10,7 @@
 #include <SimpleMath.h>
 #include <Light.h>
 #if defined(_EDITOR)
+#include <Editor.h>
 // #include <Builder/ReleaseBuilder.h>
 #endif
 
@@ -98,7 +99,7 @@ namespace Scene
 	{
 		Controller::Map(so);
 #if defined(_EDITOR)
-		// using namespace Editor;
+		using namespace Editor;
 #endif
 
 #include <TrackUUID/JInsert.h>
@@ -110,10 +111,10 @@ namespace Scene
  		CreateRenderPasses();
 // 		CreateIBLTextures();
 
-// #if defined(_EDITOR)
-// 		if (shadowMapLight().empty() && !SceneIsIsolated(unit))
-// 			RegisterBillboard(unit, uuid());
-// #endif
+#if defined(_EDITOR)
+		if (shadowMapLight().empty() && !SceneIsIsolated(unit))
+			RegisterBillboard(uuid());
+#endif
 
 		// if (shadowMapLight().empty())
 		// {
@@ -855,7 +856,7 @@ namespace Scene
 
 	void Camera::CreateUniformsBuffer()
 	{
-		cameraUb = DeviceUtils::CreateUniformBuffer(unit, sizeof(CameraAttributes), true, name());
+		cameraUb = DeviceUtils::CreateUniformBuffer(unit, sizeof(CameraAttributes), true, false, name());
 	}
 
 	void Camera::WriteUniformsBuffer(unsigned int frame)
@@ -1001,7 +1002,7 @@ namespace Scene
 	//Lights
 	void Camera::CreateLightsUniformBuffer()
 	{
-		lightsUb = DeviceUtils::CreateUniformBuffer(unit, sizeof(LightPool), true, name() + "-lightsUb");
+		lightsUb = DeviceUtils::CreateUniformBuffer(unit, sizeof(LightPool), true, true, name() + "-lightsUb");
 	}
 
 /*
@@ -1020,7 +1021,7 @@ namespace Scene
 		lpool->numLights = numLights;
 		for (unsigned int i = 0; i < numLights; i++)
 		{
-			lights[i]->WriteUniformBufferLightAttributes(lpool->lights[i]);
+			lights[i]->WriteUniformBufferLightAttributes(*lpool,i);
 		}
 		lightsUb->sync(frame);
 		// DumpLightPool(*lpool, numLights);
@@ -1187,14 +1188,12 @@ namespace Scene
 	{}
 */
 
-/*
 	RenderableID Camera::CreateBillboard(CameraID camera)
 	{
 		RenderableID bb = Editor::CreateBillboardFromMaterials(unit, camera, at("name"), "Camera", "CameraPicking");
-		bb->OnPick = [&] {Editor::SelectCamera(SUuuid()); };
+		// bb->OnPick = [&] {Editor::SelectCamera(SUuuid()); };
 		return bb;
 	}
-*/
 
 /*
 	void Camera::UpdateBillboard(RenderableID renderable)

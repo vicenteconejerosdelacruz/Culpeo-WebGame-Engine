@@ -50,11 +50,15 @@ namespace DeviceUtils
 		swapChainPass->depthStencilFormat = depthStencilFormat;
 		if (depthStencilFormat != wgpu::TextureFormat::Undefined)
 		{
-		// 	swapChainPass->depthStencilViewDescriptorHeap = CreateDescriptorHeap(d3dDevice, 1, D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-		// 	CCNAME_D3D12_OBJECT(swapChainPass->depthStencilViewDescriptorHeap);
+			std::cout << "Creating depth texture for swap chain pass " << name << " with format " << static_cast<int>(depthStencilFormat) << std::endl;
+			wgpu::TextureDescriptor depthDesc = {};
+			depthDesc.usage = wgpu::TextureUsage::RenderAttachment;
+			depthDesc.dimension = wgpu::TextureDimension::e2D;
+			depthDesc.size = {static_cast<uint32_t>(renderer->windowWidth), static_cast<uint32_t>(renderer->windowHeight), 1};
+			depthDesc.format = depthStencilFormat;
 
-		// 	UpdateDepthStencilView(d3dDevice, swapChainPass->depthStencilViewDescriptorHeap, swapChainPass->depthStencilTexture, depthStencilFormat, swapChainPass->width, swapChainPass->height);
-		// 	CCNAME_D3D12_OBJECT_N(swapChainPass->depthStencilTexture, name);
+			swapChainPass->depthTexture = renderer->GetDevice().CreateTexture(&depthDesc);
+			swapChainPass->depthTextureView = swapChainPass->depthTexture.CreateView();
 		}
 
 		swapChainPasses.insert_or_assign(swapChainPassId, std::move(swapChainPass));
@@ -94,6 +98,22 @@ namespace DeviceUtils
 		}
 
 		wgpu::RenderPassDescriptor renderpass{.colorAttachmentCount = 1, .colorAttachments = &attachment};
+
+		if(depthStencilFormat != wgpu::TextureFormat::Undefined)
+		{
+			wgpu::RenderPassDepthStencilAttachment depthAttachment{
+				.view = depthTextureView,
+				.depthLoadOp = wgpu::LoadOp::Clear,
+				.depthStoreOp = wgpu::StoreOp::Store,
+				.depthClearValue = 1.0f,
+				.depthReadOnly = false,
+				.stencilLoadOp = wgpu::LoadOp::Undefined,
+				.stencilStoreOp = wgpu::StoreOp::Undefined,
+				.stencilClearValue = 0,
+				.stencilReadOnly = false
+			};
+			renderpass.depthStencilAttachment = &depthAttachment;
+		}
 
 		return encoder.BeginRenderPass(&renderpass);
 	}

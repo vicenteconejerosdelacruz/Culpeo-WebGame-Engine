@@ -38,18 +38,10 @@
   path: BillboardPicking.hlsl
   type: VERTEX_SHADER
   uuid: 744b10ef-4f0c-46d5-bd20-e94f7b66b8f9
-- name: Billboard_vs
-  path: Billboard.hlsl
-  type: VERTEX_SHADER
-  uuid: 7d076bac-db2b-4ee3-8e4e-eadf891022fb
 - name: AnimatedDecalColorKey_vs
   path: AnimatedDecalColorKey.hlsl
   type: VERTEX_SHADER
   uuid: a08d403b-c2c6-4141-8b6b-4179b650509d
-- name: Billboard_ps
-  path: Billboard.hlsl
-  type: PIXEL_SHADER
-  uuid: abeeba0f-8f50-4780-92c2-02226cecb5dd
 - name: AnimatedDecal_vs
   path: AnimatedDecal.hlsl
   type: VERTEX_SHADER

@@ -10,6 +10,14 @@ extern std::atomic<bool> g_EngineReady;
 namespace Templates {
 
     const std::string systemShadersYaml = R"(
+- name: Billboard_vs
+  path: Billboard.wgsl
+  type: VERTEX_SHADER
+  uuid: 7d076bac-db2b-4ee3-8e4e-eadf891022fb
+- name: Billboard_ps
+  path: Billboard.wgsl
+  type: PIXEL_SHADER
+  uuid: abeeba0f-8f50-4780-92c2-02226cecb5dd
 - name: IBLBRDFLUT_cs
   path: CSBRDFLUT.hlsl
   systemCreated: true
@@ -232,7 +240,7 @@ namespace Templates {
       mipmapFilter: LINEAR
       lodMinClamp: 0.0
       lodMaxClamp: 3.4028234663852886e+38
-      compare: NEVER
+      compare: UNDEFINED
       maxAnisotropy: 0
   shader_ps: 719c0122-1e9f-46e3-90aa-8f1e5e81c098
   shader_vs: bc331f48-6a40-4b48-b435-8276051d6993
@@ -260,8 +268,8 @@ namespace Templates {
       mipmapFilter: LINEAR
       lodMinClamp: 0.0
       lodMaxClamp: 3.4028234663852886e+38
-      compare: NEVER
-      maxAnisotropy: 0
+      compare: UNDEFINED
+      maxAnisotropy: 1
   shader_ps: 5929c8f6-e9b7-4680-8447-a430b5accdbf
   shader_vs: 5af4ba59-a09c-41ef-bc1f-13a51fc68439
   systemCreated: true
@@ -288,7 +296,7 @@ namespace Templates {
       mipmapFilter: LINEAR
       lodMinClamp: 0.0
       lodMaxClamp: 3.4028234663852886e+38
-      compare: NEVER
+      compare: UNDEFINED
       maxAnisotropy: 0
   shader_ps: ed41913d-1a28-40ce-9c92-07549714f367
   shader_vs: 0069d1e9-45b0-4fd3-a28f-1f7508503a91
@@ -318,7 +326,7 @@ namespace Templates {
       mipmapFilter: LINEAR
       lodMinClamp: 0.0
       lodMaxClamp: 3.4028234663852886e+38
-      compare: NEVER
+      compare: UNDEFINED
       maxAnisotropy: 0
   shader_ps: dd93a59f-a87e-4d9a-a57c-b91066e7520e
   shader_vs: 2ad43d9e-8dec-421c-b8f2-bda3520748bd
@@ -347,7 +355,7 @@ namespace Templates {
       mipmapFilter: LINEAR
       lodMinClamp: 0.0
       lodMaxClamp: 3.4028234663852886e+38
-      compare: NEVER
+      compare: UNDEFINED
       maxAnisotropy: 0
   shader_ps: 22c13e3e-5a88-4868-a5cf-bcc65864cf6c
   shader_vs: 9815152b-84ad-45e5-8b91-0642cfde0543
@@ -376,7 +384,7 @@ namespace Templates {
       mipmapFilter: LINEAR
       lodMinClamp: 0.0
       lodMaxClamp: 3.4028234663852886e+38
-      compare: NEVER
+      compare: UNDEFINED
       maxAnisotropy: 0
   shader_ps: 438f86fd-9ef3-433f-ad7b-c1e60643cd3e
   shader_vs: 173a942d-83e2-4d51-83cd-59016cb5be4e
@@ -543,6 +551,9 @@ namespace Templates {
     - value: 0.9803921580314636
       variable: alphaCut
       variableType: FLOAT
+    - value: [1.0, 1.0, 1.0]
+      variable: baseColor
+      variableType: RGB
   name: Camera
   rasterizerState:
     AntialiasedLineEnable: false
@@ -1056,6 +1067,19 @@ namespace Templates {
   type: 2D
   uuid: 2c207f54-9cdc-4c7e-a70a-60b373f2de79
   width: 64
+
+- format: B8G8R8A8_UNORM_SRGB
+  height: 64
+  images:
+    - Assets/gizmos/camera.png
+  mipLevels: 6
+  name: Assets/gizmos/camera.png
+  numFrames: 1
+  systemCreated: true
+  type: 2D
+  uuid: 2c207f54-9cdc-4c7e-a70a-60b373f2de79
+  width: 64
+
 )";
 
 	const std::string systemPhysicGeometriesYaml = R"(

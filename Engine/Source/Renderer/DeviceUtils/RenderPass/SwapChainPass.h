@@ -19,6 +19,8 @@ namespace DeviceUtils
 
 		// DXGI_FORMAT depthStencilFormat;
 		wgpu::TextureFormat depthStencilFormat;
+		wgpu::Texture depthTexture;
+		wgpu::TextureView depthTextureView;
 		// CComPtr<ID3D12DescriptorHeap> depthStencilViewDescriptorHeap;
 		// CComPtr<ID3D12Resource> depthStencilTexture;
 

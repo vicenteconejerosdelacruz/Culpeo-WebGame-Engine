@@ -4,31 +4,31 @@ fn DistanceAttenuation(distance: f32, attenuation: vec3<f32>) -> f32 {
 }
 
 // --- PLACEHOLDERS DE SOMBRAS (Se rellenarán más adelante) ---
-fn ComputeShadowDirectional(light: LightAttributes, worldPos: vec3<f32>) -> f32 {
+fn ComputeShadowDirectional(lightIndex: u32, worldPos: vec3<f32>) -> f32 {
     // TODO: Implementar lógica de cascadas de sombras direccionales
     return 1.0;
 }
 
-fn ComputeShadowSpot(light: LightAttributes, worldPos: vec3<f32>) -> f32 {
+fn ComputeShadowSpot(lightIndex: u32, worldPos: vec3<f32>) -> f32 {
     // TODO: Implementar lógica de sombras para luces spot
     return 1.0;
 }
 
-fn ComputeShadowPoint(light: LightAttributes, worldPos: vec3<f32>) -> f32 {
+fn ComputeShadowPoint(lightIndex: u32, worldPos: vec3<f32>) -> f32 {
     // TODO: Implementar lógica de sombras omnidireccionales (cubemap) para point lights
     return 1.0;
 }
 
 // --- 1. AMBIENT ---
-fn ComputeAmbient(light: LightAttributes, outDiffuse: ptr<function, vec3<f32>>, outSpecular: ptr<function, vec3<f32>>) {
-    *outDiffuse = light.lightColor.xyz;
+fn ComputeAmbient(lightIndex: u32, outDiffuse: ptr<function, vec3<f32>>, outSpecular: ptr<function, vec3<f32>>) {
+    *outDiffuse = lights.lightColor[lightIndex].xyz;
     *outSpecular = vec3<f32>(0.0);
 }
 
 // --- 2. DIRECTIONAL ---
-fn ComputeDirectional(light: LightAttributes, normal: vec3<f32>, viewDir: vec3<f32>, specularExponent: f32, outDiffuse: ptr<function, vec3<f32>>, outSpecular: ptr<function, vec3<f32>>) {
-    let color = light.lightColor.xyz;
-    let direction = light.atts1.xyz;
+fn ComputeDirectional(lightIndex: u32, normal: vec3<f32>, viewDir: vec3<f32>, specularExponent: f32, outDiffuse: ptr<function, vec3<f32>>, outSpecular: ptr<function, vec3<f32>>) {
+    let color = lights.lightColor[lightIndex].xyz;
+    let direction = lights.atts1[lightIndex].xyz;
 
     let L = normalize(-direction);
     let diffuseFactor = saturate(dot(normal, L));
@@ -42,12 +42,12 @@ fn ComputeDirectional(light: LightAttributes, normal: vec3<f32>, viewDir: vec3<f
 }
 
 // --- 3. SPOT ---
-fn ComputeSpot(light: LightAttributes, normal: vec3<f32>, viewDir: vec3<f32>, worldPos: vec3<f32>, specularExponent: f32, outDiffuse: ptr<function, vec3<f32>>, outSpecular: ptr<function, vec3<f32>>) {
-    let color = light.lightColor.xyz;
-    let position = light.atts1.xyz;
-    let direction = light.atts2.xyz;
-    let cosAngle = light.atts2.w;
-    let attenuation = light.atts3.xyz;
+fn ComputeSpot(lightIndex: u32, normal: vec3<f32>, viewDir: vec3<f32>, worldPos: vec3<f32>, specularExponent: f32, outDiffuse: ptr<function, vec3<f32>>, outSpecular: ptr<function, vec3<f32>>) {
+    let color = lights.lightColor[lightIndex].xyz;
+    let position = lights.atts1[lightIndex].xyz;
+    let direction = lights.atts2[lightIndex].xyz;
+    let cosAngle = lights.atts2[lightIndex].w;
+    let attenuation = lights.atts3[lightIndex].xyz;
 
     let WtoL = worldPos - position;
     let dist = length(WtoL);
@@ -73,10 +73,10 @@ fn ComputeSpot(light: LightAttributes, normal: vec3<f32>, viewDir: vec3<f32>, wo
 }
 
 // --- 4. POINT ---
-fn ComputePoint(light: LightAttributes, normal: vec3<f32>, viewDir: vec3<f32>, worldPos: vec3<f32>, specularExponent: f32, outDiffuse: ptr<function, vec3<f32>>, outSpecular: ptr<function, vec3<f32>>) {
-    let color = light.lightColor.xyz;
-    let position = light.atts1.xyz;
-    let attenuation = light.atts2.xyz;
+fn ComputePoint(lightIndex: u32, normal: vec3<f32>, viewDir: vec3<f32>, worldPos: vec3<f32>, specularExponent: f32, outDiffuse: ptr<function, vec3<f32>>, outSpecular: ptr<function, vec3<f32>>) {
+    let color = lights.lightColor[lightIndex].xyz;
+    let position = lights.atts1[lightIndex].xyz;
+    let attenuation = lights.atts2[lightIndex].xyz;
 
     let WtoL = worldPos - position;
     let dist = length(WtoL);
@@ -99,43 +99,40 @@ fn SceneLighting(
     normal: vec3<f32>, 
     specularExponent: f32,
     viewDir: vec3<f32>,
-	lightsBuffer: Lights,
 	diffuseFinalLightContribution: ptr<function, vec3<f32>>,
 	specularFinalLightContribution: ptr<function, vec3<f32>>
 ) {
     var accumDiffuse = vec3<f32>(0.0);
     var accumSpecular = vec3<f32>(0.0);
 	
-	let lightCount = min(lightsBuffer.numLights, 100u);
+	let lightCount = min(lights.numLights, 100u);
 	
     for (var i = 0u; i < lightCount; i = i + 1u) {
-        let light = lightsBuffer.atts[i];
-        
         var diffuseLightContribution = vec3<f32>(0.0);
         var specularLightContribution = vec3<f32>(0.0);
         var shadowMapFactor = 1.0;
 
-        switch (light.lightType) {
+        switch (lights.lightType[i]) {
             case 0u: { // AMBIENT
-                //ComputeAmbient(light, &diffuseLightContribution, &specularLightContribution);
+                ComputeAmbient(i, &diffuseLightContribution, &specularLightContribution);
 				break;
 			}
             case 1u: { // DIRECTIONAL
-                ComputeDirectional(light, normal, viewDir, specularExponent, &diffuseLightContribution, &specularLightContribution);
+                ComputeDirectional(i, normal, viewDir, specularExponent, &diffuseLightContribution, &specularLightContribution);
                 //if (light.hasShadowMap == 1u) {
                 //    shadowMapFactor = ComputeShadowDirectional(light, worldPos);
                 //}
 				break;
 			}
 			case 2u: { // SPOT
-                ComputeSpot(light, normal, viewDir, worldPos, specularExponent, &diffuseLightContribution, &specularLightContribution);
+                ComputeSpot(i, normal, viewDir, worldPos, specularExponent, &diffuseLightContribution, &specularLightContribution);
                 //if (light.hasShadowMap == 1u) {
                 //    shadowMapFactor = ComputeShadowSpot(light, worldPos);
                 //}
 				break;
 			}
             case 3u: { // POINT
-                ComputePoint(light, normal, viewDir, worldPos, specularExponent, &diffuseLightContribution, &specularLightContribution);
+                ComputePoint(i, normal, viewDir, worldPos, specularExponent, &diffuseLightContribution, &specularLightContribution);
                 //if (light.hasShadowMap == 1u) {
                 //    shadowMapFactor = ComputeShadowPoint(light, worldPos);
                 //}

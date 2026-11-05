@@ -57,6 +57,17 @@ namespace Templates
 		inline static const std::string defaultBaseTexture = "Assets/textures/gridmap.dds";
 		inline static const std::string defaultNormalMap = "Assets/textures/bumpmapflat.dds";
 		inline static const TemplateType templateType = T_Textures;
+
+		inline static const std::string baseTexture = "baseTexture";
+		inline static const std::string normalMap = "normalMap";
+		inline static const std::string roughnessMap = "roughnessMap";
+		inline static const std::string metallicMap = "metallicMap";
+		inline static const std::string aoMap = "aoMap";
+		inline static const std::string emissiveMap = "emissiveMap";
+		inline static const std::string lightsShadowMap = "lightsShadowMap";
+		inline static const std::string iblIrradiance = "iblIrradiance";
+		inline static const std::string iblPrefiteredEnv = "iblPrefiteredEnv";
+		inline static const std::string iblBRDFLUT = "iblBRDFLUT";
 	};
 
 	struct TextureJson;
@@ -120,20 +131,14 @@ namespace Templates
 		TextureInstance(SceneUnitId id, JUUID uuid);
 		TextureInstance(SceneUnitId id, JUUID uuid, unsigned int startFrame);
 		~TextureInstance() {}
-		// void CreateTextureResource(CComPtr<ID3D12GraphicsCommandList2>& commandList, std::string& path, DXGI_FORMAT format, TextureType type, unsigned int numFrames, unsigned int nMipMaps, unsigned int startFrame = 0U);
 		void CreateTextureResource(SceneUnitId id, std::string& path, wgpu::TextureFormat format, TextureType type, unsigned int numFrames, unsigned int nMipMaps, unsigned int startFrame = 0U);
 		void ReleaseResources();
 		void RebuildResource();
 
 		JUUID materialTexture;
-
-		//D3D12
-		// D3D12_SHADER_RESOURCE_VIEW_DESC viewDesc;
-		// CD3DX12_CPU_DESCRIPTOR_HANDLE cpuHandle;
-		// CD3DX12_GPU_DESCRIPTOR_HANDLE gpuHandle;
-		// CComPtr<ID3D12Resource> texture;
-		// CComPtr<ID3D12Resource> upload;
-		size_t bufferSize;
+		wgpu::Texture texture;
+		wgpu::TextureView textureView;
+		std::vector<std::byte> textureData;
 	};
 
 	TEMPDECL_REFTRACKER(Texture);

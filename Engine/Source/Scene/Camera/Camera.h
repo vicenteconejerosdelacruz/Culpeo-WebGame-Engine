@@ -216,7 +216,7 @@ namespace Scene {
 #if defined(_EDITOR)
 		// virtual void EditorPreview(size_t flags);
 		// virtual void DestroyEditorPreview();
-		// virtual RenderableID CreateBillboard(CameraID camera);
+		RenderableID CreateBillboard(CameraID camera) override;
 		// virtual void UpdateBillboard(RenderableID renderable);
 		// BoundingBox GetBoundingBox();
 

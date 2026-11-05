@@ -307,10 +307,10 @@ namespace Scene
 // 		return unitIds.at((index + 1) % unitIds.size());
 // 	}
 
-// 	bool SceneIsIsolated(SceneUnitId id)
-// 	{
-// 		return scenesUnits.at(id)->IsIsolated();
-// 	}
+	bool SceneIsIsolated(SceneUnitId id)
+	{
+		return scenesUnits.at(id)->IsIsolated();
+	}
 
 // 	void ResizeReleaseScenePasses()
 // 	{

@@ -10,7 +10,7 @@
 // GRUPO 0: Frecuencia por FRAME (Globales)
 // ------------------------------------------
 @group(0) @binding(0) var<uniform> camera: Camera;
-@group(0) @binding(1) var<uniform> lights: Lights;
+@group(0) @binding(1) var<storage, read> lights: Lights;
 #ifdef _HAS_SHADOWMAPS_TEXTURES
 //@group(0) @binding(2) var<uniform> shadowMaps: ShadowMaps;
 #endif
@@ -88,15 +88,20 @@ fn main_vs(input: VertexShaderInput) -> PixelShaderInput {
 // FUNCIONES AUXILIARES (Grid y Gamma)
 // ==========================================
 fn getGridColor(input: PixelShaderInput) -> vec3<f32> {
-    var gridColor = vec3<f32>(1.0f);
+	var gridColor = vec3<f32>(1.0f);
     let coord = input.worldPos.xz;
     
-    // Grilla basada en http://madebyevan.com/shaders/grid/
-    let grid1 = abs(fract(coord - 0.5f) - 0.5f) / fwidth(coord);
+    // Calcular la distancia al ojo de la cámara para mantener el grosor de línea estable 
+    // y evitar el costo de fwidth() que ralentizaba la GPU.
+    let dist = distance(input.worldPos, camera.eyePosition.xyz);
+    let deriv = max(dist * 0.003f, 0.008f);
+
+    // fract(coord) repite la grilla infinitamente en todo el mundo sin importar los bordes
+    let grid1 = abs(fract(coord - 0.5f) - 0.5f) / deriv;
     let l1 = min(grid1.x, grid1.y);
     let unitColor = 1.0f - min(l1, 1.0f);
 
-    let grid2 = abs(fract((coord - 0.05f) * 10.0f) - 0.5f) / fwidth(coord * 10.0f);
+    let grid2 = abs(fract((coord - 0.05f) * 10.0f) - 0.5f) / (deriv * 10.0f);
     let l2 = min(grid2.x, grid2.y);
     let subUnitColor = 1.0f - min(l2, 1.0f);
 
@@ -122,7 +127,7 @@ fn main_ps(input: PixelShaderInput) -> @location(0) vec4<f32> {
 #endif
 */
 
-	SceneLighting(worldPos, normal, material.specularExponent, viewDir, lights, &diffuseFinalLightContribution, &specularFinalLightContribution);
+	SceneLighting(worldPos, normal, material.specularExponent, viewDir, &diffuseFinalLightContribution, &specularFinalLightContribution);
     var outputColor = material.baseColor * getGridColor(input) * diffuseFinalLightContribution;
     outputColor += specularFinalLightContribution;
 	

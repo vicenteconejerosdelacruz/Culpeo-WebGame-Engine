@@ -1,5 +1,4 @@
 #pragma once
-//#include <d3d12.h>
 #include <webgpu/webgpu_cpp.h>
 
 using namespace wgpu;
@@ -13,8 +12,8 @@ struct MaterialSamplerDesc : SamplerDescriptor {
 		mipmapFilter = MipmapFilterMode::Linear;
 		lodMinClamp = 0.f;
     	lodMaxClamp = FLT_MAX;
-		compare = CompareFunction::Never;
-		maxAnisotropy = 0;
+		compare = CompareFunction::Undefined;
+		maxAnisotropy = 1;
 	}
 
 	MaterialSamplerDesc(const MaterialSamplerDesc& other) {

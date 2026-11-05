@@ -37,7 +37,8 @@ bool InitInstance()
   renderer->Initialize(); 
 
   renderer->CreateWindow(); 
-  renderer->CreateSurface(); 
+  renderer->CreateSurface();
+  renderer->CreateSwapChainPass(); 
 
   #if defined(_EDITOR)
   Editor::InitEditor();
@@ -54,7 +55,6 @@ void Render() {
     }
     
   // 1. Polling de eventos de GLFW (resize, teclado, mouse)
-  glfwPollEvents();
 
   for(auto& cb:renderer->executionCallback)
   {

@@ -169,15 +169,15 @@ namespace Scene
 // 		//Scripting
 // 		virtual std::vector<ScriptBinding> GetScriptBindings() { return {}; }
 
-// #if defined(_EDITOR)
-// 		//Billboard
-// 		virtual RenderableID CreateBillboard(CameraID camera) { return RenderableID(); }
-// 		virtual void UpdateBillboard(RenderableID renderable) {}
+#if defined(_EDITOR)
+		//Billboard
+		// RenderableID CreateBillboard(CameraID camera);
+		// void UpdateBillboard(RenderableID renderable);
 
 // 		//Gizmos
 // 		virtual bool CanInteractWithGizmo(ImGuizmo::OPERATION operation) { return false; }
 // 		virtual std::map<std::string, ScriptBinding> GetScriptBindingOptions();
-// #endif
+#endif
 // 		//lifecycle
 // 		std::unique_ptr<std::atomic_bool> lifecycleState;
 

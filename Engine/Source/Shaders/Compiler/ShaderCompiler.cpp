@@ -16,38 +16,44 @@ struct PreprocessorState {
 namespace ShaderCompiler {
 
 	std::vector<ShaderResourceInfo> ParseWGSLBindings(const std::string& preprocessedWGSL) {
-		std::vector<ShaderResourceInfo> resources;
+        std::vector<ShaderResourceInfo> resources;
 
-		// Expresión regular para capturar:
-		// 1. Grupo: @group(X)
-		// 2. Binding: @binding(Y)
-		// 3. Palabra clave var (con o sin atributos como <uniform>, <storage, read>, etc.)
-		// 4. Nombre de la variable
-		// 5. Tipo / Estructura después de los dos puntos (:)
-		std::regex bindingRegex(R"(@group\s*\(\s*(\d+)\s*\)\s*@binding\s*\(\s*(\d+)\s*\)\s*var\s*(?:<[^>]*>)?\s*([a-zA-Z_]\w*)\s*:\s*([^;]+);)");
+        // Expresión regular para capturar:
+        // 1. Grupo: @group(X)
+        // 2. Binding: @binding(Y)
+        // 3. Palabra clave var (con o sin atributos como <uniform>, <storage, read>, etc.)
+        // 4. Nombre de la variable
+        // 5. Tipo / Estructura después de los dos puntos (:)
+        std::regex bindingRegex(R"(@group\s*\(\s*(\d+)\s*\)\s*@binding\s*\(\s*(\d+)\s*\)\s*var\s*(?:<[^>]*>)?\s*([a-zA-Z_]\w*)\s*:\s*([^;]+);)");
 
-		auto begin = std::sregex_iterator(preprocessedWGSL.begin(), preprocessedWGSL.end(), bindingRegex);
-		auto end = std::sregex_iterator();
+        auto begin = std::sregex_iterator(preprocessedWGSL.begin(), preprocessedWGSL.end(), bindingRegex);
+        auto end = std::sregex_iterator();
 
-		for (std::sregex_iterator i = begin; i != end; ++i) {
-			std::smatch match = *i;
-			ShaderResourceInfo info;
-			
-			info.group = static_cast<uint32_t>(std::stoul(match[1].str()));
-			info.binding = static_cast<uint32_t>(std::stoul(match[2].str()));
-			info.variableName = match[3].str();
-			
-			// Limpiar espacios en blanco al inicio y final del tipo extraído
-			std::string rawType = match[4].str();
-			rawType.erase(0, rawType.find_first_not_of(" \t\r\n"));
-			rawType.erase(rawType.find_last_not_of(" \t\r\n") + 1);
-			info.typeName = rawType;
+        for (std::sregex_iterator i = begin; i != end; ++i) {
+            std::smatch match = *i;
+            ShaderResourceInfo info;
+            
+            info.group = static_cast<uint32_t>(std::stoul(match[1].str()));
+            info.binding = static_cast<uint32_t>(std::stoul(match[2].str()));
+            info.variableName = match[3].str();
+            
+            // Limpiar espacios en blanco al inicio y final del tipo extraído
+            std::string rawType = match[4].str();
+            rawType.erase(0, rawType.find_first_not_of(" \t\r\n"));
+            rawType.erase(rawType.find_last_not_of(" \t\r\n") + 1);
+            info.typeName = rawType;
 
-			resources.push_back(info);
-		}
+            // --- DETECCIÓN DE TIPOS (Textura, Sampler o Uniform) ---
+            std::string fullMatch = match.str();
 
-		return resources;
-	}
+            info.isTexture = (fullMatch.find("texture_") != std::string::npos || rawType.find("texture_") != std::string::npos);
+            info.isSampler = (fullMatch.find("sampler") != std::string::npos && !info.isTexture);
+
+            resources.push_back(info);
+        }
+
+        return resources;
+    }
 
 std::string PreprocessWGSL(
     const std::string& filename, 
@@ -264,8 +270,6 @@ std::string PreprocessWGSL(
 		auto& json = params.shaderTemplate;
 
 		const std::string filename = json->path();
-
-		// std::cout << "loading shader " << filename << std::endl;
 
 		std::unordered_set<std::string> macros;
 		std::transform(params.defines.begin(), params.defines.end(), std::inserter(macros,macros.begin()), [](std::string& def){ return def;});

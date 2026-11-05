@@ -27,7 +27,6 @@ static constexpr XMVECTOR PointLightUp[] = {
 	{ 0.0f, 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f },
 };
 
-inline static const unsigned int MaxLights = 100U;
 inline static const float cascadePartitionsZeroToOne[] = { 0.05f, 0.15f, 0.6f, 1.0f };
 
 enum LightType {
@@ -105,6 +104,7 @@ static inline std::unordered_map<LightType, std::vector<std::string>> shadowMapS
 
 #endif
 
+/*
 struct LightAttributes {
 	unsigned int lightType;       // 4 bytes
     unsigned int shadowMapIndex;  // 4 bytes
@@ -129,25 +129,38 @@ inline void DumpLightAttributes(const LightAttributes &atts)
 	PrintXMFloat4(atts.atts2,"atts2");
 	PrintXMFloat4(atts.atts3,"atts3");
 }
+*/
 
+inline static const unsigned int MaxLights = 100U;
 struct LightPool {
-    unsigned int numLights;       // 4 bytes
-    unsigned int _pad3[7];        // 12 bytes (equivalente al vec3<u32> de la cabecera) -> Total cabecera: 16 bytes
-    LightAttributes lights[MaxLights];  // 100 * 80 = 8000 bytes
-	unsigned int _pad_end[4]; //16 bytes
-	// Total exacto: 8032 bytes
+    unsigned int numLights;
+	unsigned int lightType[MaxLights];
+    unsigned int shadowMapIndex[MaxLights];
+    unsigned int hasShadowMap[MaxLights];
+	unsigned int _pad_padding[3];
+    XMFLOAT4 lightColor[MaxLights];
+    XMFLOAT4 atts1[MaxLights];
+    XMFLOAT4 atts2[MaxLights];
+    XMFLOAT4 atts3[MaxLights];
 };
 
 inline void DumpLightPool(const LightPool& pool, unsigned int numLights = MaxLights)
 {
+	static_assert(sizeof(LightPool) == 7616, "LightPool size is not 7616 bytes");
 	std::cout << "numLights " << pool.numLights << std::endl;
-	std::cout << "_pad3[0] " << pool._pad3[0] << std::endl;
-	std::cout << "_pad3[1] " << pool._pad3[1] << std::endl;
-	std::cout << "_pad3[2] " << pool._pad3[2] << std::endl;
+	// std::cout << "_pad3[0] " << pool._pad3[0] << std::endl;
+	// std::cout << "_pad3[1] " << pool._pad3[1] << std::endl;
+	// std::cout << "_pad3[2] " << pool._pad3[2] << std::endl;
 	for(unsigned int i = 0; i < numLights; i++)
 	{
 		std::cout << "light(" << i << ")" << std::endl;
-		DumpLightAttributes(pool.lights[i]);
+		std::cout << "lightType("<< pool.lightType[i] <<") " << LightTypeToString.at(LightType(pool.lightType[i])) << std::endl;
+		std::cout << "hasShadowMap " << pool.hasShadowMap[i] << std::endl;
+		std::cout << "shadowMapIndex " << pool.shadowMapIndex[i] << std	::endl;
+		PrintXMFloat4(pool.lightColor[i],"lightColor");	
+		PrintXMFloat4(pool.atts1[i],"atts1");
+		PrintXMFloat4(pool.atts2[i],"atts2");
+		PrintXMFloat4(pool.atts3[i],"atts3");
 	}
 }
 
@@ -262,7 +275,7 @@ namespace Scene {
 		// bool RenderReady();
 		// void RenderReady(bool value);
 
-		void WriteUniformBufferLightAttributes(LightAttributes& atts);
+		void WriteUniformBufferLightAttributes(LightPool& lights, unsigned int index);
 		// void WriteConstantsBufferShadowMapAttributes(ShadowMapAttributes& atts);
 		// void RenderShadowMap(std::function<void(unsigned int)> renderScene);
 

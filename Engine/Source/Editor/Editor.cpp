@@ -7,7 +7,7 @@
 #include <Editor.h>
 #include <SceneObject.h>
 // #include <LoadingProgress.h>
-// #include <BillboardRegistry.h>
+#include <BillboardRegistry.h>
 // #include <GizmoInteraction.h>
 // #include <PhysicsDrawState.h>
 #include <Renderer.h>
@@ -110,8 +110,8 @@ namespace Editor
 	std::unordered_map<SceneUnitId, SceneObjectID> levelCameraUUID;
 	std::unordered_map<SceneUnitId, SceneObjectID> editorCameraUUID;
 // 	std::unordered_map<SceneUnitId, std::unique_ptr<std::atomic_bool>> editorCameraCreated;
-// 	//Billboards
-// 	std::unordered_map<SceneUnitId, BillboardRegistry> billboards;
+	//Billboards
+	std::unordered_map<SceneUnitId, BillboardRegistry> billboards;
 // 	//Physics Objects Draw
 // 	std::unordered_map<SceneUnitId, PhysicsDrawState> drawStaticBodies;
 // 	std::unordered_map<SceneUnitId, PhysicsDrawState> drawDynamicBodies;
@@ -200,11 +200,7 @@ namespace Editor
 // 		loading.cmd.LoadingPoolInsert(SO_Renderables, boundingBox[id]());
 // 	}
 
-// 	void CreateSceneUnitBillboards(SceneUnitId id)
-// 	{
-// 		if (billboards.contains(id)) return;
-// 		billboards.insert_or_assign(id, BillboardRegistry());
-// 	}
+
 
 	void CreateSceneUnitEditorIndependentCamera(SceneUnitId id)
 	{
@@ -2513,9 +2509,49 @@ namespace Editor
 	//Mouse Processing
 	void CreateMouseProcessingCallbacks()
 	{
-		glfwSetMouseButtonCallback(renderer->GetWindow(), MouseButtonCallback);
-		glfwSetCursorPosCallback(renderer->GetWindow(), CursorPosCallback);
-		glfwSetScrollCallback(renderer->GetWindow(), ScrollCallback);
+		emscripten_set_mousemove_callback("#canvas", nullptr, EM_TRUE, OnMouseMove);
+		emscripten_set_mousedown_callback("#canvas", nullptr, EM_TRUE, OnMouseDown);
+		emscripten_set_mouseup_callback("#canvas",   nullptr, EM_TRUE, OnMouseUp);
+		emscripten_set_wheel_callback("#canvas",     nullptr, EM_TRUE, OnWheel);
+	}
+
+	EM_BOOL OnMouseMove(int eventType, const EmscriptenMouseEvent* e, void* userData)
+	{
+		// std::cout << "Mouse Move: " << e->movementX << ", " << e->movementY << std::endl;
+		mouseCamera.UpdateMouseXY(mouseCamera.mouseX + e->movementX, mouseCamera.mouseY + e->movementY);
+		return EM_TRUE;
+	}
+
+	EM_BOOL OnMouseDown(int eventType, const EmscriptenMouseEvent* e, void* userData)
+	{
+		if (e->button == 0)
+		{
+			mouseCamera.LeftClick(e->clientX, e->clientY);
+		}
+		else if (e->button == 2)
+		{
+			mouseCamera.RightClick(e->clientX, e->clientY);
+		}
+		return EM_TRUE;
+	}
+
+	EM_BOOL OnMouseUp(int eventType, const EmscriptenMouseEvent* e, void* userData)
+	{
+		if (e->button == 0)
+		{
+			mouseCamera.LeftButton(false);
+		}
+		else if (e->button == 2)
+		{
+			mouseCamera.RightButton(false);
+		}
+		return EM_TRUE;
+	}
+
+	EM_BOOL OnWheel(int eventType, const EmscriptenWheelEvent* e, void* userData)
+	{
+		mouseCamera.CaptureWheel(-e->deltaY);
+		return EM_TRUE;
 	}
 
 	void HandleEditorMouseMovements(SceneUnitId id)
@@ -2528,6 +2564,7 @@ namespace Editor
 		}
 	}
 
+	/*
 	void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 	{
 		if (button == GLFW_MOUSE_BUTTON_RIGHT)
@@ -2556,150 +2593,25 @@ namespace Editor
 				mouseCamera.LeftButton(false);
 			}
 		}
-
-		/*
-		switch (currentMouseMode)
-		{
-		case MOUSE_GAMEAREA_MODE_NONE:
-		{
-			if (state.leftButton)
-			{
-				currentMouseMode = MOUSE_GAMEAREA_MODE_PICKING;
-				mousePicking.StartPicking(state);
-			}
-			if (state.rightButton)
-			{
-				currentMouseMode = MOUSE_GAMEAREA_MODE_CAMERA;
-				mouseCamera.RickClick(state.x, state.y);
-			}
-			if (!mouseCamera.WheelCaptured())
-			{
-				mouseCamera.CaptureWheel(state.scrollWheelValue);
-			}
-			else
-			{
-				if (mouseCamera.Wheel() != state.scrollWheelValue)
-				{
-					mouseCamera.UpdateWheelMode(state.scrollWheelValue, state.x, state.y);
-					currentMouseMode = MOUSE_GAMEAREA_MODE_CAMERA;
-				}
-			}
-		}
-		break;
-		case MOUSE_GAMEAREA_MODE_PICKING:
-		{
-			if (mousePicking.CanPick(state))
-			{
-				mousePicking.Pick();
-			}
-			else if (mousePicking.MouseMoved(state))
-			{
-				currentMouseMode = MOUSE_GAMEAREA_MODE_CAMERA;
-				mouseCamera.LeftClick(state.x, state.y);
-			}
-			else if (!state.leftButton)
-			{
-				resetMouseProcessing();
-			}
-		}
-		break;
-		case MOUSE_GAMEAREA_MODE_GIZMO:
-		{
-			if (!ImGuizmo::IsOver())
-			{
-				resetMouseProcessing();
-			}
-		}
-		break;
-		case MOUSE_GAMEAREA_MODE_CAMERA:
-		{
-			if (mouseCamera.WheelMode())
-			{
-				int wheelDelta = state.scrollWheelValue - mouseCamera.Wheel();
-				mouseCamera.Wheel(state.scrollWheelValue);
-				if (wheelDelta != 0)
-				{
-					//do something like settings.at("camera").at("speed").at("fw");
-					float fwMovement = wheelDelta > 0 ? 1.0f : -1.0f;
-					auto kb = keyboard->GetState();
-					if (kb.LeftShift) fwMovement *= 10.0f;
-					ImGuiIO& io = ImGui::GetIO();
-					if (!io.WantCaptureMouse)
-					{
-						camera->MoveAlongFwAxis(fwMovement);
-						WriteSceneUnitDirectionalShadowMapAttributes(camera.unit());
-					}
-				}
-				if (state.leftButton || state.rightButton)
-				{
-					currentMouseMode = MOUSE_GAMEAREA_MODE_NONE;
-					resetMouseProcessing();
-				}
-			}
-			else
-			{
-				int mousedx, mousedy;
-				mouseCamera.UpdateMouseXY(state.x, state.y, mousedx, mousedy);
-
-				if (mouseCamera.LeftButton())
-				{
-					if (state.leftButton)
-					{
-						float dx = static_cast<float>(mousedx) * 0.3f;
-						float dy = static_cast<float>(mousedy) * 0.3f;
-						auto kb = keyboard->GetState();
-						if (kb.LeftShift)
-						{
-							dx *= 5.0f;
-							dy *= 5.0f;
-						}
-						camera->Rotate(dx, dy);
-						WriteSceneUnitDirectionalShadowMapAttributes(camera.unit());
-					}
-					else
-					{
-						resetMouseProcessing();
-					}
-				}
-				if (mouseCamera.RightButton())
-				{
-					if (state.rightButton)
-					{
-						float dx = -static_cast<float>(mousedx) * 0.01f;
-						float dy = -static_cast<float>(mousedy) * 0.01f;
-						auto kb = keyboard->GetState();
-						if (kb.LeftShift)
-						{
-							dx *= 10.0f;
-							dy *= 10.0f;
-						}
-						camera->MovePerpendicularFwAxis(dx, dy);
-						WriteSceneUnitDirectionalShadowMapAttributes(camera.unit());
-					}
-					else
-					{
-						resetMouseProcessing();
-					}
-				}
-			}
-		}
-		break;
-		}
-		*/
 	}
+	*/
 
+	/*
 	void CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 	{
-		if(currentMouseMode != MOUSE_GAMEAREA_MODE_CAMERA)
-		{
+		//if(currentMouseMode != MOUSE_GAMEAREA_MODE_CAMERA)
+		//{
 			mouseCamera.UpdateMouseXY(xpos,ypos);
-		}
+		//}
 	}
+	*/
 
+	/*
 	void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		mouseCamera.CaptureWheel(yoffset);
 	}
+	*/
 
 	/*
 	bool AnyModalShowing()
@@ -2809,6 +2721,7 @@ namespace Editor
 			}
 			*/
 		}
+		break;
 		case MOUSE_GAMEAREA_MODE_PICKING:
 		{
 			/*
@@ -2818,16 +2731,19 @@ namespace Editor
 			}
 			else if (mousePicking.MouseMoved(state))
 			*/
-			if(mouseCamera.GetMouseDx() != 0.0 || mouseCamera.GetMouseDy() != 0.0)
+			//if(mouseCamera.GetMouseDx() != 0.0 || mouseCamera.GetMouseDy() != 0.0)
+			if (mouseCamera.LeftButton())
 			{
 				currentMouseMode = MOUSE_GAMEAREA_MODE_CAMERA;
+				mouseCamera.ResetSxSy();
 				//mouseCamera.LeftClick(state.x, state.y);
 			}
-			else if (mouseCamera.LeftButton())
+			else if (mouseCamera.RightButton())
 			{
 				resetMouseProcessing();
 			}
 		}
+		break;
 		case MOUSE_GAMEAREA_MODE_GIZMO:
 		{
 			/*
@@ -2837,6 +2753,7 @@ namespace Editor
 			}
 			*/
 		}
+		break;
 		case MOUSE_GAMEAREA_MODE_CAMERA:
 		{
 			//if (mouseCamera.WheelMode())
@@ -2847,8 +2764,8 @@ namespace Editor
 				int wheelDelta = state.scrollWheelValue - mouseCamera.Wheel();
 				mouseCamera.Wheel(state.scrollWheelValue);
 				*/
-				if (wheelDelta != 0.0)
-				{
+				// if (wheelDelta != 0.0)
+				// {
 					//do something like settings.at("camera").at("speed").at("fw");
 					float fwMovement = wheelDelta > 0 ? 1.0f : -1.0f;
 					// auto kb = keyboard->GetState();
@@ -2860,12 +2777,12 @@ namespace Editor
 					//	WriteSceneUnitDirectionalShadowMapAttributes(camera.unit());
 					// }
 					mouseCamera.CaptureWheel(0.0);
-				}
-				if (mouseCamera.LeftButton() || mouseCamera.RightButton())
-				{
-					currentMouseMode = MOUSE_GAMEAREA_MODE_NONE;
-					resetMouseProcessing();					
-				}
+				// }
+				// if (mouseCamera.LeftButton() || mouseCamera.RightButton())
+				// {
+				// 	currentMouseMode = MOUSE_GAMEAREA_MODE_NONE;
+				// 	resetMouseProcessing();					
+				// }
 				/*
 				if (state.leftButton || state.rightButton)
 				{
@@ -2874,52 +2791,60 @@ namespace Editor
 				}
 				*/
 			}
-			else
+			else if (mouseCamera.LeftButton())
 			{
+				/*
 				double xpos, ypos;
             	glfwGetCursorPos(renderer->GetWindow(), &xpos, &ypos);
 				mouseCamera.UpdateMouseXY(xpos,ypos);
 
 				double mousedx = mouseCamera.GetMouseDx();
 				double mousedy = mouseCamera.GetMouseDy();
-				
-				if (mouseCamera.LeftButton())
+				float dx = static_cast<float>(mousedx) * 0.3f;
+				float dy = static_cast<float>(mousedy) * 0.3f;
+				*/
+				float dx = static_cast<float>(mouseCamera.GetMouseSx()) * 0.3f;
+				float dy = static_cast<float>(mouseCamera.GetMouseSy()) * 0.3f;
+				mouseCamera.ResetSxSy();
+				/*
+				auto kb = keyboard->GetState();
+				if (kb.LeftShift)
 				{
-					// std::cout << "left mdx:" << mousedx << std::endl;
-					// std::cout << "left mdy:" << mousedy << std::endl;
-					float dx = static_cast<float>(mousedx) * 0.3f;
-					float dy = static_cast<float>(mousedy) * 0.3f;
-					/*
-					auto kb = keyboard->GetState();
-					if (kb.LeftShift)
-					{
-						dx *= 5.0f;
-						dy *= 5.0f;
-					}
-					*/
-					camera->Rotate(dx, dy);
-					//WriteSceneUnitDirectionalShadowMapAttributes(camera.unit());
+					dx *= 5.0f;
+					dy *= 5.0f;
 				}
-				else if (mouseCamera.RightButton())
-				{
-					double dx = -mousedx * 0.01;
-					double dy = -mousedy * 0.01;
+				*/
+				camera->Rotate(dx, dy);
+				//WriteSceneUnitDirectionalShadowMapAttributes(camera.unit());
+			}
+			else if(mouseCamera.RightButton())
+			{
+				//double xpos, ypos;
+            	//glfwGetCursorPos(renderer->GetWindow(), &xpos, &ypos);
+				//mouseCamera.UpdateMouseXY(xpos,ypos);
 
-					/*
-					auto kb = keyboard->GetState();
-					if (kb.LeftShift)
-					{
-						dx *= 10.0f;
-						dy *= 10.0f;
-					}
-						*/
-					camera->MovePerpendicularFwAxis(dx, dy);
-					// WriteSceneUnitDirectionalShadowMapAttributes(camera.unit());
-				}
-				else
+				//double mousedx = mouseCamera.GetMouseDx();
+				//double mousedy = mouseCamera.GetMouseDy();
+				//double dx = -mousedx * 0.01;
+				//double dy = -mousedy * 0.01;
+				float dx = -static_cast<float>(mouseCamera.GetMouseSx()) * 0.01f;
+				float dy = -static_cast<float>(mouseCamera.GetMouseSy()) * 0.01f;
+				mouseCamera.ResetSxSy();
+
+				/*
+				auto kb = keyboard->GetState();
+				if (kb.LeftShift)
 				{
-					resetMouseProcessing();
+					dx *= 10.0f;
+					dy *= 10.0f;
 				}
+				*/
+				camera->MovePerpendicularFwAxis(dx, dy);
+				// WriteSceneUnitDirectionalShadowMapAttributes(camera.unit());
+			}
+			else
+			{
+				resetMouseProcessing();
 			}
 		}
 		break;
@@ -3139,7 +3064,12 @@ namespace Editor
 	*/
 
 	//Billboards
-	/*
+	void CreateSceneUnitBillboards(SceneUnitId id)
+	{
+		if (billboards.contains(id)) return;
+		billboards.insert_or_assign(id, BillboardRegistry());
+	}
+
 	RenderableID CreateBillboardFromMaterials(SceneUnitId id, CameraID camera, std::string name, std::string material, std::string pickingMaterial)
 	{
 #if !defined(_EDITOR_BILLBOARD)
@@ -3148,60 +3078,70 @@ namespace Editor
 		std::string jname = name;
 		jname += "-billboard";
 		JUUID uuid = getUUID();
-		nlohmann::json jbillboard = nlohmann::json(
-			{
+
+		nlohmann::json parameters = {
+			{ "hidden", true },
+			{ "systemCreated", true },
+			{ "uuid", uuid },
+			{ "name", jname },
+			{ "position" , { 0.0f, 0.0f, 0.0f} },
+			{ "rotation" , { 0.0, 0.0, 0.0 } },
+			{ "scale" , { 1.0f, 1.0f, 1.0f } },
+			{ "controllers",
 				{
-					"meshMaterial",
-					{
-						{ "material", GetMaterialUUIDByName(material) },
-						{ "mesh",
-							{
-								{ "primitive", GetMeshUUIDByName("decal") }
-							}
-						}
-					}
-				},
-				{ "castShadows", false },
-				{ "shadowed", false },
-				{ "name" , jname },
-				{ "uuid" , uuid },
-				{ "position" , { 0.0f, 0.0f, 0.0f} },
-				{ "topology", "TRIANGLELIST"},
-				{ "rotation" , { 0.0, 0.0, 0.0 } },
-				{ "scale" , { 1.0f, 1.0f, 1.0f } },
-				{ "skipMeshes" , {}},
-				{ "visible" , true},
-				{ "hidden" , true },
-				{ "systemCreated", true },
-				{ "cameras", { camera.uuid() }},
-				{ "passMaterialOverrides",
-					{
+					{ "renderable",
 						{
-							{ "meshIndex", 0 },
-							{ "renderPass", GetRenderPassUUIDByName("PickingPass") },
-							{ "material", GetMaterialUUIDByName(pickingMaterial) }
+							{
+								"meshMaterial",
+								{
+									{ "material", GetMaterialUUIDByName(material) },
+									{ "mesh",
+										{
+											{ "primitive", GetMeshUUIDByName("decal") }
+										}
+									}
+								}
+							},
+							{ "castShadows", false },
+							{ "shadowed", false },
+							{ "topology", "TRIANGLELIST"},
+							{ "skipMeshes" , {}},
+							{ "visible" , true},
+							{ "cameras", { camera->sceneObject.uuid() }},
+							{ "passMaterialOverrides",
+								{
+									{
+										{ "meshIndex", 0 },
+										{ "renderPass", GetRenderPassUUIDByName("PickingPass") },
+										{ "material", GetMaterialUUIDByName(pickingMaterial) }
+									}
+								}
+							}
 						}
 					}
 				}
 			}
-		);
-		CreateRenderable(id, jbillboard);
-		RenderableID renderable = MAKESUUUID(id, uuid);
-		LoadingProcessor loading = CreateLoadingProcessor();
-		loading.cmd.LoadingPoolInsert(SO_Renderables, renderable());
+		};
+		
+		CreateSceneObject(id, parameters);
+		SceneObjectID sceneObject(id,uuid);
+
+		MapControllers(id);
+		
+		RenderableID renderable(sceneObject->at("controllers").at("renderable"));
+		renderable->BindToScene();
+
 		return renderable;
 	}
-	*/
 
-	/*
-	void RegisterBillboard(SceneUnitId id, JUUID sceneObject)
+	void RegisterBillboard(JUUID controllerId)
 	{
 #if !defined(_EDITOR_BILLBOARD)
 		return;
 #endif
-		billboards.at(id).billboardRegistry.insert_or_assign(sceneObject, MAKESUUUID(id, ""));
+		auto& controller = GetController(controllerId);
+		billboards.at(controller->unit).billboardRegistry.insert_or_assign(controllerId, "");
 	}
-	*/
 
 	/*
 	std::set<RenderableID> GetBillboards(SceneUnitId id)
@@ -3247,38 +3187,43 @@ namespace Editor
 	}
 	*/
 
-	/*
 	void CreateRegisteredBillboards(SceneUnitId id)
 	{
 #if !defined(_EDITOR_BILLBOARD)
 		return;
 #endif
+
 		if (!PendingBillboards(id)) return;
 
 		auto& reg = billboards.at(id).billboardRegistry;
 
-		CameraID camera = editorCameraUUID.at(id);
+		//CameraID camera(editorCameraUUID.at(id)->at("controllers").at("camera"));
+		CameraID camera(levelCameraUUID.at(id)->at("controllers").at("camera"));
 
 		for (auto it = reg.begin(); it != reg.end(); it++)
 		{
 			if (!it->second.empty()) continue;
 
-			auto so = GetSceneObjectPointer(id, it->first);
+			auto& controller = GetController(it->first);
+			auto so = controller->sceneObject;
 			if (so->contains("hidden") && so->at("hidden") == true) continue;
 
+			it->second = controller->CreateBillboard(camera);
+			/*
 			it->second = so->CreateBillboard(camera);
+			*/
 			if (!it->second.empty())
 			{
+				/*
 				auto& bb = it->second;
 				bb->BindToScene();
 				BindRenderableToPickingPass(bb);
 				so->UpdateBillboard(bb);
+				*/
 			}
 		}
 	}
-	*/
 
-	/*
 	bool PendingBillboards(SceneUnitId id)
 	{
 		if (!billboards.contains(id)) return false;
@@ -3287,7 +3232,6 @@ namespace Editor
 
 		return std::any_of(reg.begin(), reg.end(), [](auto& pair) { return pair.second.empty(); });
 	}
-	*/
 
 	/*
 	void ShowBillboards(SceneUnitId id)

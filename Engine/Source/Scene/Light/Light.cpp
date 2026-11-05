@@ -243,10 +243,9 @@ namespace Scene
 	// 	renderReady = value;
 	// }
 
-	void Light::WriteUniformBufferLightAttributes(LightAttributes& atts)
+	void Light::WriteUniformBufferLightAttributes(LightPool& lights, unsigned int index)
 	{
-		memset(&atts, 0, sizeof(atts));
-		atts.lightType = static_cast<unsigned int>(lightType());
+		lights.lightType[index] = static_cast<unsigned int>(lightType());
 
 		switch (lightType())
 		{
@@ -254,18 +253,18 @@ namespace Scene
 		{
 			XMFLOAT3 col = color();
 			float b = brightness();
-			atts.lightColor = XMFLOAT4(col.x * b, col.y * b, col.z * b, 0.0f);
+			lights.lightColor[index] = XMFLOAT4(col.x * b, col.y * b, col.z * b, 0.0f);
 		}
 		break;
 		case LT_Directional:
 		{
 			XMFLOAT3 col = color();
 			float b = brightness();
-			atts.lightColor = XMFLOAT4(col.x * b, col.y * b, col.z * b, 0.0f);
+			lights.lightColor[index] = XMFLOAT4(col.x * b, col.y * b, col.z * b, 0.0f);
 			XMVECTOR lightDir = fw();
-			atts.atts1 = *((XMFLOAT4*)&lightDir.vector4_f32[0]);
-			atts.hasShadowMap = hasShadowMaps();
-			atts.shadowMapIndex = shadowMapIndex;
+			lights.atts1[index] = *((XMFLOAT4*)&lightDir.vector4_f32[0]);
+			lights.hasShadowMap[index] = hasShadowMaps();
+			lights.shadowMapIndex[index] = shadowMapIndex;
 		}
 		break;
 		case LT_Spot:
@@ -274,14 +273,14 @@ namespace Scene
 			XMFLOAT3 atte = attenuation();
 			XMFLOAT3 col = color();
 			float b = brightness();
-			atts.lightColor = XMFLOAT4(col.x * b, col.y * b, col.z * b, 0.0f);
-			atts.atts1 = { pos.x, pos.y, pos.z, 0.0f };
+			lights.lightColor[index] = XMFLOAT4(col.x * b, col.y * b, col.z * b, 0.0f);
+			lights.atts1[index] = { pos.x, pos.y, pos.z, 0.0f };
 			XMVECTOR lightDir = fw();
-			atts.atts2 = *((XMFLOAT4*)&lightDir.vector4_f32[0]);
-			atts.atts2.w = cosf(XMConvertToRadians(coneAngle()));
-			atts.atts3 = { atte.x, atte.y, atte.z, 0.0f };
-			atts.hasShadowMap = hasShadowMaps();
-			atts.shadowMapIndex = shadowMapIndex;
+			lights.atts2[index] = *((XMFLOAT4*)&lightDir.vector4_f32[0]);
+			lights.atts2[index].w = cosf(XMConvertToRadians(coneAngle()));
+			lights.atts3[index] = { atte.x, atte.y, atte.z, 0.0f };
+			lights.hasShadowMap[index] = hasShadowMaps();
+			lights.shadowMapIndex[index] = shadowMapIndex;
 		}
 		break;
 		case LT_Point:
@@ -290,11 +289,11 @@ namespace Scene
 			XMFLOAT3 atte = attenuation();
 			XMFLOAT3 col = color();
 			float b = brightness();
-			atts.lightColor = XMFLOAT4(col.x * b, col.y * b, col.z * b, 0.0f);
-			atts.atts1 = { pos.x, pos.y, pos.z, 0.0f };
-			atts.atts2 = { atte.x, atte.y, atte.z, 0.0f };
-			atts.hasShadowMap = hasShadowMaps();
-			atts.shadowMapIndex = shadowMapIndex;
+			lights.lightColor[index] = XMFLOAT4(col.x * b, col.y * b, col.z * b, 0.0f);
+			lights.atts1[index] = { pos.x, pos.y, pos.z, 0.0f };
+			lights.atts2[index] = { atte.x, atte.y, atte.z, 0.0f };
+			lights.hasShadowMap[index] = hasShadowMaps();
+			lights.shadowMapIndex[index] = shadowMapIndex;
 		}
 		break;
 		}

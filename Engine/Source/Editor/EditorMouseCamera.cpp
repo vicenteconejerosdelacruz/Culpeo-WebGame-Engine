@@ -6,19 +6,23 @@ void EditorMouseCamera::Reset()
 	mouseY = 0;
 	dx = 0;
 	dy = 0;
+	sx = 0;
+	sy = 0;
 	
 	leftButton = false;
 	rightButton = false;
 
-	// wheelCaptured = false;
-	// wheelMode = false;
-	// wheel = 0;
+	wheelValue = 0.0;
+	dw = 0.0;
 }
 
 void EditorMouseCamera::UpdateMouseXY(double x, double y, double* mdx, double* mdy)
 {
+	// std::cout << "UpdateMouseXY: x=" << x << ", y=" << y << std::endl;
 	dx = x - mouseX;
 	dy = y - mouseY;
+	sx+= dx;
+	sy+= dy;
 	mouseX = x;
 	mouseY = y;
 	if(mdx) *mdx = dx;
@@ -35,7 +39,23 @@ double EditorMouseCamera::GetMouseDy()
 	return dy;
 }
 
-void EditorMouseCamera::RickClick(double x, double y)
+double EditorMouseCamera::GetMouseSx()
+{
+	return sx;
+}
+
+double EditorMouseCamera::GetMouseSy()
+{
+	return sy;
+}
+
+void EditorMouseCamera::ResetSxSy()
+{
+	sx = 0;
+	sy = 0;
+}
+
+void EditorMouseCamera::RightClick(double x, double y)
 {
 	RightButton(true);
 	mouseX = x;
@@ -73,42 +93,9 @@ void EditorMouseCamera::CaptureWheel(double value)
 {
 	wheelValue += value;
 	dw = value;
-	// std::cout << __FUNCTION__ << "wheel:" << wheelValue << " dw:" << dw << std::endl;
 }
 
 double EditorMouseCamera::GetWheel()
 {
 	return dw;
 }
-
-/*
-bool EditorMouseCamera::WheelCaptured() const { return wheelCaptured; }
-
-bool EditorMouseCamera::WheelMode() const
-{
-	return wheelMode;
-}
-
-int EditorMouseCamera::Wheel() const { return wheel; }
-
-void EditorMouseCamera::Wheel(int w)
-{
-	wheel = w;
-}
-
-void EditorMouseCamera::CaptureWheel(int scrollWheelValue)
-{
-	wheel = scrollWheelValue;
-	wheelCaptured = true;
-}
-
-void EditorMouseCamera::UpdateWheelMode(int scrollWheelValue, double x, double y)
-{
-	mouseX = x;
-	mouseY = y;
-	wheel = scrollWheelValue;
-	wheelMode = true;
-}
-*/
-
-
