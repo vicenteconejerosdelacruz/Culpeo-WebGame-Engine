@@ -2,19 +2,6 @@
 #include <nlohmann/json.hpp>
 #include <Controller.h>
 #include <SceneControllerDecl.h>
-// #include <Scene.h>
-// #include <SceneObject.h>
-// #include "ShadowMap.h"
-//#include <SceneObjectDecl.h>
-//#include <ShaderMaterials.h>
-
-//let's explain a little bit here
-// 1.- One CVB of MaxLights Descriptors is created to write the data used
-// by the shaders rendering(hence it needs to have NumFrames times the size)
-// I also think that this should be moved to the "RenderPass" once this makes it here
-// 2.- each light creates a DSV Heap + DepthStencil resource
-// 3.- these DepthStencil resources for each light are then used to be mapped into
-// a CBV descriptor as SRV unbounded slots
 
 static constexpr XMVECTOR PointLightDirection[] = {
 	{ 0.0f, 1.0f, 0.0f, 0.0f }, { 0.0f,-1.0f, 0.0f, 0.0f },
@@ -104,33 +91,6 @@ static inline std::unordered_map<LightType, std::vector<std::string>> shadowMapS
 
 #endif
 
-/*
-struct LightAttributes {
-	unsigned int lightType;       // 4 bytes
-    unsigned int shadowMapIndex;  // 4 bytes
-    unsigned int hasShadowMap;    // 4 bytes
-    float _pad0;  				  // 4 bytes
-    
-    XMFLOAT4 lightColor; // 16 bytes
-    XMFLOAT4 atts1;      // 16 bytes
-    XMFLOAT4 atts2;      // 16 bytes
-    XMFLOAT4 atts3;      // 16 bytes
-    // Total exacto por luz: 80 bytes por elemento
-};
-
-inline void DumpLightAttributes(const LightAttributes &atts)
-{
-	std::cout << "lightType("<< atts.lightType <<") " << LightTypeToString.at(LightType(atts.lightType)) << std::endl;
-	std::cout << "hasShadowMap " << atts.hasShadowMap << std::endl;
-	std::cout << "shadowMapIndex " << atts.shadowMapIndex << std::endl;
-	std::cout << "_pad0 " << atts._pad0 << std::endl;
-	PrintXMFloat4(atts.lightColor,"lightColor");
-	PrintXMFloat4(atts.atts1,"atts1");
-	PrintXMFloat4(atts.atts2,"atts2");
-	PrintXMFloat4(atts.atts3,"atts3");
-}
-*/
-
 inline static const unsigned int MaxLights = 100U;
 struct LightPool {
     unsigned int numLights;
@@ -148,9 +108,6 @@ inline void DumpLightPool(const LightPool& pool, unsigned int numLights = MaxLig
 {
 	static_assert(sizeof(LightPool) == 7616, "LightPool size is not 7616 bytes");
 	std::cout << "numLights " << pool.numLights << std::endl;
-	// std::cout << "_pad3[0] " << pool._pad3[0] << std::endl;
-	// std::cout << "_pad3[1] " << pool._pad3[1] << std::endl;
-	// std::cout << "_pad3[2] " << pool._pad3[2] << std::endl;
 	for(unsigned int i = 0; i < numLights; i++)
 	{
 		std::cout << "light(" << i << ")" << std::endl;
@@ -201,8 +158,6 @@ namespace Scene {
 	using namespace Game;
 	struct Light : Controller
 	{
-		// inline static const SceneObjectType sceneObjectType = SO_Lights;
-
 #include <Attributes/JFlags.h>
 #include "LightAtt.h"
 #include <JEnd.h>
@@ -287,12 +242,12 @@ namespace Scene {
 		// void RenderShadowMapMinMaxChain();
 
 		// //Billboard
-		// virtual RenderableID CreateBillboard(CameraID camera);
+		RenderableID CreateBillboard(CameraID camera) override;
 		// virtual void UpdateBillboard(RenderableID renderable);
 		// BoundingBox GetBoundingBox();
 		// //Gizmo
 		// virtual bool CanInteractWithGizmo(ImGuizmo::OPERATION operation);
-		// virtual void WriteJson(nlohmann::json& j);
+		void WriteJson(nlohmann::json& j) override;
 		// static void GatherFiles(nlohmann::json& json, std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream);
 #endif
 

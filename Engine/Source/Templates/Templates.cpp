@@ -579,6 +579,9 @@ namespace Templates {
     - value: 0.9803921580314636
       variable: alphaCut
       variableType: FLOAT
+    - value: [1.0, 1.0, 1.0]
+      variable: baseColor
+      variableType: RGB
   name: LightBulb
   rasterizerState:
     AntialiasedLineEnable: false

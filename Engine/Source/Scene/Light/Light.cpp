@@ -1,10 +1,10 @@
 #include "Light.h"
 #include <SceneObject.h>
 #include <Scene.h>
-// #include <NoMath.h>
-// #if defined(_EDITOR)
+#if defined(_EDITOR)
+#include <Editor.h>
 // #include <Builder/ReleaseBuilder.h>
-// #endif
+#endif
 #include <SimpleMath.h>
 
 // #if defined(_EDITOR)
@@ -69,10 +69,19 @@ namespace Scene
 
 	void Light::Map(SUUUID so)
 	{
+		#if defined(_EDITOR)
+		using namespace Editor;
+		#endif
+		
 		Controller::Map(so);
 		#include <TrackUUID/JInsert.h>
 		#include "LightAtt.h"
 		#include <JEnd.h>
+
+		#if defined(_EDITOR)
+		if (lightType() != LT_Ambient && !SceneIsIsolated(unit))
+			RegisterBillboard(uuid());
+		#endif
 	}
 
 	void Light::Unmap()
@@ -83,20 +92,21 @@ namespace Scene
 		Controller::Unmap();
 	}
 
-// #if defined(_EDITOR)
-// 	void Light::WriteJson(nlohmann::json& j)
-// 	{
-// #include <Editor/JWriteJson.h>
-// #include "LightAtt.h"
-// #include <JEnd.h>
-// 	}
+#if defined(_EDITOR)
+	void Light::WriteJson(nlohmann::json& j)
+	{
+		#include <Editor/JWriteJson.h>
+		#include "LightAtt.h"
+		#include <JEnd.h>
+		Controller::WriteJson(j);
+	}
 // 	void Light::GatherFiles(nlohmann::json& json, std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream)
 // 	{
 // #include <Editor/JReleaseBuilder.h>
 // #include "LightAtt.h"
 // #include <JEnd.h>
 // 	}
-// #endif
+#endif
 
 // 	void Light::Initialize()
 // 	{
@@ -352,7 +362,7 @@ namespace Scene
 		break;
 		}
 	}
-
+	*/
 	RenderableID Light::CreateBillboard(CameraID camera)
 	{
 		using namespace Editor;
@@ -360,9 +370,10 @@ namespace Scene
 		if (lightType() == LT_Ambient) return RenderableID();
 
 		RenderableID bb = Editor::CreateBillboardFromMaterials(unit, camera, at("name"), "LightBulb", "LightBulbPicking");
-		bb->OnPick = [&] { SelectLight(SUuuid()); };
+		// bb->OnPick = [&] {Editor::SelectLight(SUuuid()); };
 		return bb;
 	}
+	/*
 
 	void Light::UpdateBillboard(RenderableID renderable)
 	{
