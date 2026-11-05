@@ -60,6 +60,10 @@ void EditorMouseCamera::RightClick(double x, double y)
 	RightButton(true);
 	mouseX = x;
 	mouseY = y;
+	dx = 0;
+	dy = 0;
+	sx = 0;
+	sy = 0;
 }
 
 bool EditorMouseCamera::RightButton()
@@ -77,6 +81,10 @@ void EditorMouseCamera::LeftClick(double x, double y)
 	LeftButton(true);
 	mouseX = x;
 	mouseY = y;
+	dx = 0;
+	dy = 0;
+	sx = 0;
+	sy = 0;
 }
 
 bool EditorMouseCamera::LeftButton()
