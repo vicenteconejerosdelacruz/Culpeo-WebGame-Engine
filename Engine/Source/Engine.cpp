@@ -13,6 +13,7 @@
 #include <Game.h>
 #include <Renderer.h>
 #include <Templates.h>
+#include <AudioSystem.h>
 #if defined(_EDITOR)
 #include <Editor.h>
 #endif
@@ -26,6 +27,7 @@ namespace Scene
 
 using namespace Templates;
 using namespace Game;
+using namespace AudioSystem;
 
 RECT hWndRect = { 0L, 0L, 0L, 0L };
 
@@ -39,6 +41,8 @@ bool InitInstance()
   renderer->CreateWindow(); 
   renderer->CreateSurface();
   renderer->CreateSwapChainPass(); 
+
+  InitAudio();
 
   #if defined(_EDITOR)
   Editor::InitEditor();

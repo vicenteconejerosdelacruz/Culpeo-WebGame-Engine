@@ -126,14 +126,15 @@ namespace Scene
 		Controller::Unmap();
     }
 
-// #if defined(_EDITOR)
-// 	void Renderable::WriteJson(nlohmann::json& j)
-// 	{
-// #include <Editor/JWriteJson.h>
-// #include "RenderableAtt.h"
-// #include <JEnd.h>
-// 	}
-// #endif
+#if defined(_EDITOR)
+	void Renderable::WriteJson(nlohmann::json& j)
+	{
+		#include <Editor/JWriteJson.h>
+		#include "RenderableAtt.h"
+		#include <JEnd.h>
+		Controller::WriteJson(j);
+	}
+#endif
 
 	/*
 	void Renderable::Initialize()

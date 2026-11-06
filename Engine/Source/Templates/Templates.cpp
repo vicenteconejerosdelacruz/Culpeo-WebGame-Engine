@@ -198,7 +198,11 @@ namespace Templates {
   uuid: bc666a1e-97b4-4b01-979f-af4857e0d4b7
 )";
 
-	const std::string systemSoundsYaml = R"([])";
+	const std::string systemSoundsYaml = R"(
+- name: fireplace
+  path: fireplace.wav
+  uuid: 1e0c1716-ac41-4325-91ed-3ff087911687
+)";
 
 	const std::string systemMaterialsYaml0 = R"(
 - name: BoundingBox
@@ -1180,7 +1184,7 @@ namespace Templates {
           LoadTemplates(defaultTemplatesFolder, Shader::templateName, CreateShader);
           LoadTemplates(defaultTemplatesFolder, Material::templateName, CreateMaterial);
           // LoadTemplates(defaultTemplatesFolder, Model3D::templateName, CreateModel3D);
-          // LoadTemplates(defaultTemplatesFolder, Sound::templateName, CreateSound);
+          LoadTemplates(defaultTemplatesFolder, Sound::templateName, CreateSound);
           LoadTemplates(defaultTemplatesFolder, Texture::templateName, CreateTexture);
           LoadTemplates(defaultTemplatesFolder, RenderPass::templateName, CreateRenderPass);
           // // LoadTemplates(defaultTemplatesFolder, PhysicGeometry::templateName, CreatePhysicGeometry);
@@ -1239,7 +1243,7 @@ namespace Templates {
 	{
 		ReleaseRenderPassTemplates();
 		ReleaseTextureTemplates();
-		//ReleaseSoundTemplates();
+		ReleaseSoundTemplates();
 		//ReleaseModel3DTemplates();
 		ReleaseMaterialTemplates();
 		ReleaseShaderTemplates();

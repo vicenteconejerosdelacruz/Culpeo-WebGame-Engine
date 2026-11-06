@@ -7,6 +7,7 @@
 #include <Renderable.h>
 #include <Camera.h>
 #include <Light.h>
+#include <SoundFX.h>
 
 // #if defined(_EDITOR)
 // namespace Editor
@@ -32,6 +33,7 @@ namespace Game
 		{ "renderable", [](nlohmann::json& json) { return std::make_unique<Renderable>(json); }},
 		{ "camera", [](nlohmann::json& json) { return std::make_unique<Camera>(json); }},
 		{ "light", [](nlohmann::json& json) { return std::make_unique<Light>(json); }},
+		{ "soundfx", [](nlohmann::json& json) { return std::make_unique<SoundFX>(json); }},
     };
 
 	std::map<JUUID, std::unique_ptr<Controller>> controllersUUIDs;

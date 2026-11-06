@@ -100,6 +100,32 @@ controllers:
     zBias: 0.0002
 )";
 
+  const std::string soundFxYaml = R"(
+uuid: 8e453610-a972-42b2-a4dc-f33cff173ab4
+name: fireplace
+rotation:
+  - 63.0
+  - 0.0
+  - 0.0
+controllers:
+  soundfx:
+    autoPlay: true
+    destroyOnCompletion: false
+    hidden: false
+    instanceFlags: 0
+    loop: true
+    position:
+      - 0
+      - 0
+      - 0
+    rotation:
+      - 0
+      - 0
+      - 0
+    sound: 1e0c1716-ac41-4325-91ed-3ff087911687
+    volume: 1
+)";
+
 /*
 	const std::string renderablesYaml = R"(
 renderables:
@@ -246,6 +272,7 @@ physicScenes:
     level.push_back(yaml_str_to_json(cameraYaml));
     level.push_back(yaml_str_to_json(ambientLightYaml));
     level.push_back(yaml_str_to_json(directionalLightYaml));
+    level.push_back(yaml_str_to_json(soundFxYaml));
     return level;
   }
 }

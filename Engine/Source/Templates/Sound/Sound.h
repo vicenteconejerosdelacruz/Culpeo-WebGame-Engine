@@ -6,11 +6,12 @@
 #include <nlohmann/json.hpp>
 #include <Templates.h>
 #include <JTemplate.h>
+#include <miniaudio.h>
 
 //using namespace DirectX;
 
 //typedef std::tuple<JUUID, std::unique_ptr<DirectX::SoundEffectInstance>> SoundInstance;
-typedef std::tuple<JUUID, std::unique_ptr<void>> SoundInstance;
+// using SoundInstance = std::tuple<JUUID, std::unique_ptr<ma_sound>>;
 
 namespace Templates
 {
@@ -50,6 +51,11 @@ namespace Templates
 	{
 		inline static const std::string templateName = "sounds.yaml";
 		inline static const TemplateType templateType = T_Sounds;
+
+		enum SoundInstanceFlag 
+		{
+			Use3D = 1 << 0,
+		};
 	}
 
 	struct SoundJson : JTemplate
@@ -71,27 +77,44 @@ namespace Templates
 		DEF_STRING2FLAGS_FUNC(SoundJson, JTemplate);
 
 #if defined(_EDITOR)
-		// virtual void WriteJson(nlohmann::json& j);
+		void WriteJson(nlohmann::json& j) override;
 		// void GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream) override;
 #endif
 	};
 
+	struct SoundInstance;
+
 	TEMPDECL_FULL(Sound);
-	DEF_TEMPLATE_ID(SoundJson, GetSoundTemplate);
 
-	void SoundJsonStep();
-	void ReleaseSoundEffectsInstances();
+	struct SoundInstance
+	{
+		SoundInstance(JUUID uuid, unsigned int f);
+		void Play(bool loop);
+		void Stop();
+		void SetVolume(float volume);
+		void SetPosition(XMFLOAT3 pos);
 
-	SoundInstance GetSoundEffectInstance(
-		JUUID uuid,
-		unsigned int flags,
-		std::string objectUUID = ""
-	);
+		SoundJsonID json;
+		SoundInstanceID instance;
+		unsigned int flags;
 
-	bool SoundEffectExists(JUUID uuid);
+		ma_sound sound;
+		std::unique_ptr<ma_decoder> decoder;
+	};
+
+	SoundInstanceID CreateSoundInstance(JUUID uuid, unsigned int f = 0);
+
+	// DEF_TEMPLATE_ID(SoundJson, GetSoundTemplate);
+
+	// void SoundJsonStep();
+	// void ReleaseSoundEffectsInstances();
+
+	// SoundInstance GetSoundEffectInstance(JUUID uuid, unsigned int flags, std::string objectUUID = "");
+
+	// bool SoundEffectExists(JUUID uuid);
 	// std::unique_ptr<DirectX::SoundEffect>& GetSoundEffect(JUUID uuid);
 
-	void DestroySoundEffectInstance(JUUID uuid, SoundInstance& soundEffectInstance);
+	// void DestroySoundEffectInstance(JUUID uuid, SoundInstance& soundEffectInstance);
 };
-using namespace Templates;
-DEF_TEMPLATE_ID_HASH(SoundJson);
+// using namespace Templates;
+// DEF_TEMPLATE_ID_HASH(SoundJson);

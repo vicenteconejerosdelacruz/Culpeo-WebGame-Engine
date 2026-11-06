@@ -11746,22 +11746,32 @@ IMPLEMENTATION
 
             What's basically happening is that we're saving and restoring the ebx register manually.
             */
-            #if defined(MA_X86) && defined(__PIC__)
-                __asm__ __volatile__ (
-                    "xchg{l} {%%}ebx, %k1;"
-                    "cpuid;"
-                    "xchg{l} {%%}ebx, %k1;"
-                    : "=a"(info[0]), "=&r"(info[1]), "=c"(info[2]), "=d"(info[3]) : "a"(fid), "c"(0)
-                );
+            #if !defined(__EMSCRIPTEN__) && !defined(__wasm32__)
+                #if defined(MA_X86) && defined(__PIC__)
+                    __asm__ __volatile__ (
+                        "xchg{l} {%%}ebx, %k1;"
+                        "cpuid;"
+                        "xchg{l} {%%}ebx, %k1;"
+                        : "=a"(info[0]), "=&r"(info[1]), "=c"(info[2]), "=d"(info[3]) : "a"(fid), "c"(0)
+                    );
+                #else
+                    __asm__ __volatile__ (
+                        "cpuid" : "=a"(info[0]), "=b"(info[1]), "=c"(info[2]), "=d"(info[3]) : "a"(fid), "c"(0)
+                    );
+                #endif
             #else
-                __asm__ __volatile__ (
-                    "cpuid" : "=a"(info[0]), "=b"(info[1]), "=c"(info[2]), "=d"(info[3]) : "a"(fid), "c"(0)
-                );
+                // En WebAssembly no existe cpuid de x86; devolvemos ceros de forma segura
+                info[0] = 0; info[1] = 0; info[2] = 0; info[3] = 0;
             #endif
         }
 
         static MA_INLINE ma_uint64 ma_xgetbv(int reg)
         {
+        #if defined(__EMSCRIPTEN__) || defined(__wasm32__)
+            // WebAssembly no soporta xgetbv de x86
+            (void)reg;
+            return 0;
+        #else
             unsigned int hi;
             unsigned int lo;
 
@@ -11770,6 +11780,7 @@ IMPLEMENTATION
             );
 
             return ((ma_uint64)hi << 32) | (ma_uint64)lo;
+        #endif
         }
     #else
         #define MA_NO_CPUID
@@ -12048,7 +12059,12 @@ static MA_INLINE void ma_yield(void)
             #endif
         #endif
     #else
-        __asm__ __volatile__ ("rep; nop");
+        #if defined(__EMSCRIPTEN__) || defined(__wasm32__)
+            // WebAssembly no soporta rep; nop (instrucción exclusiva de x86)
+            (void)0;
+        #else
+            __asm__ __volatile__ ("rep; nop");
+        #endif
     #endif
 #elif (defined(__arm__) && defined(__ARM_ARCH) && __ARM_ARCH >= 7) || defined(_M_ARM64) || (defined(_M_ARM) && _M_ARM >= 7) || defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6T2__)
     /* ARM */

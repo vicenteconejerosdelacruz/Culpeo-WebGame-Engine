@@ -1,7 +1,6 @@
 // JCLASS(Camera, GetCameras)
 JCLASS(Camera, _)
 // JTYPE(SceneObjectType, SO_Cameras)
-JEXPOSE(std::string, uuid, "", jedv_t_hidden, 0, false)
 JEXPOSE(bool, hidden, false, jedv_t_boolean, 1, false)
 JEXPOSE(std::string, name, "cam.", jedv_t_so_camera_name, 0, true)
 JEXPOSE(bool, fitWindow, true, jedv_t_boolean, 1, true)

@@ -1,7 +1,4 @@
-//JCLASS(Renderable, GetRenderables)
 JCLASS(Renderable, _)
-//JTYPE(SceneObjectType, SO_Renderables)
-JEXPOSE(std::string, uuid, "", jedv_t_hidden, 0, false)
 JEXPOSE(bool, castShadows, true, jedv_t_boolean, 0, false)
 JEXPOSE(bool, shadowed, true, jedv_t_boolean, 0, false)
 JEXPOSE(bool, hidden, false, jedv_t_boolean, 0, false)

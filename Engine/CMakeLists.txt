@@ -25,14 +25,17 @@ endif()
 # 1. Define el ejecutable de tu motor
 add_executable(CulpeoEngine
     "Source/Engine.cpp"
+    "Source/Audio/AudioSystem.h"
+    "Source/Audio/AudioSystem.cpp"
+    "Source/Audio/MiniAudioBridge.cpp"
+    "Source/Controllers/Controller.h"
+    "Source/Controllers/Controller.cpp"
     "Source/Editor/DefaultLevel.h"
     "Source/Editor/DefaultLevel.cpp"
     "Source/Editor/Editor.h"
     "Source/Editor/Editor.cpp"
     "Source/Editor/EditorMouseCamera.h"
     "Source/Editor/EditorMouseCamera.cpp"
-    "Source/Controllers/Controller.h"
-    "Source/Controllers/Controller.cpp"
     "Source/Game/Game.h"
     "Source/Game/Game.cpp"
     "Source/JExpose/JObject.h"
@@ -94,6 +97,9 @@ add_executable(CulpeoEngine
     "Source/Scene/Renderable/Renderable.h"
     "Source/Scene/Renderable/RenderableAtt.h"
     "Source/Scene/Renderable/Renderable.cpp"
+    "Source/Scene/Sound/SoundFx.h"
+    "Source/Scene/Sound/SoundFxAtt.h"
+    "Source/Scene/Sound/SoundFx.cpp"
     "Source/Templates/JTemplate.h"
     "Source/Templates/Templates.h"
     "Source/Templates/Templates.cpp"
@@ -151,8 +157,9 @@ set_target_properties(CulpeoEngine PROPERTIES
 # 3. Directorios de inclusión locales del motor y dependencias (Actualizado dinámicamente)
 target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source
-    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Editor
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Audio
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Controllers
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Editor
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Game
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/JExpose
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/JExpose/Primitives
@@ -162,11 +169,13 @@ target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Camera
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Light
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Renderable
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Scene/Sound
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Templates
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Primitives
     ${CMAKE_SOURCE_DIR}/SDKs/assimp/include
     ${CMAKE_SOURCE_DIR}/SDKs/yaml-cpp/include
     ${CMAKE_SOURCE_DIR}/SDKs/tinyddsloader/include
+    ${CMAKE_SOURCE_DIR}/SDKs/miniaudio/include
     ${SDK_BUILD_DIR_STANDARD}/SDKs/assimp/include
     ${CMAKE_SOURCE_DIR}/SDKs/DirectXMath/Inc
 )

@@ -1,8 +1,5 @@
 JCLASS(Light, _)
-// JTYPE(SceneObjectType, SO_Lights)
-JEXPOSE(std::string, uuid, "", jedv_t_hidden, 0, false)
 JEXPOSE(bool, hidden, false, jedv_t_hidden, 0, false)
-//JEXPOSE(std::string, name, ("light." + std::to_string(GetCountFromLights())), jedv_t_hidden, 0, true)
 JEXPOSE(std::string, name, "light.", jedv_t_hidden, 0, true)
 JEXPOSE_ENUM(LightType, lightType, LT_Ambient, jedv_t_lighttype, 1, true)
 JEXPOSE_TRANSFORM(XMFLOAT3, color, ToXMFLOAT3, FromXMFLOAT3, XMFLOAT3(1.0f, 1.0f, 1.0f), jedv_t_hidden, 1, true)
