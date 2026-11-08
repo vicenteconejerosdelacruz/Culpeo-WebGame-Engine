@@ -369,7 +369,8 @@ namespace Scene
 
 		if (lightType() == LT_Ambient) return RenderableID();
 
-		RenderableID bb = Editor::CreateBillboardFromMaterials(unit, camera, at("name"), "LightBulb", "LightBulbPicking");
+		RenderableID bb = Editor::CreateBillboardFromMaterials(unit, camera, sceneObject->at("name"), "LightBulb", "LightBulbPicking");
+		bb->sceneObject->position(sceneObject->position());
 		// bb->OnPick = [&] {Editor::SelectLight(SUuuid()); };
 		return bb;
 	}

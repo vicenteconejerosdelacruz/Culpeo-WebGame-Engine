@@ -1,24 +1,12 @@
 #include "SoundFX.h"
 #include <SceneObject.h>
+#include <Scene.h>
+#if defined(_EDITOR)
 #include <Editor.h>
-// #include <Scene.h>
+// #include <Builder/ReleaseBuilder.h>
+#endif
 // #include <AudioSystem.h>
 // #include <Sound/Sound.h>
-
-// #if defined(_EDITOR)
-// #include <Builder/ReleaseBuilder.h>
-
-// namespace Editor
-// {
-// 	extern void SelectSoundEffect(SoundFXID soundfx);
-// 	extern RenderableID CreateBillboardFromMaterials(SceneUnitId id, CameraID camera, std::string name, std::string material, std::string pickingMaterial);
-// 	extern void RegisterBillboard(SceneUnitId id, JUUID sceneObject);
-// 	extern void DestroyBillboard(SceneUnitId id, JUUID sceneObject);
-// 	extern void MarkScenePanelAssetsAsDirty();
-// 	extern bool IsPlaying(SceneUnitId id);
-// 	extern bool IsPaused(SceneUnitId id);
-// }
-// #endif
 
 namespace Scene
 {
@@ -81,20 +69,28 @@ namespace Scene
 
 	void SoundFX::Map(SUUUID so)
 	{
+		#if defined(_EDITOR)
+		using namespace Editor;
+		#endif
+		
 		Controller::Map(so);
 
-#include <TrackUUID/JInsert.h>
-#include "SoundFXAtt.h"
-#include <JEnd.h>
+		#include <TrackUUID/JInsert.h>
+		#include "SoundFXAtt.h"
+		#include <JEnd.h>
 
-		std::cout << this->dump(4) << std::endl;
+		#if defined(_EDITOR)
+		if (!SceneIsIsolated(unit))
+			RegisterBillboard(uuid());
+		#endif
 	}
 
 	void SoundFX::Unmap()
 	{
-#include <TrackUUID/JErase.h>
-#include "SoundFXAtt.h"
-#include <JEnd.h>
+		#include <TrackUUID/JErase.h>
+		#include "SoundFXAtt.h"
+		#include <JEnd.h>
+
 		Controller::Unmap();
 	}
 
@@ -360,7 +356,8 @@ void SoundFX::BindToScene()
 	{
 		// if (!(instanceFlags() & SoundEffectInstance_Use3D)) return RenderableID();
 
-		RenderableID bb = Editor::CreateBillboardFromMaterials(unit, camera, at("name"), "SoundEffect", "SoundEffectPicking");
+		RenderableID bb = Editor::CreateBillboardFromMaterials(unit, camera, sceneObject->at("name"), "SoundEffect", "SoundEffectPicking");
+		bb->sceneObject->position(sceneObject->position());
 		// bb->OnPick = [&] {Editor::SelectSoundEffect(SUuuid()); };
 		return bb;
 	}
