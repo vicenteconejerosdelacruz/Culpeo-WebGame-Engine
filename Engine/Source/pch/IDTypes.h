@@ -21,6 +21,8 @@ DEF_TYPE_ID(Templates, TUUID, MoldJson, GetMoldTemplate);
 DEF_TYPE_ID(Templates, TUUID, MeshInstance, GetMeshInstance);
 DEF_TYPE_ID(Templates, TUUID, SoundJson, GetSoundTemplate);
 DEF_TYPE_ID(Templates, TUUID, SoundInstance, GetSoundInstance);
+DEF_TYPE_ID(Templates, TUUID, Model3DJson, GetModel3DTemplate);
+DEF_TYPE_ID(Templates, TUUID, Model3DInstance, GetModel3DInstance);
 
 DEF_TYPE_CID(Scene, CUUID, Camera, GetCamera);
 DEF_TYPE_CID(Scene, CUUID, Renderable, GetRenderable);

@@ -16,41 +16,8 @@
 
 extern std::unique_ptr<JRenderer> renderer;
 
-#if defined(_EDITOR)
-// namespace Editor
-// {
-// 	extern void SelectCamera(CameraID camera);
-// 	extern RenderableID CreateBillboardFromMaterials(SceneUnitId id, CameraID camera, std::string name, std::string material, std::string pickingMaterial);
-// 	extern void RegisterBillboard(SceneUnitId id, JUUID sceneObject);
-// 	extern std::set<RenderableID> GetBillboards(SceneUnitId id);
-// 	extern void DestroyBillboard(SceneUnitId id, JUUID sceneObject);
-// 	extern void ShowBillboards(SceneUnitId id);
-// 	extern void HideBillboards(SceneUnitId id);
-
-// 	extern bool IsPlaying(SceneUnitId id);
-
-// 	extern bool StaticBodiesSceneUnitRegistered(SceneUnitId id);
-// 	extern bool DynamicBodiesSceneUnitRegistered(SceneUnitId id);
-// 	extern bool CharactersSceneUnitRegistered(SceneUnitId id);
-// 	extern bool TriggersSceneUnitRegistered(SceneUnitId id);
-
-// 	//Should Draw
-// 	extern bool StaticBodiesShouldDraw(SceneUnitId id);
-// 	extern bool DynamicBodiesShouldDraw(SceneUnitId id);
-// 	extern bool CharactersShouldDraw(SceneUnitId id);
-// 	extern bool TriggersShouldDraw(SceneUnitId id);
-
-// 	//Physics Objects list
-// 	extern std::set<PhysicObjectID> GetStaticBodies(SceneUnitId id);
-// 	extern std::set<PhysicObjectID> GetDynamicBodies(SceneUnitId id);
-// 	extern std::set<PhysicObjectID> GetCharacters(SceneUnitId id);
-// 	extern std::set<PhysicObjectID> GetTriggers(SceneUnitId id);
-// }
-#endif
 namespace Scene
 {
-	// SODEF_FULL(Camera);
-
 #include <TrackUUID/JDef.h>
 #include "CameraAtt.h"
 #include <JEnd.h>

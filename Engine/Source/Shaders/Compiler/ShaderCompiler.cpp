@@ -1,7 +1,7 @@
 #include "ShaderCompiler.h"
 #include <webgpu/webgpu.h>
 #include <webgpu/webgpu_cpp.h>
-#include <Utils/FileSystem.h>
+#include <Utils/AssetStream.h>
 #include <Renderer.h>
 #include <Scene.h>
 using namespace Templates;
@@ -55,162 +55,164 @@ namespace ShaderCompiler {
         return resources;
     }
 
-std::string PreprocessWGSL(
-    const std::string& filename, 
-    std::unordered_set<std::string>& definedMacros,
-    const std::function<std::string(const std::string&)>& loadFileCallback,
-    std::unordered_set<std::string>& includedFiles) 
-{
-    // Evitar inclusiones circulares
-    if (includedFiles.count(filename)) {
-        return "";
-    }
-    includedFiles.insert(filename);
+    std::string PreprocessWGSL(
+        const std::string& filename, 
+        std::unordered_set<std::string>& definedMacros,
+        const std::function<std::string(const std::string&)>& loadFileCallback,
+        std::unordered_set<std::string>& includedFiles) 
+    {
+        // Evitar inclusiones circulares
+        if (includedFiles.count(filename)) {
+            return "";
+        }
+        includedFiles.insert(filename);
 
-    std::string fileContent = loadFileCallback(filename);
-    if (fileContent.empty()) {
-        std::cerr << "[Preprocessor] Error: No se pudo cargar el archivo: " << filename << std::endl;
-        return "";
-    }
+        std::string fileContent = loadFileCallback(filename);
+        if (fileContent.empty()) {
+            std::cerr << "[Preprocessor] Error: No se pudo cargar el archivo: " << filename << std::endl;
+            return "";
+        }
 
-    std::istringstream stream(fileContent);
-    std::ostringstream output;
-    std::string line;
+        std::istringstream stream(fileContent);
+        std::ostringstream output;
+        std::string line;
 
-    // Pila de condiciones inicializada con el estado global activo
-    std::vector<PreprocessorState> conditionStack = { { true, true } };
-    
-    // Estado para rastrear comentarios multilínea (/* ... */) que cruzan varias líneas
-    bool inMultiLineComment = false;
-
-    while (std::getline(stream, line)) {
-        // --- Paso 1: Eliminar comentarios en la línea ---
-        std::string cleanedLine = "";
+        // Pila de condiciones inicializada con el estado global activo
+        std::vector<PreprocessorState> conditionStack = { { true, true } };
         
-        for (size_t i = 0; i < line.length(); ++i) {
-            if (inMultiLineComment) {
-                if (i + 1 < line.length() && line[i] == '*' && line[i + 1] == '/') {
-                    inMultiLineComment = false;
+        // Estado para rastrear comentarios multilínea (/* ... */) que cruzan varias líneas
+        bool inMultiLineComment = false;
+
+        while (std::getline(stream, line)) {
+            // --- Paso 1: Eliminar comentarios en la línea ---
+            std::string cleanedLine = "";
+            
+            for (size_t i = 0; i < line.length(); ++i) {
+                if (inMultiLineComment) {
+                    if (i + 1 < line.length() && line[i] == '*' && line[i + 1] == '/') {
+                        inMultiLineComment = false;
+                        i++; 
+                    }
+                    continue;
+                }
+
+                if (i + 1 < line.length() && line[i] == '/' && line[i + 1] == '*') {
+                    inMultiLineComment = true;
                     i++; 
+                    continue;
                 }
+
+                if (i + 1 < line.length() && line[i] == '/' && line[i + 1] == '/') {
+                    break; // Ignorar el resto de la línea
+                }
+
+                cleanedLine += line[i];
+            }
+
+            if (inMultiLineComment && cleanedLine.empty()) {
                 continue;
             }
 
-            if (i + 1 < line.length() && line[i] == '/' && line[i + 1] == '*') {
-                inMultiLineComment = true;
-                i++; 
-                continue;
+            // --- Paso 2: Recortar espacios iniciales y finales (incluyendo \r de Windows) ---
+            size_t start = cleanedLine.find_first_not_of(" \t\r\n");
+            if (start == std::string::npos) {
+                continue; // Línea vacía o solo espacios
             }
 
-            if (i + 1 < line.length() && line[i] == '/' && line[i + 1] == '/') {
-                break; // Ignorar el resto de la línea
-            }
+            std::string trimmed = cleanedLine.substr(start);
+            // Solución CRLF: Limpiar retornos de carro o espacios al final de la línea
+            trimmed.erase(trimmed.find_last_not_of(" \t\r\n") + 1);
 
-            cleanedLine += line[i];
-        }
-
-        if (inMultiLineComment && cleanedLine.empty()) {
-            continue;
-        }
-
-        // --- Paso 2: Recortar espacios iniciales en la línea ya limpia ---
-        size_t start = cleanedLine.find_first_not_of(" \t\r\n");
-        if (start == std::string::npos) {
-            continue; // Línea vacía o solo espacios
-        }
-
-        std::string trimmed = cleanedLine.substr(start);
-
-        // --- Paso 3: Evaluar y consumir CUALQUIER directiva del preprocesador que empiece con '#' ---
-        if (!trimmed.empty() && trimmed[0] == '#') {
-            if (trimmed.rfind("#include", 0) == 0) {
-                if (conditionStack.back().active) {
-                    size_t firstQuote = trimmed.find('"');
-                    size_t lastQuote = trimmed.rfind('"');
-                    if (firstQuote != std::string::npos && lastQuote != std::string::npos && lastQuote > firstQuote) {
-                        std::string includePath = trimmed.substr(firstQuote + 1, lastQuote - firstQuote - 1);
-                        // Llamada recursiva para incluir el archivo anidado
-                        output << PreprocessWGSL(includePath, definedMacros, loadFileCallback, includedFiles);
+            // --- Paso 3: Evaluar y consumir CUALQUIER directiva del preprocesador que empiece con '#' ---
+            if (!trimmed.empty() && trimmed[0] == '#') {
+                if (trimmed.rfind("#include", 0) == 0) {
+                    if (conditionStack.back().active) {
+                        size_t firstQuote = trimmed.find('"');
+                        size_t lastQuote = trimmed.rfind('"');
+                        if (firstQuote != std::string::npos && lastQuote != std::string::npos && lastQuote > firstQuote) {
+                            std::string includePath = trimmed.substr(firstQuote + 1, lastQuote - firstQuote - 1);
+                            // Llamada recursiva para incluir el archivo anidado
+                            output << PreprocessWGSL(includePath, definedMacros, loadFileCallback, includedFiles);
+                        }
                     }
                 }
-            }
-            else if (trimmed.rfind("#define", 0) == 0) {
-                if (conditionStack.back().active) {
-                    std::istringstream iss(trimmed);
-                    std::string directive, macroName;
-                    iss >> directive >> macroName;
-                    if (!macroName.empty()) {
-                        definedMacros.insert(macroName);
+                else if (trimmed.rfind("#define", 0) == 0) {
+                    if (conditionStack.back().active) {
+                        std::istringstream iss(trimmed);
+                        std::string directive, macroName;
+                        iss >> directive >> macroName;
+                        if (!macroName.empty()) {
+                            definedMacros.insert(macroName);
+                        }
                     }
                 }
-            }
-            else if (trimmed.rfind("#ifdef", 0) == 0) {
-                std::istringstream iss(trimmed);
-                std::string directive, macroName;
-                iss >> directive >> macroName;
-
-                bool parentActive = conditionStack.back().active;
-                bool macroExists = (definedMacros.find(macroName) != definedMacros.end());
-                bool shouldActivate = parentActive && macroExists;
-
-                conditionStack.push_back({ shouldActivate, shouldActivate });
-            }
-            else if (trimmed.rfind("#ifndef", 0) == 0) {
-                std::istringstream iss(trimmed);
-                std::string directive, macroName;
-                iss >> directive >> macroName;
-
-                bool parentActive = conditionStack.back().active;
-                bool macroExists = (definedMacros.find(macroName) != definedMacros.end());
-                bool shouldActivate = parentActive && !macroExists;
-
-                conditionStack.push_back({ shouldActivate, shouldActivate });
-            }
-            else if (trimmed.rfind("#elif", 0) == 0) {
-                if (conditionStack.size() > 1) {
+                else if (trimmed.rfind("#ifdef", 0) == 0) {
                     std::istringstream iss(trimmed);
                     std::string directive, macroName;
                     iss >> directive >> macroName;
 
-                    bool parentActive = conditionStack[conditionStack.size() - 2].active;
-                    bool branchTaken = conditionStack.back().branchTaken;
+                    bool parentActive = conditionStack.back().active;
                     bool macroExists = (definedMacros.find(macroName) != definedMacros.end());
+                    bool shouldActivate = parentActive && macroExists;
 
-                    bool shouldActivate = parentActive && !branchTaken && macroExists;
-                    conditionStack.back().active = shouldActivate;
-                    if (shouldActivate) {
+                    conditionStack.push_back({ shouldActivate, shouldActivate });
+                }
+                else if (trimmed.rfind("#ifndef", 0) == 0) {
+                    std::istringstream iss(trimmed);
+                    std::string directive, macroName;
+                    iss >> directive >> macroName;
+
+                    bool parentActive = conditionStack.back().active;
+                    bool macroExists = (definedMacros.find(macroName) != definedMacros.end());
+                    bool shouldActivate = parentActive && !macroExists;
+
+                    conditionStack.push_back({ shouldActivate, shouldActivate });
+                }
+                else if (trimmed.rfind("#elif", 0) == 0) {
+                    if (conditionStack.size() > 1) {
+                        std::istringstream iss(trimmed);
+                        std::string directive, macroName;
+                        iss >> directive >> macroName;
+
+                        bool parentActive = conditionStack[conditionStack.size() - 2].active;
+                        bool branchTaken = conditionStack.back().branchTaken;
+                        bool macroExists = (definedMacros.find(macroName) != definedMacros.end());
+
+                        bool shouldActivate = parentActive && !branchTaken && macroExists;
+                        conditionStack.back().active = shouldActivate;
+                        if (shouldActivate) {
+                            conditionStack.back().branchTaken = true;
+                        }
+                    }
+                }
+                else if (trimmed == "#else") {
+                    if (conditionStack.size() > 1) {
+                        bool parentActive = conditionStack[conditionStack.size() - 2].active;
+                        bool branchTaken = conditionStack.back().branchTaken;
+
+                        bool shouldActivate = parentActive && !branchTaken;
+                        conditionStack.back().active = shouldActivate;
                         conditionStack.back().branchTaken = true;
                     }
                 }
+                else if (trimmed == "#endif") {
+                    if (conditionStack.size() > 1) {
+                        conditionStack.pop_back();
+                    }
+                }
+                
+                // IMPORTANTE: Al ser una directiva de preprocesador, siempre se descarta del output final
+                continue; 
             }
-            else if (trimmed == "#else") {
-                if (conditionStack.size() > 1) {
-                    bool parentActive = conditionStack[conditionStack.size() - 2].active;
-                    bool branchTaken = conditionStack.back().branchTaken;
 
-                    bool shouldActivate = parentActive && !branchTaken;
-                    conditionStack.back().active = shouldActivate;
-                    conditionStack.back().branchTaken = true;
-                }
+            // --- Paso 4: Líneas de código normal / WGSL ---
+            if (conditionStack.back().active) {
+                output << cleanedLine << "\n";
             }
-            else if (trimmed == "#endif") {
-                if (conditionStack.size() > 1) {
-                    conditionStack.pop_back();
-                }
-            }
-            
-            // IMPORTANTE: Al ser una directiva de preprocesador, siempre se descarta del output final
-            continue; 
         }
 
-        // --- Paso 4: Líneas de código normal / WGSL ---
-        if (conditionStack.back().active) {
-            output << cleanedLine << "\n";
-        }
+        return output.str();
     }
-
-    return output.str();
-}
 
 	std::vector<VertexAttributeInfo> ParseVertexInputAttributes(const std::string& preprocessedWGSL) {
 		std::vector<VertexAttributeInfo> attributes;

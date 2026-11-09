@@ -25,7 +25,6 @@ namespace Templates {
 	std::unique_ptr<MeshInstance>& GetMeshInstance(SceneUnitId id, nlohmann::json& json);
 	std::unique_ptr<MeshInstance>& GetMeshInstance(JUUID uuid);
 	std::unique_ptr<MeshInstance>& GetMeshInstance(SceneUnitId id, JUUID uuid, VertexClass vertexClass, void* vertexData, unsigned int vertexSize, unsigned int verticesCount, const void* indices, unsigned int indicesCount);
-	// DEF_TEMPLATE_ID(MeshInstance, GetMeshInstance);
 
 	//READ&GET
 	JNAME GetMeshName(JUUID uuid);

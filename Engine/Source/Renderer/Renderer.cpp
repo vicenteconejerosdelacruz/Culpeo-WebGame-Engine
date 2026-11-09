@@ -91,7 +91,7 @@ void JRenderer::ConfigureSurface(uint32_t width, uint32_t height) {
                                       .width = width,
                                       .height = height,
                                       .alphaMode = wgpu::CompositeAlphaMode::Auto,
-                                      .presentMode = wgpu::PresentMode::Mailbox
+                                      .presentMode = wgpu::PresentMode::Fifo
                                   };
     surface.Configure(&config);
 }

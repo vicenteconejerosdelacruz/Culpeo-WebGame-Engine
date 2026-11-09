@@ -3,7 +3,7 @@
 #include <set>
 #include <yaml-cpp/yaml.h>
 #include <Mesh/Mesh.h>
-#include <Utils/FileSystem.h>
+#include <Utils/AssetStream.h>
 
 extern std::atomic<bool> g_EngineReady;
 
@@ -609,6 +609,9 @@ namespace Templates {
     - value: 0.9803921580314636
       variable: alphaCut
       variableType: FLOAT
+    - value: [1.0, 1.0, 1.0]
+      variable: baseColor
+      variableType: RGB
   name: SoundEffect
   rasterizerState:
     AntialiasedLineEnable: false
@@ -1075,18 +1078,6 @@ namespace Templates {
   uuid: 2c207f54-9cdc-4c7e-a70a-60b373f2de79
   width: 64
 
-- format: B8G8R8A8_UNORM_SRGB
-  height: 64
-  images:
-    - Assets/gizmos/camera.png
-  mipLevels: 6
-  name: Assets/gizmos/camera.png
-  numFrames: 1
-  systemCreated: true
-  type: 2D
-  uuid: 2c207f54-9cdc-4c7e-a70a-60b373f2de79
-  width: 64
-
 )";
 
 	const std::string systemPhysicGeometriesYaml = R"(
@@ -1183,7 +1174,7 @@ namespace Templates {
           // std::cout << "[Templates] Iniciando carga de templates..." << std::endl;
           LoadTemplates(defaultTemplatesFolder, Shader::templateName, CreateShader);
           LoadTemplates(defaultTemplatesFolder, Material::templateName, CreateMaterial);
-          // LoadTemplates(defaultTemplatesFolder, Model3D::templateName, CreateModel3D);
+          LoadTemplates(defaultTemplatesFolder, Model3D::templateName, CreateModel3D);
           LoadTemplates(defaultTemplatesFolder, Sound::templateName, CreateSound);
           LoadTemplates(defaultTemplatesFolder, Texture::templateName, CreateTexture);
           LoadTemplates(defaultTemplatesFolder, RenderPass::templateName, CreateRenderPass);
@@ -1244,7 +1235,7 @@ namespace Templates {
 		ReleaseRenderPassTemplates();
 		ReleaseTextureTemplates();
 		ReleaseSoundTemplates();
-		//ReleaseModel3DTemplates();
+		ReleaseModel3DTemplates();
 		ReleaseMaterialTemplates();
 		ReleaseShaderTemplates();
 		//ReleasePhysicGeometryTemplates();

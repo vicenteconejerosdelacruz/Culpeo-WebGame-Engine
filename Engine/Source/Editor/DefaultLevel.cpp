@@ -30,6 +30,28 @@ controllers:
     geometry: 330c6bfd-2c71-4c6b-be42-b797d07ab5ba
 )";
 
+  const std::string femaleYaml = R"(
+uuid: fa0aad99-b46c-4dfc-b351-232dbf58a0db
+name: female
+position:
+  - 0.0
+  - 0.0
+  - 0.0
+scale:
+  - 0.0001
+  - -0.0001
+  - -0.0001
+controllers:
+  renderable:
+    cameras:
+      - 06de4a6c-0393-42b1-91ab-1d2389cb2cbd
+    castShadows: false
+#    model: 997167c6-23a5-49db-89eb-607f93687b35
+    model: 8826c636-9ff2-456a-a905-90a8a8ad7d9e
+    shadowed: true
+    checkBoundingBox: false
+)";
+
   const std::string cameraYaml = R"(
 uuid: 06de4a6c-0393-42b1-91ab-1d2389cb2cbd
 name: default.cam.0
@@ -49,9 +71,9 @@ controllers:
     fitWindow: true
     mouseController: true
     perspective:
-      farZ: 100.0
+      farZ: 1000.0
       fovAngleY: 70.0
-      nearZ: 0.001
+      nearZ: 0.0001
     projectionType: Perspective
     renderPasses: []
     speed: 0.05000000074505806
@@ -75,6 +97,10 @@ controllers:
   const std::string directionalLightYaml = R"(
 uuid: 9ec2714e-0184-45f2-aaee-b9b5d08e5763
 name: light.1.dir
+position:
+  - 1.0
+  - 0.0
+  - 0.0
 rotation:
   - 63.0
   - 0.0
@@ -103,8 +129,12 @@ controllers:
   const std::string soundFxYaml = R"(
 uuid: 8e453610-a972-42b2-a4dc-f33cff173ab4
 name: fireplace
+position:
+  - 2.0
+  - 0.0
+  - 0.0
 rotation:
-  - 63.0
+  - 0.0
   - 0.0
   - 0.0
 controllers:
@@ -269,10 +299,11 @@ physicScenes:
   {
     nlohmann::json level = nlohmann::json::array({});
     level.push_back(yaml_str_to_json(floorYaml));
+    level.push_back(yaml_str_to_json(femaleYaml));
     level.push_back(yaml_str_to_json(cameraYaml));
     level.push_back(yaml_str_to_json(ambientLightYaml));
     level.push_back(yaml_str_to_json(directionalLightYaml));
-    level.push_back(yaml_str_to_json(soundFxYaml));
+    // level.push_back(yaml_str_to_json(soundFxYaml));
     return level;
   }
 }

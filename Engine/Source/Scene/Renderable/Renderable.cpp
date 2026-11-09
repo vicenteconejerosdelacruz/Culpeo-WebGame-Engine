@@ -56,7 +56,7 @@ namespace Scene
 
 // #endif
 
-	// std::unordered_map<RenderableID, SequencePlayer*> animationPlayers;
+	std::unordered_map<RenderableID, SequencePlayer*> animationPlayers;
 
 // #if defined(_EDITOR)
 
@@ -108,6 +108,8 @@ namespace Scene
 
     void Renderable::Map(SUUUID so)
     {
+		using namespace Animation;
+
 		Controller::Map(so);
 
 #include <TrackUUID/JInsert.h>
@@ -116,6 +118,16 @@ namespace Scene
 
 		worldUb = CreateUniformBuffer(unit, sizeof(XMMATRIX), true, false,"world");
 		CreateMeshInstances();
+
+		if (!animable.empty())
+		{
+			AttachAnimation(uuid(), model3D->animations);
+			//boundingBoxCompute = CreateRenderableBoundingBox(MAKESUUUID(unit, uuid()));
+			sequencePlayer.renderable = uuid();
+			CreateAnimationThread();
+		}
+
+		SetInitialConditions();
     }
 
     void Renderable::Unmap()
@@ -165,7 +177,6 @@ namespace Scene
 	}
 	*/
 
-	/*
 	void Renderable::SetInitialConditions()
 	{
 		lastAnimationTime = 0.0f;
@@ -181,10 +192,9 @@ namespace Scene
 			StepAnimation(0.0f);
 		}
 
-		updateRotationQ();
-		deleteFrames = JRenderer::numFrames;
+		sceneObject->updateRotationQ();
+		// deleteFrames = JRenderer::numFrames;
 	}
-	*/
 
 	void Renderable::BindToScene()
 	{
@@ -356,11 +366,13 @@ namespace Scene
 
 	void Renderable::CreateMeshInstances()
 	{
-		/*
 		using namespace Templates;
+
+		std::cout << "loading mesh for " << sceneObject->name() << std::endl;
 
 		if (Model3DTemplateExist(model()))
 		{
+			std::cout << "loading model template " << model() << std::endl;
 			CreateModel3DInstance(model(), [this]
 				{
 					return std::make_unique<Model3DInstance>(unit, model(), uuid());
@@ -370,14 +382,16 @@ namespace Scene
 			meshes = model3D->meshes;
 			if (model3D->animations)
 			{
-#if defined(_EDITOR)
+				/*
+				#if defined(_EDITOR)
 				Model3DJsonID model3dJson = model();
 				model3dJson->ListenUpdate(Model3DJson::Update_animationSequences, SUuuid(), [&]()
 					{
 						RebuildAnimationSequences();
 					}
 				);
-#endif
+				#endif
+				*/
 				animable = model3D;
 			}
 
@@ -390,8 +404,7 @@ namespace Scene
 				CreateAnimationSequences();
 			}
 		}
-		else*/
-		 if (!meshMaterial().mesh.empty() && meshMaterial().mesh.contains("primitive") && !meshMaterial().mesh.at("primitive").empty() && !meshMaterial().materialUUID.empty())
+		else if (!meshMaterial().mesh.empty() && meshMaterial().mesh.contains("primitive") && !meshMaterial().mesh.at("primitive").empty() && !meshMaterial().materialUUID.empty())
 		{
 			nlohmann::json mesh = meshMaterial().mesh;
 			meshes.push_back(GetMeshInstance(unit, mesh)->uuid);
@@ -425,19 +438,18 @@ namespace Scene
 			return;
 		}
 
-		// if (!model3D.empty())
-		// {
-		// 	for (unsigned int i = 0; i < meshes.size(); i++)
-		// 	{
-		// 		std::vector<PassMaterialOverride> mpmo;
-		// 		std::copy_if(pmo.begin(), pmo.end(), std::back_inserter(mpmo), [i](PassMaterialOverride& o) { return o.meshIndex == i; });
-		// 		auto& mesh = meshes.at(i);
-		// 		JUUID matUUID = model3D->materials.at(i)();
-		// 		materials[pass].push_back(pass->GetRenderPassMaterialInstance(unit, matUUID, mesh, shadowed(), mpmo, uuid()));
-		// 	}
-		// }
-		// else
-		if (!meshMaterial().mesh.empty() && meshMaterial().mesh.contains("primitive") && !meshMaterial().mesh.at("primitive").empty() && !meshMaterial().materialUUID.empty())
+		if (!model3D.empty())
+		{
+			for (unsigned int i = 0; i < meshes.size(); i++)
+			{
+				std::vector<PassMaterialOverride> mpmo;
+				std::copy_if(pmo.begin(), pmo.end(), std::back_inserter(mpmo), [i](PassMaterialOverride& o) { return o.meshIndex == i; });
+				auto& mesh = meshes.at(i);
+				JUUID matUUID = model3D->materials.at(i)();
+				materials[pass].push_back(pass->GetRenderPassMaterialInstance(unit, matUUID, mesh, shadowed(), mpmo, uuid()));
+			}
+		}
+		else if (!meshMaterial().mesh.empty() && meshMaterial().mesh.contains("primitive") && !meshMaterial().mesh.at("primitive").empty() && !meshMaterial().materialUUID.empty())
 		{
 			std::vector<PassMaterialOverride> mpmo;
 			std::copy_if(pmo.begin(), pmo.end(), std::back_inserter(mpmo), [](PassMaterialOverride& o) { return o.meshIndex == 0; });
@@ -653,6 +665,7 @@ namespace Scene
 	void Renderable::CreateRenderPassBindGroups(RenderPassInstanceID rp)
     {
 		using namespace Templates::Texture;
+		using namespace Animation;
 
         RenderableID r(uuid());
 
@@ -672,7 +685,7 @@ namespace Scene
                 { ShadowMapUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
                 { ModelUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->worldUb; } },
                 { MaterialUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId){ return r->uniformBuffers[rp][meshId]; } },
-                { AnimationUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return UniformBufferID(""); } },
+                { AnimationUniformBufferName, [&](RenderPassInstanceID rp, unsigned int meshId) { return GetAnimatedUniformBuffer(r); } },
             };
 
 			std::unordered_map<std::string, TextureShaderUsage> bindingToTextureShaderUsage = {
@@ -680,7 +693,7 @@ namespace Scene
 				//TextureShaderUsage_IBLPreFilteredEnvironment,
 				//TextureShaderUsage_IBLBRDFLUT,
 				{ baseTexture, TextureShaderUsage_Base },
-				//TextureShaderUsage_NormalMap,
+				{ normalMap, TextureShaderUsage_NormalMap },
 				//TextureShaderUsage_MetallicRoughness,
 				//TextureShaderUsage_ShadowMaps,
 				//TextureShaderUsage_MinTexture,
@@ -1174,15 +1187,14 @@ namespace Scene
 		}
 	}
 */
-/*
-	void Renderable::WriteAnimationConstantsBuffer(unsigned int frame)
+
+	void Renderable::WriteAnimationUniformBuffer(unsigned int frame)
 	{
 		if (animable.empty()) return;
 
 		using namespace Animation;
-		WriteBoneTransformationsToConstantsBuffer(SUuuid(), bonesTransformation, frame);
+		WriteBoneTransformationsToUniformBuffer(uuid(), bonesTransformation, frame);
 	}
-*/
 
 	void Renderable::WriteUniformBuffer(unsigned int frame)
 	{
@@ -1192,7 +1204,6 @@ namespace Scene
 	}
 	
 	//Animation
-	/*
 	void Renderable::CreateAnimationSequences()
 	{
 		std::unique_ptr<Model3DJson>& mdl = GetModel3DTemplate(model());
@@ -1219,33 +1230,31 @@ namespace Scene
 			animationsSequences.sequences.insert_or_assign(name, sequence);
 		}
 	}
-*/
 /*
 	void Renderable::RebuildAnimationSequences()
 	{
 		CreateAnimationSequences();
 	}
 */
-/*
+
 	void Renderable::SetCurrentAnimation(SequencePlayer* seqPlayer)
 	{
 		if (seqPlayer == nullptr)
 		{
-			if (animationPlayers.contains(MAKESUUUID(unit, uuid())))
+			if (animationPlayers.contains(uuid()))
 			{
-				animationPlayers.erase(MAKESUUUID(unit, uuid()));
+				animationPlayers.erase(uuid());
 			}
 		}
 		else
 		{
-			animationPlayers.insert_or_assign(MAKESUUUID(unit, uuid()), seqPlayer);
+			animationPlayers.insert_or_assign(uuid(), seqPlayer);
 		}
 	}
-*/
-/*
+
 	void Renderable::SetCurrentAnimation(std::string anim, float startTime, float timeFactor, bool play, bool loop)
 	{
-		if (!animationPlayers.contains(MAKESUUUID(unit, uuid())) || animationPlayers.at(MAKESUUUID(unit, uuid())) != &sequencePlayer)
+		if (!animationPlayers.contains(uuid()) || animationPlayers.at(uuid()) != &sequencePlayer)
 			SetCurrentAnimation(&sequencePlayer);
 
 		animationSequence(anim);
@@ -1260,20 +1269,22 @@ namespace Scene
 		animationTimeFactor(timeFactor);
 		forceAnimation = true;
 	}
-*/
-/*
+
 	void Renderable::CreateAnimationThread()
 	{
 		animationThreadAlive = std::make_unique<std::atomic_bool>(true);
 
-		// Guardamos la hebra SIN hacer detach()
-		animationThread = std::thread([](Renderable* r)
-			{
-				auto& scene = GetSceneUnit(r->unit);
-				std::string animationThreadEvent = "CreateAnimationThread:" + r->name() + ":" + r->uuid();
+		RenderableID r(uuid());
 
+		std::cout << __FUNCTION__ << "(" << r() << ")" << std::endl;
+
+		// Guardamos la hebra SIN hacer detach()
+		animationThread = std::thread([r]()
+			{
+				std::cout << __FUNCTION__ << "(" << r() << ")" << std::endl;
 				while (r->animationThreadAlive->load(std::memory_order_relaxed))
 				{
+					std::cout << __FUNCTION__ << "while(" << r() << ")" << std::endl;
 					using namespace Animation;
 
 					// Espera activa/suspendida MIENTRAS sea false (esperando trabajo)
@@ -1287,19 +1298,18 @@ namespace Scene
 						break;
 
 					auto& animations = r->animable->animations;
-#if defined(_DEVELOPMENT)
-					PIXScopedEvent(0, nostd::StringToWString(animationThreadEvent).c_str());
-#endif
+
+					std::cout << "TraverseMultiplycationQueue" << std::endl;
 					TraverseMultiplycationQueue(r->animationTime(), r->animation(), animations, r->bonesTransformation, r->sequenceBoneTransformations, r->globalNodeTransforms);
 
 					// Tarea completada: volvemos a false y notificamos a los consumidores
 					r->animationStepLock->store(false, std::memory_order_release);
 					r->animationStepLock->notify_all(); // notify_all en caso de que SequencePlayer y el hilo principal esperen
 				}
-			}, this);
+			}
+		);
 	}
-*/
-/*
+
 	void Renderable::StepAnimation(double elapsedSeconds)
 	{
 		if (animable.empty()) return;
@@ -1320,8 +1330,7 @@ namespace Scene
 		animationStepLock->store(true, std::memory_order_release);
 		animationStepLock->notify_one();
 	}
-*/
-/*
+
 	std::tuple<XMMATRIX, XMFLOAT3, XMFLOAT3, XMVECTOR, XMFLOAT3> Renderable::GetBoneTransformation(std::string bone)
 	{
 		if (bone.empty())
@@ -1337,15 +1346,14 @@ namespace Scene
 		auto& nodesTransforms = globalNodeTransforms;
 		return Animation::GetBoneTransformation(world(), nodesTransforms, bone);
 	}
-	*/
-/*
+
 	std::vector<std::string> Renderable::GetBones()
 	{
 		std::vector<std::string> bones = nostd::GetKeysFromMap(animable->animations->bonesParents);
 		std::sort(bones.begin(), bones.end(), [](std::string a, std::string b) { return a < b; });
 		return bones;
 	}
-	*/
+	
 	/*
 	void Renderable::Destroy()
 	{

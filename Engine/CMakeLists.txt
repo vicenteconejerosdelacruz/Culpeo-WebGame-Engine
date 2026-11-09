@@ -25,6 +25,34 @@ endif()
 # 1. Define el ejecutable de tu motor
 add_executable(CulpeoEngine
     "Source/Engine.cpp"
+    "Source/Animation/Animated.h"
+    "Source/Animation/Animated.cpp"
+    "Source/Animation/Sequence/AnimationSequences.h"
+    "Source/Animation/Sequence/AnimationSequences.cpp"
+    "Source/Animation/Sequence/Sequence.h"
+    "Source/Animation/Sequence/Sequence.cpp"
+    "Source/Animation/Sequence/SequenceChannel.h"
+    "Source/Animation/Sequence/SequenceChannel.cpp"
+    "Source/Animation/Sequence/SequencePlayer.h"
+    "Source/Animation/Sequence/SequencePlayer.cpp"
+    "Source/Animation/Sequence/Channels/ChannelElement.h"
+    "Source/Animation/Sequence/Channels/ChannelElement.cpp"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElement.h"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElement.cpp"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementAnimation.h"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementAnimation.cpp"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementBoneTransformation.h"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementBoneTransformation.cpp"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementScript.h"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementScript.cpp"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementSoundFX.h"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementSoundFX.cpp"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementTransformation.h"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementTransformation.cpp"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementTrigger.h"
+    "Source/Animation/Sequence/Channels/Elements/SequenceChannelElementTrigger.cpp"
+    "Source/Animation/Sequence/Channels/Elements/TransformationKeyFrame.h"
+    "Source/Animation/Sequence/Channels/Elements/TransformationKeyFrame.cpp"
     "Source/Audio/AudioSystem.h"
     "Source/Audio/AudioSystem.cpp"
     "Source/Audio/MiniAudioBridge.cpp"
@@ -114,6 +142,9 @@ add_executable(CulpeoEngine
     "Source/Templates/Material/Variables.cpp"
     "Source/Templates/Mesh/Mesh.h"
     "Source/Templates/Mesh/Mesh.cpp"
+    "Source/Templates/Model3D/Model3D.h"
+    "Source/Templates/Model3D/Model3DAtt.h"
+    "Source/Templates/Model3D/Model3D.cpp"
     "Source/Templates/Mold/Mold.h"
     "Source/Templates/Mold/MoldAtt.h"
     "Source/Templates/Mold/Mold.cpp"
@@ -145,8 +176,12 @@ add_executable(CulpeoEngine
     "Source/pch/UUID.h"
     "Source/pch/NoStd.h"
     "Source/pch/SceneUnitId.h"
-    "Source/Utils/FileSystem.h"
-    "Source/Utils/FileSystem.cpp"
+    "Source/Utils/AssetStream.h"
+    "Source/Utils/AssetStream.cpp"
+    "Source/Utils/CustomIOSystem.h"
+    "Source/Utils/CustomIOSystem.cpp"
+    "Source/Utils/CustomIOStream.h"
+    "Source/Utils/CustomIOStream.cpp"
 )
 
 # 2. Configura la ruta de salida usando directamente el nombre de la configuración
@@ -157,6 +192,7 @@ set_target_properties(CulpeoEngine PROPERTIES
 # 3. Directorios de inclusión locales del motor y dependencias (Actualizado dinámicamente)
 target_include_directories(CulpeoEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Source
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Animation
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Audio
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Controllers
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/Editor

@@ -1,15 +1,15 @@
 #pragma once
 #include <nlohmann/json.hpp>
 #include <Controller.h>
-//#include <Model3D/Model3D.h>
+#include <Model3D/Model3D.h>
 #include <Material/Material.h>
 #include <Material/MeshMaterial.h>
 #include <Mesh/Mesh.h>
 #include <Camera/Camera.h>
 #include <RenderPass/RenderPass.h>
 #include <RenderPass/PassMaterialOverride.h>
-// #include <Sequence/AnimationSequences.h>
-// #include <Sequence/SequencePlayer.h>
+#include <Sequence/AnimationSequences.h>
+#include <Sequence/SequencePlayer.h>
 #include <DeviceUtils/UniformBuffer/UniformBuffer.h>
 //#include <Renderable/RenderableBoundingBox.h>
 // #include <PhysicObject.h>
@@ -111,7 +111,7 @@ namespace Scene
 		XMMATRIX world();
 
 		// void Initialize() override;
-		// virtual void SetInitialConditions();
+		void SetInitialConditions() override;
 		void BindToScene() override;
 		void Bind(JUUID uuid) override;
 		void BindToCamera(JUUID camId) override;
@@ -161,18 +161,18 @@ namespace Scene
 
 		// void WriteMaterialVariablesToConstantsBufferSpace(MaterialInstanceID material, ConstantsBufferID cbvData, unsigned int cbvFrameIndex);
 		// void WriteConstantsBuffer(std::string constantName, void* data, unsigned int backbufferIndex, unsigned int slot = 0U, size_t offset = 0ULL);
-		// void WriteAnimationConstantsBuffer(unsigned int frame);
+		void WriteAnimationUniformBuffer(unsigned int frame);
 		void WriteUniformBuffer(unsigned int frame);
 
 		//Animation
-		// void CreateAnimationSequences();
+		void CreateAnimationSequences();
 		// void RebuildAnimationSequences();
-		// void SetCurrentAnimation(SequencePlayer* sequencePlayer);
-		// void SetCurrentAnimation(std::string anim, float startTime = 0.0f, float timeFactor = 1.0f, bool play = true, bool loop = false);
-		// void CreateAnimationThread();
-		// void StepAnimation(double elapsedSeconds);
-		// std::tuple<XMMATRIX, XMFLOAT3, XMFLOAT3, XMVECTOR, XMFLOAT3> GetBoneTransformation(std::string bone);
-		// std::vector<std::string> GetBones();
+		void SetCurrentAnimation(SequencePlayer* sequencePlayer);
+		void SetCurrentAnimation(std::string anim, float startTime = 0.0f, float timeFactor = 1.0f, bool play = true, bool loop = false);
+		void CreateAnimationThread();
+		void StepAnimation(double elapsedSeconds);
+		std::tuple<XMMATRIX, XMFLOAT3, XMFLOAT3, XMVECTOR, XMFLOAT3> GetBoneTransformation(std::string bone);
+		std::vector<std::string> GetBones();
 
 		//DESTROY
 		// void Destroy();
@@ -200,7 +200,7 @@ namespace Scene
 		// bool renderReady = false;
 		// bool renderException = false;
 		//Model3D
-		// Model3DInstanceID model3D;
+		Model3DInstanceID model3D;
 		//Meshes
 		UniformBufferID worldUb;
 		RenderableMeshes meshes;
@@ -216,18 +216,18 @@ namespace Scene
 		BindGroupRender bindGroupRenders;
 		RenderableBindingGroupOffsets bingGroupOffsets;
 		//Animations
-		// float lastAnimationTime;
-		// bool forceAnimation;
-		// std::unique_ptr<std::atomic_bool> animationStepLock;
-		// std::unique_ptr<std::atomic_bool> animationThreadAlive;
-		// std::thread animationThread;
-		// Model3DInstanceID animable;
-		// Animation::BonesTransformations bonesTransformation;
-		// Animation::NodeTransformsMap globalNodeTransforms;
-		// XMMATRIX animationTransformation;
-		// AnimationSequences animationsSequences;
-		// SequencePlayer sequencePlayer;
-		// Animation::BonesTransformations sequenceBoneTransformations;
+		float lastAnimationTime;
+		bool forceAnimation;
+		std::unique_ptr<std::atomic_bool> animationStepLock;
+		std::unique_ptr<std::atomic_bool> animationThreadAlive;
+		std::thread animationThread;
+		Model3DInstanceID animable;
+		Animation::BonesTransformations bonesTransformation;
+		Animation::NodeTransformsMap globalNodeTransforms;
+		XMMATRIX animationTransformation;
+		AnimationSequences animationsSequences;
+		SequencePlayer sequencePlayer;
+		Animation::BonesTransformations sequenceBoneTransformations;
 		//Cameras
 		std::set<CameraID> bindedCameras;
 

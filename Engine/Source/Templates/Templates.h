@@ -39,6 +39,7 @@ namespace Templates {
 
 		if (templates.contains(uuid) || uuidSet.contains(uuid) || typesMap.contains(uuid))
 		{
+			std::cerr << "creation collision " << name << std::endl;
 			assert(!!!"creation collision");
 		}
 

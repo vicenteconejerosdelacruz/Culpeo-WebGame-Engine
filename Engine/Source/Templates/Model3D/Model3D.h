@@ -1,0 +1,111 @@
+#pragma once
+
+#include <Templates.h>
+#include <JTemplate.h>
+#include <Sequence/AnimationSequences.h>
+#include <Mesh/Mesh.h>
+// #include <UUID.h>
+
+namespace Templates
+{
+#if defined(_EDITOR)
+
+#include <Attributes/JOrder.h>
+#include "Model3DAtt.h"
+#include <JEnd.h>
+
+// #include <Editor/JDrawersDecl.h>
+// #include "Model3DAtt.h"
+// #include <JEnd.h>
+
+// #include <Editor/JPreviewDecl.h>
+// #include "Model3DAtt.h"
+// #include <JEnd.h>
+
+// #include <Creator/JRequired.h>
+// #include "Model3DAtt.h"
+// #include <JEnd.h>
+
+// #include <Creator/JJsonDecl.h>
+// #include "Model3DAtt.h"
+// #include <JEnd.h>
+
+// #include <Creator/JDrawersDecl.h>
+// #include "Model3DAtt.h"
+// #include <JEnd.h>
+
+// #include <Creator/JValidatorDecl.h>
+// #include "Model3DAtt.h"
+// #include <JEnd.h>
+
+	// void Model3DJsonStep();
+
+#endif
+
+	namespace Model3D
+	{
+		inline static const std::string templateName = "model3ds.yaml";
+		inline static const std::string fallbackMaterialName = "BaseLighting";
+		inline static const TemplateType templateType = T_Models3D;
+	}
+
+	struct Model3DJson : public JTemplate
+	{
+		TEMPLATE_DECL(Model3D);
+
+#include <Attributes/JFlags.h>
+#include "Model3DAtt.h"
+#include <JEnd.h>
+
+#include <Attributes/JStr2Flag.h>
+#include "Model3DAtt.h"
+#include <JEnd.h>
+
+#include <Attributes/JDecl.h>
+#include "Model3DAtt.h"
+#include <JEnd.h>
+
+		DEF_STRING2FLAGS_FUNC(Model3DJson, JTemplate);
+
+#if defined(_EDITOR)
+		void WriteJson(nlohmann::json& j) override;
+		// void ListenUpdate(Model3D_UpdateFlags flag, SUUUID suuuid, std::function<void()> callback);
+		// void RemoveUpdateListener(Model3D_UpdateFlags flag, SUUUID suuuid);
+		// void GatherFiles(std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream) override;
+#endif
+
+		// std::map<Model3D_UpdateFlags, std::map<SUUUID, std::function<void()>>> updateFlagsListeners;
+	};
+
+	struct Model3DInstance;
+
+	TEMPDECL_FULL(Model3D);
+	TEMPDECL_REFTRACKER(Model3D);
+
+	// JUUID GetModel3DMeshInstanceID(JUUID meshInstanceUUID, unsigned int index);
+	// JUUID GetModel3DMaterialInstanceID(JUUID materialInstanceUUID, unsigned int index);
+	// JUUID GetModel3DMaterialTemplateName(Model3DJsonID mdl, unsigned int index);
+
+	struct Model3DInstance
+	{
+		Model3DInstance(JUUID uuid) { assert(!!!"do not use"); }
+		explicit Model3DInstance(SceneUnitId id, JUUID uuid, JUUID objectUUID);
+		~Model3DInstance();
+		void LoadModel3DInstance(SceneUnitId id);
+		void CreateModel3DMaterialsTemplates(const aiScene* aiModel);
+		void CreateBoundingBox(BoundingBox& boundingBox, aiMesh* aMesh);
+		#if defined(_DEVELOPMENT)
+		nlohmann::json GetAssimpTexturesMaterialJson(std::filesystem::path relativePath, const aiScene* aiModel, aiMaterial* material);
+		void PushAssimpTextureToJson(nlohmann::json& j, TextureShaderUsage textureType, std::filesystem::path relativePath, aiString& aiTextureName, std::string fallbackTexture = "", DXGI_FORMAT fallbackFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+		void PushEmbeddedAsimpTextureToJson(nlohmann::json& m, const aiTexture* embeddedTexture, TextureShaderUsage textureType, std::filesystem::path relativePath, aiString& aiTextureName, DXGI_FORMAT fallbackFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+		MaterialJson CreateModel3DMaterialJson(JUUID materialUUID, JNAME materialName, JUUID vertexShader, JUUID pixelShader, aiMaterial* material);
+		#endif
+
+		Model3DJsonID model3D;
+		VertexClass vertexClass;
+		std::vector<MeshInstanceID> meshes;
+		std::vector<MaterialJsonID> materials;
+		//animation
+		std::unique_ptr<Animation::Animated> animations;
+	};
+}

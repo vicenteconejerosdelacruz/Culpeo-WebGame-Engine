@@ -787,6 +787,7 @@ namespace Scene
 			if(!ControllerExists(r())) continue;
 
 			r->WriteUniformBuffer(renderer->GetBackBufferIndex());
+			r->WriteAnimationUniformBuffer(renderer->GetBackBufferIndex());
 // 			RenderableID r = MAKESUUUID(id, uuid);
 // 			if (!RenderableSceneObjectExist(r) || !r->RenderReady()) continue;
 

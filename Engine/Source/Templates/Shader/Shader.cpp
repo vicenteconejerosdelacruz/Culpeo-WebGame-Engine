@@ -120,6 +120,7 @@ namespace Templates {
 		using namespace DeviceUtils;
 		using namespace Templates::Texture;
 		using namespace Templates::Material;
+		using namespace Animation;
 
 		shaderInfo = ParseWGSLBindings(byteCode);
 
@@ -138,6 +139,7 @@ namespace Templates {
 			{ ModelUniformBufferName, sizeof(XMMATRIX) },
 			{ MaterialUniformBufferName, sizeof(MaterialAttributes) },
 			{ LightUniformBufferName, sizeof(LightPool) },
+			{ AnimationUniformBufferName, sizeof(BonesMatrices) },
 		};
 
 		const std::set<std::string> uniformsMultiframe = {
@@ -166,6 +168,7 @@ namespace Templates {
 		const std::unordered_map<std::string, ShaderResourceBinding&> storageBindingMap =
 		{
 			{ LightUniformBufferName, UniformBufferBinding.light },
+			{ AnimationUniformBufferName, UniformBufferBinding.animation },
 		};
 
 		auto mapUniformBufferResourceInfo=[&](ShaderResourceInfo& info)

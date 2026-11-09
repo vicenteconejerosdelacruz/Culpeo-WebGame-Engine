@@ -7,9 +7,6 @@
 - name: brawler/venom/venom-death
   path: brawler/venom/venom-death.wav
   uuid: 1c27358d-60fd-4f91-bc6b-66a4db9dc5e9
-- name: fireplace
-  path: fireplace.wav
-  uuid: 1e0c1716-ac41-4325-91ed-3ff087911687
 - name: brawler/bosses/goblin/goblin_death.wav
   path: brawler/bosses/goblin/goblin_death.wav
   uuid: 2335b7a9-279c-4e84-8908-a3c1c3b62f12

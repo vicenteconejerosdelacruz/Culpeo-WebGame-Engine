@@ -1,4 +1,4 @@
-#include "FileSystem.h"
+#include "AssetStream.h"
 #include <emscripten.h>
 #include <emscripten/fetch.h>
 #include <filesystem>

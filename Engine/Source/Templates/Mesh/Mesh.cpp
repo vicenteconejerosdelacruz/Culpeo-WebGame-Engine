@@ -62,25 +62,9 @@ namespace Templates {
 				std::unique_ptr<MeshInstance> instance = std::make_unique<MeshInstance>();
 				instance->uuid = uuid;
 				instance->vertexClass = vertexClass;
-				// auto loading = CreateLoadingProcessor();
-				// auto& cmd = loading.cmd;
-				// auto& commandList = cmd.GetCommandList();
 
-				// InitializeVertexBufferView(renderer->d3dDevice, commandList, vertexData, vertexSize, verticesCount, instance->vbvData);
-				// InitializeIndexBufferView(renderer->d3dDevice, commandList, indices, indicesCount, instance->ibvData);
-
-				// JUUID uuid = instance->uuid;
-
-				// cmd.RunPreDeletion([uuid]
-				// 	{
-				// 		if (MeshInstanceExists(uuid))
-				// 		{
-				// 			auto& mesh = GetMeshInstance(uuid);
-				// 			mesh->vbvData.vertexBufferUpload = nullptr;
-				// 			mesh->ibvData.indexBufferUpload = nullptr;
-				// 		}
-				// 	}
-				// );
+				instance->vertexBufferId = CreateVertexBuffer(id, vertexData, vertexSize, verticesCount);
+				instance->indexBufferId = CreateIndexBuffer(id, indices, indicesCount);
 
 				return instance;
 			}

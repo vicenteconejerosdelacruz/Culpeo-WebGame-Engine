@@ -69,7 +69,7 @@ inline void MatrixDump(std::string matrixName, DirectX::XMMATRIX m)
 		std::to_string(m.r[3].vector4_f32[1]) + "," +
 		std::to_string(m.r[3].vector4_f32[2]) + "," +
 		std::to_string(m.r[3].vector4_f32[3]) + "]";
-	std::string matrixDump = row1 + "\n" + row2 + "\n" + row3 + "\n" + row4 + "\n";
+	std::string matrixDump = row1 + "\n" + row2 + "\n" + row3 + "\n" + row4;
 
 	std::cout << matrixName << std::endl;
 	std::cout << matrixDump << std::endl;
@@ -97,10 +97,10 @@ inline void MatrixDump(std::string matrixName, DirectX::XMFLOAT4X4 m)
 		std::to_string(m._42) + "," +
 		std::to_string(m._43) + "," +
 		std::to_string(m._44) + "]";
-	std::string matrixDump = row1 + "\n" + row2 + "\n" + row3 + "\n" + row4 + "\n";
+	std::string matrixDump = row1 + "\n" + row2 + "\n" + row3 + "\n" + row4;
 
 	std::cout << matrixName << std::endl;
-	std::cout << matrixDump;
+	std::cout << matrixDump << std::endl;
 }
 
 // template<typename T>

@@ -7,20 +7,8 @@
 #endif
 #include <SimpleMath.h>
 
-// #if defined(_EDITOR)
-// namespace Editor
-// {
-// 	extern void SelectLight(LightID light);
-// 	extern RenderableID CreateBillboardFromMaterials(SceneUnitId id, CameraID camera, std::string name, std::string material, std::string pickingMaterial);
-// 	extern void RegisterBillboard(SceneUnitId id, JUUID sceneObject);
-// 	extern void DestroyBillboard(SceneUnitId id, JUUID sceneObject);
-// }
-// #endif
-
 namespace Scene
 {
-	// SODEF_FULL(Light);
-
 #include <TrackUUID/JDef.h>
 #include "LightAtt.h"
 #include <JEnd.h>

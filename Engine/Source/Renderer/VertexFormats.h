@@ -6,7 +6,7 @@
 #include <assimp/scene.h>
 #include <cstddef>
 #include <functional>
-// #include <Animated.h>
+#include <Animated.h>
 #include <set>
 
 //using namespace Graphics;
@@ -739,4 +739,4 @@ static std::map<VertexClass, std::function<void(aiMesh*, std::vector<std::byte>&
 };
 
 void LoadIndices(aiMesh* mesh, std::vector<unsigned int>& indicesData);
-// void LoadBonesInVertices(aiMesh* mesh, Animation::BonesTransformations& bones, Vertex<POS_NORMAL_TANGENT_TEXCOORD0_SKINNING>* vertices);
+void LoadBonesInVertices(aiMesh* mesh, Animation::BonesTransformations& bones, Vertex<POS_NORMAL_TANGENT_TEXCOORD0_SKINNING>* vertices);

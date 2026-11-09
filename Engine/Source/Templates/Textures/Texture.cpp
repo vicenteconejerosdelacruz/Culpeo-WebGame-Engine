@@ -1,7 +1,7 @@
 #include "Texture.h"
 #include <Renderer.h>
 #include <Scene.h>
-#include <Utils/FileSystem.h>
+#include <Utils/AssetStream.h>
 #include <webgpu/webgpu_cpp.h>
 #include <Scene/SceneUnit.h>
 #define TINYDDSLOADER_IMPLEMENTATION

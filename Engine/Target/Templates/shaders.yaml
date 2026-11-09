@@ -23,7 +23,7 @@
   type: PIXEL_SHADER
   uuid: 2dbc1cfd-8bcb-484a-bfc2-ec8be5150e55
 - name: BlinnPhong_vs
-  path: BlinnPhong.hlsl
+  path: BlinnPhong.wgsl
   type: VERTEX_SHADER
   uuid: 38e71d99-4412-4272-98bb-4f6a225f71c7
 - mappedValues:
@@ -59,7 +59,7 @@
       variable: specularExponent
       variableType: FLOAT
   name: BlinnPhong_ps
-  path: BlinnPhong.hlsl
+  path: BlinnPhong.wgsl
   type: PIXEL_SHADER
   uuid: d1ad23c8-bbdd-4ade-89be-ae937563ed62
 - name: DecalColorKey_ps

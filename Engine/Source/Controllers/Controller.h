@@ -145,7 +145,7 @@ namespace Game
 		Controller(nlohmann::json& json);
 		void JUpdate(nlohmann::json p) override;
 		void JPatch(nlohmann::json p) override;
-		// virtual void SetInitialConditions() {};
+		virtual void SetInitialConditions() {};
 #if defined(_EDITOR)
 		void WriteJson(nlohmann::json& j) override;
 		// static void GatherFiles(nlohmann::json& json, std::set<std::filesystem::path>& filesToCopy, std::set<JUUID>& templates, ThreadSafeStream& logStream) {}
